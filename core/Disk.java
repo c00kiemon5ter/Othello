@@ -12,6 +12,7 @@ public class Disk {
 
     private boolean color;
 
+    // Let's say false for black and true for white
     public Disk(boolean color) {
         this.color=color;
     }
