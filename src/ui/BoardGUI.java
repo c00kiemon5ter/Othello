@@ -12,6 +12,8 @@ public class BoardGUI extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         createSquares(core.Board.BOARD_LENGTH,core.Board.BOARD_WIDTH);
+        addSquares();
+        enableSquares();
     }
 
     /** This method is called from within the constructor to
@@ -23,18 +25,39 @@ public class BoardGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        board = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setIconImage(new ImageIcon(getClass().getResource("/ui/images/logo.jpg")).getImage());
+
+        board.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout boardLayout = new javax.swing.GroupLayout(board);
+        board.setLayout(boardLayout);
+        boardLayout.setHorizontalGroup(
+            boardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 743, Short.MAX_VALUE)
+        );
+        boardLayout.setVerticalGroup(
+            boardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 455, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 776, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 493, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -52,6 +75,7 @@ public class BoardGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel board;
     // End of variables declaration//GEN-END:variables
     private javax.swing.JButton[][] squares;
     
@@ -60,6 +84,26 @@ public class BoardGUI extends javax.swing.JFrame {
         for(int x=0;x<boardlength;x++) {
             for(int y=0;y<boardwidth;y++) {
                 squares[x][y] = new javax.swing.JButton();
+                squares[x][y].setText("suqre"+x+y);
+            }
+        }
+    }
+
+    private void addSquares() {
+        java.awt.GridLayout grid = new java.awt.GridLayout(squares.length,squares[0].length);
+        for(int x=0;x<squares.length;x++) {
+            for(int y=0;y<squares[0].length;y++) {
+                board.add(squares[x][y]);
+            }
+        }
+        board.setLayout(grid);
+    }
+
+    private void enableSquares() {
+        for(int x=0;x<squares.length;x++) {
+            for(int y=0;y<squares[0].length;y++) {
+                squares[x][y].setEnabled(true);
+                squares[x][y].setVisible(true);
             }
         }
     }
