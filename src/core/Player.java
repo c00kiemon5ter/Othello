@@ -34,8 +34,7 @@ public enum Player {
 		this.score = score;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("%s: %d", this.description, this.score);
+	public String stats() {
+		return String.format("%s: %d", this, this.score);
 	}
 }

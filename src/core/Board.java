@@ -65,8 +65,7 @@ public class Board {
 		for (point.x = 0; point.x < disks.length; point.x++) {
 			builder.append(point.x + 1);
 			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				builder.append(' ');
-				builder.append(disks[point.x][point.y].getState().getSymbol());
+				builder.append(' ').append(disks[point.x][point.y].getState().getSymbol());
 			}
 			builder.append('\n');
 		}

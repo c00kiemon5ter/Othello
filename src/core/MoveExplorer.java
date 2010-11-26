@@ -2,6 +2,7 @@ package core;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +19,7 @@ public enum MoveExplorer {
 		this.color = color;
 	}
 
-	public Set<Point> explore() {
+	public Collection<Point> explore() {
 		Set<Point> possibleMoves = new HashSet<Point>();
 		Set<Point> diskpoints = board.getDiskPoints(color);
 		for (Point point : diskpoints) {
@@ -63,40 +64,73 @@ public enum MoveExplorer {
 	}
 
 	private boolean shouldSearch(Point seed, Direction direction) {
-		Disk nextPoint;
+		Point nextPoint;
+		Disk nextDisk;
 		switch (direction) {
 			case NORTH:
-				nextPoint = board.getDisk(new Point(seed.x - 1, seed.y));
-				return nextPoint.getState() != DiskState.EMPTY
-				       && nextPoint.getColor() != color;
+				nextPoint = new Point(seed.x - 1, seed.y);
+				if (nextPoint.x < 0) {
+					return false;
+				}
+				nextDisk = board.getDisk(nextPoint);
+				return nextDisk.getState() != DiskState.EMPTY
+				       && nextDisk.getColor() != color;
 			case SOUTH:
-				nextPoint = board.getDisk(new Point(seed.x + 1, seed.y));
-				return nextPoint.getState() != DiskState.EMPTY
-				       && nextPoint.getColor() != color;
+				nextPoint = new Point(seed.x + 1, seed.y);
+				if (nextPoint.x >= Board.BOARD_LENGTH) {
+					return false;
+				}
+				nextDisk = board.getDisk(nextPoint);
+				return nextDisk.getState() != DiskState.EMPTY
+				       && nextDisk.getColor() != color;
 			case WEST:
-				nextPoint = board.getDisk(new Point(seed.x, seed.y - 1));
-				return nextPoint.getState() != DiskState.EMPTY
-				       && nextPoint.getColor() != color;
+				nextPoint = new Point(seed.x, seed.y - 1);
+				if (nextPoint.y < 0) {
+					return false;
+				}
+				nextDisk = board.getDisk(nextPoint);
+				return nextDisk.getState() != DiskState.EMPTY
+				       && nextDisk.getColor() != color;
 			case EAST:
-				nextPoint = board.getDisk(new Point(seed.x, seed.y + 1));
-				return nextPoint.getState() != DiskState.EMPTY
-				       && nextPoint.getColor() != color;
+				nextPoint = new Point(seed.x, seed.y + 1);
+				if (nextPoint.y >= Board.BOARD_WIDTH) {
+					return false;
+				}
+				nextDisk = board.getDisk(nextPoint);
+				return nextDisk.getState() != DiskState.EMPTY
+				       && nextDisk.getColor() != color;
 			case NORTHWEST:
-				nextPoint = board.getDisk(new Point(seed.x - 1, seed.y - 1));
-				return nextPoint.getState() != DiskState.EMPTY
-				       && nextPoint.getColor() != color;
+				nextPoint = new Point(seed.x - 1, seed.y - 1);
+				if (nextPoint.x < 0 || nextPoint.y < 0) {
+					return false;
+				}
+				nextDisk = board.getDisk(nextPoint);
+				return nextDisk.getState() != DiskState.EMPTY
+				       && nextDisk.getColor() != color;
 			case SOUTHEAST:
-				nextPoint = board.getDisk(new Point(seed.x + 1, seed.y + 1));
-				return nextPoint.getState() != DiskState.EMPTY
-				       && nextPoint.getColor() != color;
+				nextPoint = new Point(seed.x + 1, seed.y + 1);
+				if (nextPoint.x >= Board.BOARD_LENGTH || nextPoint.y >= Board.BOARD_WIDTH) {
+					return false;
+				}
+				nextDisk = board.getDisk(nextPoint);
+				return nextDisk.getState() != DiskState.EMPTY
+				       && nextDisk.getColor() != color;
 			case SOUTHWEST:
-				nextPoint = board.getDisk(new Point(seed.x + 1, seed.y - 1));
-				return nextPoint.getState() != DiskState.EMPTY
-				       && nextPoint.getColor() != color;
+				nextPoint = new Point(seed.x + 1, seed.y - 1);
+				if (nextPoint.x >= Board.BOARD_LENGTH || nextPoint.y < 0) {
+					return false;
+				}
+				nextDisk = board.getDisk(nextPoint);
+				return nextDisk.getState() != DiskState.EMPTY
+				       && nextDisk.getColor() != color;
 			case NORTHEAST:
-				nextPoint = board.getDisk(new Point(seed.x - 1, seed.y + 1));
-				return nextPoint.getState() != DiskState.EMPTY
-				       && nextPoint.getColor() != color;
+				nextPoint = new Point(seed.x - 1, seed.y + 1);
+				if (nextPoint.x < 0 || nextPoint.y >= Board.BOARD_WIDTH) {
+					return false;
+				}
+				nextDisk = board.getDisk(nextPoint);
+				return nextDisk.getState() != DiskState.EMPTY
+				       && nextDisk.getColor() != color;
 			default:
 				return false;
 		}
@@ -137,7 +171,7 @@ public enum MoveExplorer {
 	private List<Point> searchWest(Point seed) {
 		List<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x, seed.y - 2);
-		while (nextPoint.x >= 0) {
+		while (nextPoint.y >= 0) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
@@ -153,7 +187,7 @@ public enum MoveExplorer {
 	private List<Point> searchEast(Point seed) {
 		List<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x, seed.y + 2);
-		while (nextPoint.x < Board.BOARD_WIDTH) {
+		while (nextPoint.y < Board.BOARD_WIDTH) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
@@ -169,7 +203,7 @@ public enum MoveExplorer {
 	private List<Point> searchNorthWest(Point seed) {
 		List<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x - 2, seed.y - 2);
-		while (nextPoint.x < Board.BOARD_WIDTH) {
+		while (nextPoint.x >= 0 && nextPoint.y >= 0) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
@@ -185,7 +219,7 @@ public enum MoveExplorer {
 	private List<Point> searchSouthEast(Point seed) {
 		List<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x + 2, seed.y + 2);
-		while (nextPoint.x < Board.BOARD_WIDTH) {
+		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y < Board.BOARD_WIDTH) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
@@ -201,7 +235,7 @@ public enum MoveExplorer {
 	private List<Point> searchSouthWest(Point seed) {
 		List<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x + 2, seed.y - 2);
-		while (nextPoint.x < Board.BOARD_WIDTH) {
+		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y >= 0) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
@@ -217,7 +251,7 @@ public enum MoveExplorer {
 	private List<Point> searchNorthEast(Point seed) {
 		List<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x - 2, seed.y + 2);
-		while (nextPoint.x < Board.BOARD_WIDTH) {
+		while (nextPoint.x >= 0 && nextPoint.y < Board.BOARD_WIDTH) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
