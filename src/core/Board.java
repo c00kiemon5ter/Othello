@@ -7,7 +7,7 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Board {
+public final class Board {
 
 	public static final int BOARD_LENGTH = 8;
 	public static final int BOARD_WIDTH = 8;
@@ -17,13 +17,17 @@ public class Board {
 		this(BOARD_LENGTH, BOARD_WIDTH);
 	}
 
+	private Board(int boardLength, int boardWidth) {
+		disks = new Disk[boardLength][boardWidth];
+		init();
+	}
+
 	/**
 	 * game starts with four pieces, two black, two white, placed diagonally
 	 *
 	 * @param boardSize the size of the board
 	 */
-	private Board(int boardLength, int boardWidth) {
-		disks = new Disk[boardLength][boardWidth];
+	void init() {
 		Point point = new Point();
 		for (point.x = 0; point.x < disks.length; point.x++) {
 			for (point.y = 0; point.y < disks[point.x].length; point.y++) {

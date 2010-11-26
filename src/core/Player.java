@@ -15,7 +15,6 @@ public enum Player {
 		this.description = "The " + (color == DiskState.BLACK
 					     ? "black" : "white") + " player";
 		this.color = color;
-		this.score = 2;
 	}
 
 	public DiskState color() {
@@ -36,5 +35,9 @@ public enum Player {
 
 	public String stats() {
 		return String.format("%s: %d", this, this.score);
+	}
+
+	void init() {
+		this.score = 2;
 	}
 }

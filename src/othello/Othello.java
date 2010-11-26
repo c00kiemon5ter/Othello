@@ -3,8 +3,7 @@
  */
 package othello;
 
-import core.Controller;
-import java.io.IOException;
+import core.Game;
 
 /**
  *
@@ -27,7 +26,8 @@ public class Othello {
 	// TODO: MinMax + AlphaBeta
 	// TODO: AI Interface
 	// TODO: UI and connection
-	public static void main(String[] args) throws IOException {
-		Controller.getInstance().operate();
+	public static void main(String[] args) {
+		Game othello = new Game();
+		othello.start();
 	}
 }
