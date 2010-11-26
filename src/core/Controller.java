@@ -4,9 +4,11 @@
 package core;
 
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Controller {
 
@@ -18,15 +20,15 @@ public class Controller {
 	private boolean turn;
 	private Board board;
 	private MoveExplorer explorer;
-	private Scanner scan;
+	private BufferedReader reader;
 
 	private Controller() {
 		turn = false;	/* black player plays first */
 		board = Board.getInstance();
-		scan = new Scanner(System.in);
+		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	public void operate() {
+	public void operate() throws IOException {
 		List<Point> moves;
 		Point move;
 		while (!endOfGame()) {
@@ -34,10 +36,12 @@ public class Controller {
 			System.out.println(Player.BLACK.stats() + '\t' + Player.WHITE.stats());
 			System.out.println(board.toString());
 			if (!moves.isEmpty()) {
+				/* play */
 				move = selectMove(moves);
-				moves.remove(move);
 				makeMove(move);
 				updateScores();
+				/* clean up */
+				moves.remove(move);
 				for (Point possiblePoint : moves) {
 					board.getDisk(possiblePoint).setState(DiskState.EMPTY);
 				}
@@ -45,6 +49,7 @@ public class Controller {
 			/* change turn */
 			turn = !turn;
 		}
+		reader.close();
 		System.out.println(board.toString());
 		System.out.println(Player.BLACK.stats() + '\t' + Player.WHITE.stats());
 	}
@@ -58,7 +63,7 @@ public class Controller {
 		return moves;
 	}
 
-	private Point selectMove(List<Point> moves) {
+	private Point selectMove(List<Point> moves) throws IOException {
 		String line;
 		int moveIdx = 0;
 		for (Point point : moves) {
@@ -66,7 +71,7 @@ public class Controller {
 		}
 		System.out.print("\nSelect move: ");
 		while (true) {
-			line = scan.nextLine();
+			line = reader.readLine();
 			try {
 				moveIdx = Integer.parseInt(line);
 			} catch (NumberFormatException nfe) {
@@ -87,7 +92,8 @@ public class Controller {
 	}
 
 	private void makeMove(Point move) {
-		board.getDisk(move).setState(turn ? DiskState.WHITE : DiskState.BLACK);
+		DiskState color = turn ? DiskState.WHITE : DiskState.BLACK;
+		board.getDisk(move).setColor(color);
 		// TODO: expand - change affected disks
 	}
 
