@@ -4,6 +4,8 @@
 package core;
 
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Board {
 
@@ -12,6 +14,19 @@ public class Board {
 
 	public static Board getInstance() {
 		return BoardHolder.INSTANCE;
+	}
+
+	Set<Point> getDiskPoints(DiskState color) {
+		Set<Point> points = new HashSet<Point>();
+		Point point = new Point();
+		for (point.x = 0; point.x < disks.length; point.x++) {
+			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
+				if (disks[point.x][point.y].getState() == color) {
+					points.add(new Point(point));
+				}
+			}
+		}
+		return points;
 	}
 
 	/* singleton - there is only one board */

@@ -14,4 +14,8 @@ public class Player {
 		this.color = color;
 	}
 
+	public void turn() {
+		// discover available moves
+	}
+
 }
