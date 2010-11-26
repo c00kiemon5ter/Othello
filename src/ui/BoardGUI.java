@@ -3,6 +3,7 @@
  */
 package ui;
 
+import java.awt.Color;
 import javax.swing.ImageIcon;
 
 public class BoardGUI extends javax.swing.JFrame {
@@ -14,6 +15,8 @@ public class BoardGUI extends javax.swing.JFrame {
         createSquares(core.Board.BOARD_LENGTH,core.Board.BOARD_WIDTH);
         addSquares();
         enableSquares();
+        changeSquareIcon(0,0,new ImageIcon(getClass().getResource("/ui/images/empty.png")));
+        changeSquaresColor("#228B22");
     }
 
     /** This method is called from within the constructor to
@@ -28,19 +31,23 @@ public class BoardGUI extends javax.swing.JFrame {
         board = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Othello");
         setIconImage(new ImageIcon(getClass().getResource("/ui/images/logo.jpg")).getImage());
+        setResizable(false);
 
+        board.setBackground(new java.awt.Color(0, 0, 0));
         board.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        board.setPreferredSize(new java.awt.Dimension(600, 600));
 
         javax.swing.GroupLayout boardLayout = new javax.swing.GroupLayout(board);
         board.setLayout(boardLayout);
         boardLayout.setHorizontalGroup(
             boardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 743, Short.MAX_VALUE)
+            .addGap(0, 630, Short.MAX_VALUE)
         );
         boardLayout.setVerticalGroup(
             boardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 455, Short.MAX_VALUE)
+            .addGap(0, 481, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -49,14 +56,14 @@ public class BoardGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(board, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -84,13 +91,12 @@ public class BoardGUI extends javax.swing.JFrame {
         for(int x=0;x<boardlength;x++) {
             for(int y=0;y<boardwidth;y++) {
                 squares[x][y] = new javax.swing.JButton();
-                squares[x][y].setText("suqre"+x+y);
             }
         }
     }
 
     private void addSquares() {
-        java.awt.GridLayout grid = new java.awt.GridLayout(squares.length,squares[0].length);
+        java.awt.GridLayout grid = new java.awt.GridLayout(squares.length,squares[0].length,1,1);
         for(int x=0;x<squares.length;x++) {
             for(int y=0;y<squares[0].length;y++) {
                 board.add(squares[x][y]);
@@ -106,6 +112,22 @@ public class BoardGUI extends javax.swing.JFrame {
                 squares[x][y].setVisible(true);
             }
         }
+    }
+
+    private void changeSquaresColor(String color) {
+        for(int x=0;x<squares.length;x++) {
+            for(int y=0;y<squares[0].length;y++) {
+                changeSquareColor(x,y,color);
+            }
+        }
+    }
+
+    private void changeSquareIcon(int x,int y,ImageIcon icon) {
+        squares[x][y].setIcon(icon);
+    }
+
+    private void changeSquareColor(int x,int y,String color) {
+        squares[x][y].setBackground(Color.decode(color));
     }
 
 }
