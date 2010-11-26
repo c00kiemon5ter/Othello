@@ -1,7 +1,10 @@
 package core;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public enum MoveExplorer {
@@ -16,229 +19,214 @@ public enum MoveExplorer {
 	}
 
 	public Set<Point> explore() {
-		Set<Point> availablemoves = new HashSet<Point>();
+		Set<Point> possibleMoves = new HashSet<Point>();
 		Set<Point> diskpoints = board.getDiskPoints(color);
 		for (Point point : diskpoints) {
-			for (Direction direction : Direction.values()) {
-				availablemoves.addAll(searchMoves(point, direction));
-			}
+			possibleMoves.addAll(searchMoves(point));
 		}
-		return availablemoves;
+		return possibleMoves;
 	}
 
-	private Set<Point> searchMoves(Point seed, Direction direction) {
-		Set<Point> points = new HashSet<Point>();
-		// TODO: search this direction for available moves
+	private List<Point> searchMoves(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		for (Direction direction : Direction.values()) {
+			if (shouldSearch(seed, direction)) {
+				switch (direction) {
+					case NORTH:
+						pointlist.addAll(searchNorth(seed));
+						break;
+					case SOUTH:
+						pointlist.addAll(searchSouth(seed));
+						break;
+					case WEST:
+						pointlist.addAll(searchWest(seed));
+						break;
+					case EAST:
+						pointlist.addAll(searchEast(seed));
+						break;
+					case NORTHWEST:
+						pointlist.addAll(searchNorthWest(seed));
+						break;
+					case SOUTHEAST:
+						pointlist.addAll(searchSouthEast(seed));
+						break;
+					case SOUTHWEST:
+						pointlist.addAll(searchSouthWest(seed));
+						break;
+					case NORTHEAST:
+						pointlist.addAll(searchNorthEast(seed));
+						break;
+				}
+			}
+		}
+		return pointlist;
+	}
+
+	private boolean shouldSearch(Point seed, Direction direction) {
+		Disk nextPoint;
 		switch (direction) {
 			case NORTH:
-				if (hasNorth(seed)) {
-					points.add(searchNorth(seed));
-				}
-				break;
+				nextPoint = board.getDisk(new Point(seed.x - 1, seed.y));
+				return nextPoint.getState() != DiskState.EMPTY
+				       && nextPoint.getColor() != color;
 			case SOUTH:
-				if (hasSouth(seed)) {
-					points.add(searchSouth(seed));
-				}
-				break;
+				nextPoint = board.getDisk(new Point(seed.x + 1, seed.y));
+				return nextPoint.getState() != DiskState.EMPTY
+				       && nextPoint.getColor() != color;
 			case WEST:
-				if (hasWest(seed)) {
-					points.add(searchWest(seed));
-				}
-				break;
+				nextPoint = board.getDisk(new Point(seed.x, seed.y - 1));
+				return nextPoint.getState() != DiskState.EMPTY
+				       && nextPoint.getColor() != color;
 			case EAST:
-				if (hasEast(seed)) {
-					points.add(searchEast(seed));
-				}
-				break;
+				nextPoint = board.getDisk(new Point(seed.x, seed.y + 1));
+				return nextPoint.getState() != DiskState.EMPTY
+				       && nextPoint.getColor() != color;
 			case NORTHWEST:
-				if (hasNorthWest(seed)) {
-					points.add(searchNorthWest(seed));
-				}
-				break;
+				nextPoint = board.getDisk(new Point(seed.x - 1, seed.y - 1));
+				return nextPoint.getState() != DiskState.EMPTY
+				       && nextPoint.getColor() != color;
 			case SOUTHEAST:
-				if (hasSouthEast(seed)) {
-					points.add(searchSouthEast(seed));
-				}
-				break;
+				nextPoint = board.getDisk(new Point(seed.x + 1, seed.y + 1));
+				return nextPoint.getState() != DiskState.EMPTY
+				       && nextPoint.getColor() != color;
 			case SOUTHWEST:
-				if (hasSouthWest(seed)) {
-					points.add(searchSouthWest(seed));
-				}
-				break;
+				nextPoint = board.getDisk(new Point(seed.x + 1, seed.y - 1));
+				return nextPoint.getState() != DiskState.EMPTY
+				       && nextPoint.getColor() != color;
 			case NORTHEAST:
-				if (hasNorthEast(seed)) {
-					points.add(searchNorthEast(seed));
-				}
-				break;
+				nextPoint = board.getDisk(new Point(seed.x - 1, seed.y + 1));
+				return nextPoint.getState() != DiskState.EMPTY
+				       && nextPoint.getColor() != color;
+			default:
+				return false;
 		}
-		return points;
 	}
 
-	private boolean hasNorth(Point seed) {
-		return (board.getDisk(new Point(seed.x, seed.y - 1)).getState() == board.getDisk(seed).getState());
-	}
-
-	private Point searchNorth(Point seed) {
-		Point point = new Point();
-		int current = seed.y - 1;
-		while (current >= 0) {
-			point.setLocation(seed.x, current);
-			if (board.getDisk(point).getState() == DiskState.EMPTY) {
+	private List<Point> searchNorth(Point seed) {
+		List<Point> list = new ArrayList<Point>(1);
+		Point nextPoint = new Point(seed.x - 2, seed.y);
+		while (nextPoint.x >= 0) {
+			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
-			if (current == 0) {
-				return null;
-			}
-			current--;
-		}
-		return point;
-	}
-
-	private boolean hasSouth(Point seed) {
-		return (board.getDisk(new Point(seed.x, seed.y + 1)).getState() == board.getDisk(seed).getState());
-	}
-
-	private Point searchSouth(Point seed) {
-		Point point = new Point();
-		int current = seed.y + 1;
-		while (current < Board.BOARD_SIZE) {
-			point.setLocation(seed.x, current);
-			if (board.getDisk(point).getState() == DiskState.EMPTY) {
+			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				list.add(nextPoint);
 				break;
 			}
-			if (current == Board.BOARD_SIZE - 1) {
-				return null;
-			}
-			current++;
+			nextPoint = new Point(nextPoint.x - 1, nextPoint.y);
 		}
-		return point;
+		return list;
 	}
 
-	private boolean hasWest(Point seed) {
-		return (board.getDisk(new Point(seed.x - 1, seed.y)).getState() == board.getDisk(seed).getState());
-	}
-
-	private Point searchWest(Point seed) {
-		Point point = new Point();
-		int current = seed.x - 1;
-		while (current >= 0) {
-			point.setLocation(current, seed.y);
-			if (board.getDisk(point).getState() == DiskState.EMPTY) {
+	private List<Point> searchSouth(Point seed) {
+		List<Point> list = new ArrayList<Point>(1);
+		Point nextPoint = new Point(seed.x + 2, seed.y);
+		while (nextPoint.x < Board.BOARD_LENGTH) {
+			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
-			if (current == 0) {
-				return null;
-			}
-			current--;
-		}
-		return point;
-	}
-
-	private boolean hasEast(Point seed) {
-		return (board.getDisk(new Point(seed.x + 1, seed.y)).getState() == board.getDisk(seed).getState());
-	}
-
-	private Point searchEast(Point seed) {
-		Point point = new Point();
-		int current = seed.x + 1;
-		while (current < Board.BOARD_SIZE) {
-			point.setLocation(current, seed.y);
-			if (board.getDisk(point).getState() == DiskState.EMPTY) {
+			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				list.add(nextPoint);
 				break;
 			}
-			if (current == Board.BOARD_SIZE - 1) {
-				return null;
-			}
-			current++;
+			nextPoint = new Point(nextPoint.x + 1, nextPoint.y);
 		}
-		return point;
+		return list;
 	}
 
-	private boolean hasNorthWest(Point seed) {
-		return (board.getDisk(new Point(seed.x - 1, seed.y - 1)).getState() == board.getDisk(seed).getState());
-	}
-
-	private Point searchNorthWest(Point seed) {
-		Point point = new Point();
-		int currentx = seed.x - 1;
-		int currenty = seed.y - 1;
-		while (currentx >= 0 && currenty >= 0) {
-			point.setLocation(currentx, currenty);
-			if (board.getDisk(point).getState() == DiskState.EMPTY) {
+	private List<Point> searchWest(Point seed) {
+		List<Point> list = new ArrayList<Point>(1);
+		Point nextPoint = new Point(seed.x, seed.y - 2);
+		while (nextPoint.x >= 0) {
+			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
-			if (currentx == 0 || currenty == 0) {
-				return null;
-			}
-			currentx--;
-			currenty--;
-		}
-		return point;
-	}
-
-	private boolean hasSouthEast(Point seed) {
-		return (board.getDisk(new Point(seed.x + 1, seed.y + 1)).getState() == board.getDisk(seed).getState());
-	}
-
-	private Point searchSouthEast(Point seed) {
-		Point point = new Point();
-		int currentx = seed.x + 1;
-		int currenty = seed.y + 1;
-		while (currentx < Board.BOARD_SIZE && currenty < Board.BOARD_SIZE) {
-			point.setLocation(currentx, currenty);
-			if (board.getDisk(point).getState() == DiskState.EMPTY) {
+			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				list.add(nextPoint);
 				break;
 			}
-			if (currentx == Board.BOARD_SIZE - 1 || currenty == Board.BOARD_SIZE - 1) {
-				return null;
-			}
-			currentx++;
-			currenty++;
+			nextPoint = new Point(nextPoint.x, nextPoint.y - 1);
 		}
-		return point;
+		return list;
 	}
 
-	private boolean hasSouthWest(Point seed) {
-		return (board.getDisk(new Point(seed.x - 1, seed.y + 1)).getState() == board.getDisk(seed).getState());
-	}
-
-	private Point searchSouthWest(Point seed) {
-		Point point = new Point();
-		int currentx = seed.x - 1;
-		int currenty = seed.y + 1;
-		while (currentx >= 0 && currenty < Board.BOARD_SIZE) {
-			point.setLocation(currentx, currenty);
-			if (board.getDisk(point).getState() == DiskState.EMPTY) {
+	private List<Point> searchEast(Point seed) {
+		List<Point> list = new ArrayList<Point>(1);
+		Point nextPoint = new Point(seed.x, seed.y + 2);
+		while (nextPoint.x < Board.BOARD_WIDTH) {
+			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
 			}
-			if (currentx == 0 || currenty == Board.BOARD_SIZE - 1) {
-				return null;
-			}
-			currentx--;
-			currenty++;
-		}
-		return point;
-	}
-
-	private boolean hasNorthEast(Point seed) {
-		return (board.getDisk(new Point(seed.x + 1, seed.y - 1)).getState() == board.getDisk(seed).getState());
-	}
-
-	private Point searchNorthEast(Point seed) {
-		Point point = new Point();
-		int currentx = seed.x + 1;
-		int currenty = seed.y - 1;
-		while (currentx < Board.BOARD_SIZE && currenty >= 0) {
-			point.setLocation(currentx, currenty);
-			if (board.getDisk(point).getState() == DiskState.EMPTY) {
+			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				list.add(nextPoint);
 				break;
 			}
-			if (currentx == Board.BOARD_SIZE - 1 || currenty == 0) {
-				return null;
-			}
-			currentx++;
-			currenty--;
+			nextPoint = new Point(nextPoint.x, nextPoint.y + 1);
 		}
-		return point;
+		return list;
+	}
+
+	private List<Point> searchNorthWest(Point seed) {
+		List<Point> list = new ArrayList<Point>(1);
+		Point nextPoint = new Point(seed.x - 2, seed.y - 2);
+		while (nextPoint.x < Board.BOARD_WIDTH) {
+			if (board.getDisk(nextPoint).getColor() == color) {
+				break;
+			}
+			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				list.add(nextPoint);
+				break;
+			}
+			nextPoint = new Point(nextPoint.x - 1, nextPoint.y - 1);
+		}
+		return list;
+	}
+
+	private List<Point> searchSouthEast(Point seed) {
+		List<Point> list = new ArrayList<Point>(1);
+		Point nextPoint = new Point(seed.x + 2, seed.y + 2);
+		while (nextPoint.x < Board.BOARD_WIDTH) {
+			if (board.getDisk(nextPoint).getColor() == color) {
+				break;
+			}
+			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				list.add(nextPoint);
+				break;
+			}
+			nextPoint = new Point(nextPoint.x + 1, nextPoint.y + 1);
+		}
+		return list;
+	}
+
+	private List<Point> searchSouthWest(Point seed) {
+		List<Point> list = new ArrayList<Point>(1);
+		Point nextPoint = new Point(seed.x + 2, seed.y - 2);
+		while (nextPoint.x < Board.BOARD_WIDTH) {
+			if (board.getDisk(nextPoint).getColor() == color) {
+				break;
+			}
+			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				list.add(nextPoint);
+				break;
+			}
+			nextPoint = new Point(nextPoint.x + 1, nextPoint.y - 1);
+		}
+		return list;
+	}
+
+	private List<Point> searchNorthEast(Point seed) {
+		List<Point> list = new ArrayList<Point>(1);
+		Point nextPoint = new Point(seed.x - 2, seed.y + 2);
+		while (nextPoint.x < Board.BOARD_WIDTH) {
+			if (board.getDisk(nextPoint).getColor() == color) {
+				break;
+			}
+			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				list.add(nextPoint);
+				break;
+			}
+			nextPoint = new Point(nextPoint.x - 1, nextPoint.y + 1);
+		}
+		return list;
 	}
 }

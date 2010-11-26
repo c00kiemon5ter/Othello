@@ -23,6 +23,14 @@ public class Disk {
 		this.position.setLocation(position);
 	}
 
+	public DiskState getColor() {
+		return state;
+	}
+
+	public DiskState setColor(DiskState state) {
+		return state;
+	}
+
 	public DiskState getState() {
 		return state;
 	}
@@ -44,10 +52,11 @@ public class Disk {
 	}
 
 	public boolean isCorner() {
-		int edge = Board.BOARD_SIZE - 1;
+		int rowEdge = Board.BOARD_LENGTH - 1;
+		int colmnEdge = Board.BOARD_WIDTH - 1;
 		return (this.position.x == 0 && this.position.y == 0)
-		       || (this.position.x == 0 && this.position.y == edge)
-		       || (this.position.x == edge && this.position.y == 0)
-		       || (this.position.x == edge && this.position.y == edge);
+		       || (this.position.x == 0 && this.position.y == colmnEdge)
+		       || (this.position.x == rowEdge && this.position.y == 0)
+		       || (this.position.x == rowEdge && this.position.y == colmnEdge);
 	}
 }
