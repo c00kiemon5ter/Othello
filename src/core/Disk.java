@@ -27,8 +27,8 @@ public class Disk {
 		return state;
 	}
 
-	public DiskState setColor(DiskState state) {
-		return state;
+	public void setColor(DiskState color) {
+		this.state = color;
 	}
 
 	public DiskState getState() {
@@ -37,10 +37,6 @@ public class Disk {
 
 	public void setState(DiskState state) {
 		this.state = state;
-	}
-
-	public void flip() {
-		this.changeColor();
 	}
 
 	protected void changeColor() {

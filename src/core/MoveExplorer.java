@@ -142,8 +142,7 @@ public enum MoveExplorer {
 		while (nextPoint.x >= 0) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
-			}
-			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				list.add(nextPoint);
 				break;
 			}
@@ -158,8 +157,7 @@ public enum MoveExplorer {
 		while (nextPoint.x < Board.BOARD_LENGTH) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
-			}
-			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				list.add(nextPoint);
 				break;
 			}
@@ -174,8 +172,7 @@ public enum MoveExplorer {
 		while (nextPoint.y >= 0) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
-			}
-			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				list.add(nextPoint);
 				break;
 			}
@@ -190,8 +187,7 @@ public enum MoveExplorer {
 		while (nextPoint.y < Board.BOARD_WIDTH) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
-			}
-			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				list.add(nextPoint);
 				break;
 			}
@@ -206,8 +202,7 @@ public enum MoveExplorer {
 		while (nextPoint.x >= 0 && nextPoint.y >= 0) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
-			}
-			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				list.add(nextPoint);
 				break;
 			}
@@ -222,8 +217,7 @@ public enum MoveExplorer {
 		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y < Board.BOARD_WIDTH) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
-			}
-			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				list.add(nextPoint);
 				break;
 			}
@@ -238,8 +232,7 @@ public enum MoveExplorer {
 		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y >= 0) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
-			}
-			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				list.add(nextPoint);
 				break;
 			}
@@ -254,13 +247,205 @@ public enum MoveExplorer {
 		while (nextPoint.x >= 0 && nextPoint.y < Board.BOARD_WIDTH) {
 			if (board.getDisk(nextPoint).getColor() == color) {
 				break;
-			}
-			if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				list.add(nextPoint);
 				break;
 			}
 			nextPoint = new Point(nextPoint.x - 1, nextPoint.y + 1);
 		}
 		return list;
+	}
+
+	public void fill(Point seed) {
+		for (Direction direction : Direction.values()) {
+			if (shouldSearch(seed, direction)) {
+				switch (direction) {
+					case NORTH:
+						fillNorth(seed);
+						break;
+					case SOUTH:
+						fillSouth(seed);
+						break;
+					case WEST:
+						fillWest(seed);
+						break;
+					case EAST:
+						fillEast(seed);
+						break;
+					case NORTHWEST:
+						fillNorthWest(seed);
+						break;
+					case SOUTHEAST:
+						fillSouthEast(seed);
+						break;
+					case SOUTHWEST:
+						fillSouthWest(seed);
+						break;
+					case NORTHEAST:
+						fillNorthEast(seed);
+						break;
+				}
+			}
+		}
+	}
+
+	private void fillNorth(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		DiskState oppositeColor = (color == DiskState.BLACK)
+					  ? DiskState.WHITE : DiskState.BLACK;
+		Point nextPoint = new Point(seed.x - 1, seed.y);
+		while (nextPoint.x >= 0) {
+			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+				pointlist.add(nextPoint);
+			} else if (board.getDisk(nextPoint).getColor() == color) {
+				for (Point toChange : pointlist) {
+					board.getDisk(toChange).changeColor();
+				}
+				return;
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				break;
+			}
+			nextPoint = new Point(nextPoint.x - 1, nextPoint.y);
+		}
+	}
+
+	private void fillSouth(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		DiskState oppositeColor = (color == DiskState.BLACK)
+					  ? DiskState.WHITE : DiskState.BLACK;
+		Point nextPoint = new Point(seed.x + 1, seed.y);
+		while (nextPoint.x < Board.BOARD_LENGTH) {
+			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+				pointlist.add(nextPoint);
+			} else if (board.getDisk(nextPoint).getColor() == color) {
+				for (Point toChange : pointlist) {
+					board.getDisk(toChange).changeColor();
+				}
+				return;
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				break;
+			}
+			nextPoint = new Point(nextPoint.x + 1, nextPoint.y);
+		}
+	}
+
+	private void fillWest(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		DiskState oppositeColor = (color == DiskState.BLACK)
+					  ? DiskState.WHITE : DiskState.BLACK;
+		Point nextPoint = new Point(seed.x, seed.y - 1);
+		while (nextPoint.y >= 0) {
+			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+				pointlist.add(nextPoint);
+			} else if (board.getDisk(nextPoint).getColor() == color) {
+				for (Point toChange : pointlist) {
+					board.getDisk(toChange).changeColor();
+				}
+				return;
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				break;
+			}
+			nextPoint = new Point(nextPoint.x, nextPoint.y - 1);
+		}
+	}
+
+	private void fillEast(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		DiskState oppositeColor = (color == DiskState.BLACK)
+					  ? DiskState.WHITE : DiskState.BLACK;
+		Point nextPoint = new Point(seed.x, seed.y + 1);
+		while (nextPoint.y < Board.BOARD_WIDTH) {
+			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+				pointlist.add(nextPoint);
+			} else if (board.getDisk(nextPoint).getColor() == color) {
+				for (Point toChange : pointlist) {
+					board.getDisk(toChange).changeColor();
+				}
+				return;
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				break;
+			}
+			nextPoint = new Point(nextPoint.x, nextPoint.y + 1);
+		}
+	}
+
+	private void fillNorthWest(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		DiskState oppositeColor = (color == DiskState.BLACK)
+					  ? DiskState.WHITE : DiskState.BLACK;
+		Point nextPoint = new Point(seed.x - 1, seed.y - 1);
+		while (nextPoint.x >= 0 && nextPoint.y >= 0) {
+			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+				pointlist.add(nextPoint);
+			} else if (board.getDisk(nextPoint).getColor() == color) {
+				for (Point toChange : pointlist) {
+					board.getDisk(toChange).changeColor();
+				}
+				return;
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				break;
+			}
+			nextPoint = new Point(nextPoint.x - 1, nextPoint.y - 1);
+		}
+	}
+
+	private void fillSouthEast(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		DiskState oppositeColor = (color == DiskState.BLACK)
+					  ? DiskState.WHITE : DiskState.BLACK;
+		Point nextPoint = new Point(seed.x + 1, seed.y + 1);
+		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y < Board.BOARD_WIDTH) {
+			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+				pointlist.add(nextPoint);
+			} else if (board.getDisk(nextPoint).getColor() == color) {
+				for (Point toChange : pointlist) {
+					board.getDisk(toChange).changeColor();
+				}
+				return;
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				break;
+			}
+			nextPoint = new Point(nextPoint.x + 1, nextPoint.y + 1);
+		}
+	}
+
+	private void fillSouthWest(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		DiskState oppositeColor = (color == DiskState.BLACK)
+					  ? DiskState.WHITE : DiskState.BLACK;
+		Point nextPoint = new Point(seed.x + 1, seed.y - 1);
+		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y >= 0) {
+			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+				pointlist.add(nextPoint);
+			} else if (board.getDisk(nextPoint).getColor() == color) {
+				for (Point toChange : pointlist) {
+					board.getDisk(toChange).changeColor();
+				}
+				return;
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				break;
+			}
+			nextPoint = new Point(nextPoint.x + 1, nextPoint.y - 1);
+		}
+	}
+
+	private void fillNorthEast(Point seed) {
+		List<Point> pointlist = new LinkedList<Point>();
+		DiskState oppositeColor = (color == DiskState.BLACK)
+					  ? DiskState.WHITE : DiskState.BLACK;
+		Point nextPoint = new Point(seed.x - 1, seed.y + 1);
+		while (nextPoint.x >= 0 && nextPoint.y < Board.BOARD_WIDTH) {
+			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+				pointlist.add(nextPoint);
+			} else if (board.getDisk(nextPoint).getColor() == color) {
+				for (Point toChange : pointlist) {
+					board.getDisk(toChange).changeColor();
+				}
+				return;
+			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+				break;
+			}
+			nextPoint = new Point(nextPoint.x - 1, nextPoint.y + 1);
+		}
 	}
 }

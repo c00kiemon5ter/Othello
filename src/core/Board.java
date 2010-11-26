@@ -71,8 +71,8 @@ public class Board {
 		}
 		return builder.toString();
 	}
-	/* singleton - there is only one board */
 
+	/* singleton - there is only one board */
 	private static class BoardHolder {
 
 		private static final Board INSTANCE = new Board();

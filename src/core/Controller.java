@@ -35,16 +35,12 @@ public class Controller {
 			moves = markPossibleMoves();
 			System.out.println(Player.BLACK.stats() + '\t' + Player.WHITE.stats());
 			System.out.println(board.toString());
+			unmarkPossibleMoves(moves);
 			if (!moves.isEmpty()) {
 				/* play */
 				move = selectMove(moves);
 				makeMove(move);
 				updateScores();
-				/* clean up */
-				moves.remove(move);
-				for (Point possiblePoint : moves) {
-					board.getDisk(possiblePoint).setState(DiskState.EMPTY);
-				}
 			}
 			/* change turn */
 			turn = !turn;
@@ -61,6 +57,12 @@ public class Controller {
 			board.getDisk(possiblePoint).setState(DiskState.PSSBL);
 		}
 		return moves;
+	}
+
+	private void unmarkPossibleMoves(List<Point> moves) {
+		for (Point possiblePoint : moves) {
+			board.getDisk(possiblePoint).setState(DiskState.EMPTY);
+		}
 	}
 
 	private Point selectMove(List<Point> moves) throws IOException {
@@ -93,8 +95,9 @@ public class Controller {
 
 	private void makeMove(Point move) {
 		DiskState color = turn ? DiskState.WHITE : DiskState.BLACK;
+		explorer = turn ? MoveExplorer.WHITEEXPLORER : MoveExplorer.BLACKEXPLORER;
 		board.getDisk(move).setColor(color);
-		// TODO: expand - change affected disks
+		explorer.fill(move);
 	}
 
 	private void updateScores() {
