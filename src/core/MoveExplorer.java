@@ -4,13 +4,14 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MoveExplorer {
+public enum MoveExplorer {
 
-	private Board board;
+	BLACKEXPLORER(DiskState.BLACK),
+	WHITEEXPLORER(DiskState.WHITE);
+	private Board board = Board.getInstance();
 	private DiskState color;
 
-	public MoveExplorer(Board board, DiskState color) {
-		this.board = board;
+	MoveExplorer(DiskState color) {
 		this.color = color;
 	}
 
