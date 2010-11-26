@@ -12,29 +12,6 @@ public class Board {
 	public static final int BOARD_SIZE = 8;
 	private Disk[][] disks;
 
-	public static Board getInstance() {
-		return BoardHolder.INSTANCE;
-	}
-
-	Set<Point> getDiskPoints(DiskState color) {
-		Set<Point> points = new HashSet<Point>();
-		Point point = new Point();
-		for (point.x = 0; point.x < disks.length; point.x++) {
-			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				if (disks[point.x][point.y].getState() == color) {
-					points.add(new Point(point));
-				}
-			}
-		}
-		return points;
-	}
-
-	/* singleton - there is only one board */
-	private static class BoardHolder {
-
-		private static final Board INSTANCE = new Board();
-	}
-
 	private Board() {
 		this(BOARD_SIZE);
 	}
@@ -58,21 +35,25 @@ public class Board {
 		disks[4][4] = new Disk(new Point(point), DiskState.WHITE);
 	}
 
+	public Disk[][] getDisks() {
+		return disks;
+	}
+
 	public Disk getDisk(Point point) {
 		return disks[point.x][point.y];
 	}
 
-	public int getScore(DiskState color) {
-		int score = 0;
+	Set<Point> getDiskPoints(DiskState color) {
+		Set<Point> points = new HashSet<Point>();
 		Point point = new Point();
 		for (point.x = 0; point.x < disks.length; point.x++) {
 			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				if (disks[point.x][point.y].getState() == DiskState.WHITE) {
-					score++;
+				if (disks[point.x][point.y].getState() == color) {
+					points.add(new Point(point));
 				}
 			}
 		}
-		return score;
+		return points;
 	}
 
 	@Override
@@ -89,5 +70,15 @@ public class Board {
 			builder.append('\n');
 		}
 		return builder.toString();
+	}
+	/* singleton - there is only one board */
+
+	private static class BoardHolder {
+
+		private static final Board INSTANCE = new Board();
+	}
+
+	public static Board getInstance() {
+		return BoardHolder.INSTANCE;
 	}
 }
