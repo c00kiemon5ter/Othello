@@ -37,7 +37,7 @@ public enum Player {
 		return String.format("%s: %d", this, this.score);
 	}
 
-	void init() {
+	public void init() {
 		this.score = 2;
 	}
 }

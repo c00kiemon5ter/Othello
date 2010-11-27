@@ -39,12 +39,8 @@ public class Disk {
 		this.state = state;
 	}
 
-	protected void changeColor() {
-		this.state = this.isBlack() ? DiskState.WHITE : DiskState.BLACK;
-	}
-
-	private boolean isBlack() {
-		return this.state == DiskState.BLACK;
+	public void changeColor() {
+		this.state = this.state == DiskState.BLACK ? DiskState.WHITE : DiskState.BLACK;
 	}
 
 	public boolean isCorner() {

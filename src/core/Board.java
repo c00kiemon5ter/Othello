@@ -13,7 +13,7 @@ public final class Board {
 	public static final int BOARD_WIDTH = 8;
 	private Disk[][] disks;
 
-	private Board() {
+	public Board() {
 		this(BOARD_LENGTH, BOARD_WIDTH);
 	}
 
@@ -24,10 +24,8 @@ public final class Board {
 
 	/**
 	 * game starts with four pieces, two black, two white, placed diagonally
-	 *
-	 * @param boardSize the size of the board
 	 */
-	void init() {
+	public void init() {
 		Point point = new Point();
 		for (point.x = 0; point.x < disks.length; point.x++) {
 			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
@@ -74,15 +72,5 @@ public final class Board {
 			builder.append('\n');
 		}
 		return builder.toString();
-	}
-
-	/* singleton - there is only one board */
-	private static class BoardHolder {
-
-		private static final Board INSTANCE = new Board();
-	}
-
-	public static Board getInstance() {
-		return BoardHolder.INSTANCE;
 	}
 }
