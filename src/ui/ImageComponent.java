@@ -18,10 +18,9 @@ public class ImageComponent extends JComponent {
 		try {
 			mt.waitForAll();
 		} catch (InterruptedException e) {
-			// error ...
 		}
-		size = new Dimension(image.getWidth(null), image.getHeight(null));
-		setSize(size);
+		this.size = new Dimension(image.getWidth(null), image.getHeight(null));
+		this.setSize(size);
 	}
 
 	@Override
