@@ -14,9 +14,9 @@ import java.util.Collection;
 public final class Controller {
 
 	/**
-	 * turn has two values -> boolean
-	 * false : if it's black player's turn
-	 * true  : if it's white player's turn
+	 * whosTurn has two values -> boolean
+	 * false : if it's black player's whosTurn
+	 * true  : if it's white player's whosTurn
 	 */
 	private Board board;
 	private MoveExplorer explorer;
@@ -59,13 +59,13 @@ public final class Controller {
 
 	public void updateScores() {
 		int score = 0;
-		score = getScore(DiskState.BLACK);
+		score = calcScore(DiskState.BLACK);
 		Player.BLACK.setScore(score);
-		score = getScore(DiskState.WHITE);
+		score = calcScore(DiskState.WHITE);
 		Player.WHITE.setScore(score);
 	}
 
-	public int getScore(DiskState color) {
+	private int calcScore(DiskState color) {
 		int score = 0;
 		for (Disk[] diskrow : board.getDisks()) {
 			for (Disk disk : diskrow) {
@@ -75,6 +75,38 @@ public final class Controller {
 			}
 		}
 		return score;
+	}
+
+	private int getScore(DiskState color) {
+		return color == DiskState.WHITE ? Player.WHITE.score() : Player.BLACK.score();
+	}
+
+	private String getStats(boolean color) {
+		return color ? Player.WHITE.stats() : Player.BLACK.stats();
+	}
+
+	public int getBlackScore() {
+		return getScore(DiskState.BLACK);
+	}
+
+	public int getWhiteScore() {
+		return getScore(DiskState.WHITE);
+	}
+
+	public String getBlackStats() {
+		return getStats(false);
+	}
+
+	public String getWhiteStats() {
+		return getStats(true);
+	}
+
+	public boolean getWinner() {
+		return Player.BLACK.score() < Player.WHITE.score();
+	}
+
+	public String getWinnerName() {
+		return getWinner() ? Player.WHITE.toString() : Player.BLACK.toString();
 	}
 
 	/**
@@ -110,7 +142,7 @@ public final class Controller {
 		turn = !turn;
 	}
 
-	public boolean turn() {
+	public boolean whosTurn() {
 		return turn;
 	}
 
@@ -124,8 +156,9 @@ public final class Controller {
 			} else if (idx == 4) {
 				strbuf.append('\t').append(Player.WHITE.stats());
 			} else if (idx == 6) {
-				strbuf.append('\t').append(turn ? Player.WHITE
-							   : Player.BLACK).append(" plays");
+				strbuf.append('\t').
+					append(turn ? Player.WHITE : Player.BLACK).
+					append(" plays");
 			}
 			strbuf.append('\n');
 		}
