@@ -19,10 +19,11 @@ public final class Controller {
 	 * true  : if it's white player's turn
 	 */
 	private Board board;
-
-	;
 	private MoveExplorer explorer;
 	private boolean turn;
+	/* 0: all good , 1: one cant move , 2: none can move */
+	private final short YES = 0, CANTMOVE = 2;
+	private short canMove = YES;
 
 	private Controller() {
 		this.board = new Board();
@@ -34,6 +35,11 @@ public final class Controller {
 		Set<Point> moves = explorer.explore();
 		for (Point possiblePoint : moves) {
 			board.getDisk(possiblePoint).setState(DiskState.PSSBL);
+		}
+		if (moves.isEmpty()) {
+			canMove++;
+		} else {
+			canMove = YES;
 		}
 		return moves;
 	}
@@ -82,7 +88,7 @@ public final class Controller {
 	 * @return if the game is over
 	 */
 	public boolean endOfGame() {
-		return checkFullBoard() || checkZeroScore();
+		return checkFullBoard() || checkZeroScore() || canMove == CANTMOVE;
 	}
 
 	private boolean checkFullBoard() {
