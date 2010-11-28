@@ -7,4 +7,5 @@ Basically, there are two sided chips (also called discs) on a board. One side is
 ##Screenshot
 ![othello](Othello/raw/master/doc/mid_shot.png)
 
-
+##License
+[Othello](https://github.com/c00kiemon5ter/Othello) is licensed under [GNU GPLv3](http://www.gnu.org/licenses/gpl.txt) license. See [COPYING](https://github.com/c00kiemon5ter/Othello/blob/master/COPYING) for further information.
