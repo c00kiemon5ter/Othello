@@ -76,7 +76,7 @@ public final class BoardUI extends JFrame {
 		board = new JPanel(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_WIDTH));
 		for (int row = 0; row < Board.BOARD_LENGTH; row++) {
 			for (int col = 0; col < Board.BOARD_WIDTH; col++) {
-				ImageComponent emptyDisk = diskFactory.createDisk(DiskComponentFactory.DiskType.EMPTY);
+				ImageComponent emptyDisk = diskFactory.createDisk(DiskType.EMPTY);
 				board.add(emptyDisk);
 				diskComps.add(emptyDisk);
 			}

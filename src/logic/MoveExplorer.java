@@ -306,13 +306,13 @@ public class MoveExplorer {
 				for (Point toChange : pointlist) {
 					board.getDisk(toChange).changeColor();
 				}
-				break;
+				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
 			}
 			nextPoint = new Point(nextPoint.x - 1, nextPoint.y);
 		}
-		return pointlist;
+		return Collections.emptyList();
 	}
 
 	private Collection<Point> fillSouth(Point seed) {
@@ -327,13 +327,13 @@ public class MoveExplorer {
 				for (Point toChange : pointlist) {
 					board.getDisk(toChange).changeColor();
 				}
-				break;
+				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
 			}
 			nextPoint = new Point(nextPoint.x + 1, nextPoint.y);
 		}
-		return pointlist;
+		return Collections.emptyList();
 	}
 
 	private Collection<Point> fillWest(Point seed) {
@@ -348,13 +348,13 @@ public class MoveExplorer {
 				for (Point toChange : pointlist) {
 					board.getDisk(toChange).changeColor();
 				}
-				break;
+				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
 			}
 			nextPoint = new Point(nextPoint.x, nextPoint.y - 1);
 		}
-		return pointlist;
+		return Collections.emptyList();
 	}
 
 	private Collection<Point> fillEast(Point seed) {
@@ -369,13 +369,13 @@ public class MoveExplorer {
 				for (Point toChange : pointlist) {
 					board.getDisk(toChange).changeColor();
 				}
-				break;
+				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
 			}
 			nextPoint = new Point(nextPoint.x, nextPoint.y + 1);
 		}
-		return pointlist;
+		return Collections.emptyList();
 	}
 
 	private Collection<Point> fillNorthWest(Point seed) {
@@ -390,13 +390,13 @@ public class MoveExplorer {
 				for (Point toChange : pointlist) {
 					board.getDisk(toChange).changeColor();
 				}
-				break;
+				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
 			}
 			nextPoint = new Point(nextPoint.x - 1, nextPoint.y - 1);
 		}
-		return pointlist;
+		return Collections.emptyList();
 	}
 
 	private Collection<Point> fillSouthEast(Point seed) {
@@ -411,13 +411,13 @@ public class MoveExplorer {
 				for (Point toChange : pointlist) {
 					board.getDisk(toChange).changeColor();
 				}
-				break;
+				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
 			}
 			nextPoint = new Point(nextPoint.x + 1, nextPoint.y + 1);
 		}
-		return pointlist;
+		return Collections.emptyList();
 	}
 
 	private Collection<Point> fillSouthWest(Point seed) {
@@ -432,13 +432,13 @@ public class MoveExplorer {
 				for (Point toChange : pointlist) {
 					board.getDisk(toChange).changeColor();
 				}
-				break;
+				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
 			}
 			nextPoint = new Point(nextPoint.x + 1, nextPoint.y - 1);
 		}
-		return pointlist;
+		return Collections.emptyList();
 	}
 
 	private Collection<Point> fillNorthEast(Point seed) {
@@ -453,12 +453,12 @@ public class MoveExplorer {
 				for (Point toChange : pointlist) {
 					board.getDisk(toChange).changeColor();
 				}
-				break;
+				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
 			}
 			nextPoint = new Point(nextPoint.x - 1, nextPoint.y + 1);
 		}
-		return pointlist;
+		return Collections.emptyList();
 	}
 }

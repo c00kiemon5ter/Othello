@@ -53,7 +53,6 @@ public class UIGame implements Runnable {
 
 	private Set<Point> markPossibleMoves() {
 		Set<Point> moves = controller.markPossibleMoves();
-		System.out.println(controller.getBoardForm());
 		controller.unmarkPossibleMoves(moves);
 		if (!moves.isEmpty()) {
 			DiskType color = controller.whosTurn() ? DiskType.PSSBLWHT : DiskType.PSSBLBLK;
