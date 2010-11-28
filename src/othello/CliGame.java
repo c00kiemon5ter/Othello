@@ -62,16 +62,14 @@ public class CliGame implements Game {
 	}
 
 	private void printBoard() {
-		System.out.printf("%s\t%s\n", Player.BLACK.stats(), Player.WHITE.stats());
 		System.out.println(controller.getBoardForm().toString());
 	}
 
 	private void whoWon() {
 		Player winner = Player.BLACK.score() < Player.WHITE.score()
 				? Player.WHITE : Player.BLACK;
-		System.out.println("\n--- We got a winner! ---");
+		System.out.println("\n\n--- We haz a winnarz! ---\n");
 		System.out.println(controller.getBoardForm().toString());
-		System.out.println(Player.BLACK.stats() + '\t' + Player.WHITE.stats());
-		System.out.printf("%s wins with %d", winner, winner.score());
+		System.out.printf("~~ %s wins ~~\n", winner);
 	}
 }

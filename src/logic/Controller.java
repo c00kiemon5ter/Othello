@@ -109,7 +109,21 @@ public final class Controller {
 	}
 
 	public String getBoardForm() {
-		return board.toString();
+		StringBuilder strbuf = new StringBuilder();
+		String[] rows = board.toString().split("\n");
+		for (int idx = 0; idx < rows.length; idx++) {
+			strbuf.append(rows[idx]);
+			if (idx == 2) {
+				strbuf.append('\t').append(Player.BLACK.stats());
+			} else if (idx == 4) {
+				strbuf.append('\t').append(Player.WHITE.stats());
+			} else if (idx == 6) {
+				strbuf.append('\t').append(turn ? Player.WHITE
+							   : Player.BLACK).append(" plays");
+			}
+			strbuf.append('\n');
+		}
+		return strbuf.toString();
 	}
 
 	public void init() {
