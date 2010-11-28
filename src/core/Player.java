@@ -1,6 +1,3 @@
-/*
- * Creative Commons Attribution Non-Commercial Share Alike
- */
 package core;
 
 public enum Player {

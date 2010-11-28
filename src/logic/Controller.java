@@ -1,6 +1,3 @@
-/*
- * Creative Commons Attribution Non-Commercial Share Alike
- */
 package logic;
 
 import core.Board;
