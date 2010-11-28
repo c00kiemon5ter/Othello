@@ -2,5 +2,5 @@ package othello;
 
 public interface Game {
 
-	void start();
+	void play();
 }

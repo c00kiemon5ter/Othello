@@ -39,7 +39,7 @@ public class Othello {
 			printUsage();
 			System.exit(1);
 		}
-		othello.start();
+		othello.play();
 	}
 
 	private static void printUsage() {

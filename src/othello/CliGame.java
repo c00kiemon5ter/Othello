@@ -1,11 +1,11 @@
 package othello;
 
-import core.Player;
 import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import logic.Controller;
+import utils.Transform;
 
 public class CliGame implements Game {
 
@@ -16,7 +16,7 @@ public class CliGame implements Game {
 	}
 
 	@Override
-	public void start() {
+	public void play() {
 		Set<Point> possblMoves;
 		Point move;
 		while (!controller.endOfGame()) {
@@ -37,7 +37,7 @@ public class CliGame implements Game {
 		List<Point> select = new ArrayList<Point>(moves);
 		int moveIdx = 0;
 		for (Point point : select) {
-			System.out.printf("%d: %s\t", ++moveIdx, transformNotation(point));
+			System.out.printf("%d: %s\t", ++moveIdx, Transform.toBoardNotation(point));
 		}
 		System.out.print("\nSelect move: ");
 		while (true) {
@@ -57,19 +57,13 @@ public class CliGame implements Game {
 		return select.get(moveIdx - 1);
 	}
 
-	private String transformNotation(Point point) {
-		return String.format("%d%c", point.x + 1, point.y + 65);
-	}
-
 	private void printBoard() {
-		System.out.println(controller.getBoardForm().toString());
+		System.out.println(controller.getBoardForm());
 	}
 
 	private void whoWon() {
-		Player winner = Player.BLACK.score() < Player.WHITE.score()
-				? Player.WHITE : Player.BLACK;
 		System.out.println("\n\n--- We haz a winnarz! ---\n");
 		System.out.println(controller.getBoardForm().toString());
-		System.out.printf("~~ %s wins ~~\n", winner);
+		System.out.printf("~~ %s wins ~~\n", controller.getWinnerName());
 	}
 }
