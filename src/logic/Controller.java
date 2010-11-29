@@ -58,7 +58,7 @@ public final class Controller {
 		return pointsToFill;
 	}
 
-	public void updateScores() {
+	public void updateScore() {
 		player.setScore(calcScore(player));
 		player.opponent().setScore(calcScore(player.opponent()));
 	}

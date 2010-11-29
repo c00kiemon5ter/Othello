@@ -26,7 +26,7 @@ public class CliGame implements Game {
 			if (!possblMoves.isEmpty()) {
 				move = selectMove(possblMoves);
 				controller.makeMove(move);
-				controller.updateScores();
+				controller.updateScore();
 			}
 			controller.changeTurn();
 		}

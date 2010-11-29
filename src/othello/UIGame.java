@@ -35,8 +35,7 @@ public class UIGame implements Runnable {
 		} else {
 			possblMoves = markPossibleMoves();
 			if (possblMoves.isEmpty()) {
-				lostTurn();
-				updateStats();
+				pass();
 				run();
 			}
 		}
@@ -47,7 +46,7 @@ public class UIGame implements Runnable {
 		controller.unmarkPossibleMoves(moves);
 		if (!moves.isEmpty()) {
 			DiskCompType color = controller.whoPlays().color() == DiskState.WHITE
-					 ? DiskCompType.PSSBLWHT : DiskCompType.PSSBLBLK;
+					     ? DiskCompType.PSSBLWHT : DiskCompType.PSSBLBLK;
 			boardUI.markPossibleMoves(moves, color);
 		}
 		updateListeners();
@@ -55,7 +54,7 @@ public class UIGame implements Runnable {
 	}
 
 	private void updateStats() {
-		controller.updateScores();
+		controller.updateScore();
 		boardUI.updateStats(controller.getBlackStats(), controller.getWhiteStats());
 	}
 
@@ -67,6 +66,11 @@ public class UIGame implements Runnable {
 	private void lostTurn() {
 		boardUI.notifyLostTurn();
 		changeTurn();
+	}
+
+	private void pass() {
+		lostTurn();
+		updateStats();
 	}
 
 	private void updateListeners() {
@@ -98,7 +102,7 @@ public class UIGame implements Runnable {
 
 	private void makeMove(Point move) {
 		DiskCompType color = controller.whoPlays().color() == DiskState.WHITE
-				 ? DiskCompType.WHITE : DiskCompType.BLACK;
+				     ? DiskCompType.WHITE : DiskCompType.BLACK;
 		Set<Point> disksToChange = controller.makeMove(move);
 		boardUI.fill(disksToChange, color);
 	}
