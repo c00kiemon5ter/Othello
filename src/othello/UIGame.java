@@ -11,8 +11,6 @@ import java.awt.Point;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 public class UIGame implements Runnable {
 
@@ -26,13 +24,6 @@ public class UIGame implements Runnable {
 	}
 
 	private void initBoardUI() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException ex) {
-		} catch (InstantiationException ex) {
-		} catch (IllegalAccessException ex) {
-		} catch (UnsupportedLookAndFeelException ex) {
-		}
 		boardUI = new BoardUI();
 		boardUI.setVisible(true);
 	}
