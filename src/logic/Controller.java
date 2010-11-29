@@ -106,6 +106,10 @@ public final class Controller {
 		return getWinner() ? Player.WHITE.toString() : Player.BLACK.toString();
 	}
 
+	public boolean isDraw() {
+		return Player.BLACK.score() == Player.WHITE.score();
+	}
+
 	/**
 	 * Game stops if <br/>
 	 * <ol>

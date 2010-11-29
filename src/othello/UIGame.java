@@ -113,6 +113,10 @@ public class UIGame implements Runnable {
 
 	private void gameEnd() {
 		updateStats();
-		boardUI.declareWinner(controller.getWinnerName());
+		if (controller.isDraw()) {
+			boardUI.declareDraw();
+		} else {
+			boardUI.declareWinner(controller.getWinnerName());
+		}
 	}
 }

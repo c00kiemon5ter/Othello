@@ -167,6 +167,11 @@ public final class BoardUI extends JFrame {
 		this.showTurn.setText(winner ? "Whites!" : "Blacks!");
 	}
 
+	public void declareDraw() {
+		this.showTurn.setFont(showTurn.getFont().deriveFont(Font.BOLD));
+		this.showTurn.setText("Draw !?");
+	}
+
 	public void declareWinner(String winnerName) {
 		this.showTurn.setFont(showTurn.getFont().deriveFont(Font.BOLD));
 		this.showTurn.setText(winnerName + "!");
