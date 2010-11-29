@@ -4,20 +4,25 @@ import java.awt.Point;
 
 public class Disk {
 
-	private Point position;
+	private Point point;
 	private DiskState state;
 
-	public Disk(Point position, DiskState color) {
-		this.position = new Point(position);
+	public Disk(Point point, DiskState color) {
+		this.point = new Point(point);
 		this.state = color;
 	}
 
-	public Point getPosition() {
-		return this.position;
+	public Disk(Disk disk) {
+		this.point = new Point(disk.getPoint());
+		this.state = disk.getState();
 	}
 
-	public void setPosition(Point position) {
-		this.position.setLocation(position);
+	public Point getPoint() {
+		return this.point;
+	}
+
+	public void setPoint(Point position) {
+		this.point.setLocation(position);
 	}
 
 	public DiskState getColor() {
@@ -43,9 +48,9 @@ public class Disk {
 	public boolean isCorner() {
 		int rowEdge = Board.BOARD_LENGTH - 1;
 		int colmnEdge = Board.BOARD_WIDTH - 1;
-		return (this.position.x == 0 && this.position.y == 0)
-		       || (this.position.x == 0 && this.position.y == colmnEdge)
-		       || (this.position.x == rowEdge && this.position.y == 0)
-		       || (this.position.x == rowEdge && this.position.y == colmnEdge);
+		return (this.point.x == 0 && this.point.y == 0)
+		       || (this.point.x == 0 && this.point.y == colmnEdge)
+		       || (this.point.x == rowEdge && this.point.y == 0)
+		       || (this.point.x == rowEdge && this.point.y == colmnEdge);
 	}
 }

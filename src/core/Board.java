@@ -19,6 +19,17 @@ public final class Board {
 		init();
 	}
 
+	/* copy constructor */
+	public Board(Board board) {
+		disks = new Disk[BOARD_LENGTH][BOARD_WIDTH];
+		Point point = new Point();
+		for (point.x = 0; point.x < disks.length; point.x++) {
+			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
+				disks[point.x][point.y] = new Disk(board.getDisk(point));
+			}
+		}
+	}
+
 	/**
 	 * game starts with four pieces, two black, two white, placed diagonally
 	 */
@@ -26,13 +37,13 @@ public final class Board {
 		Point point = new Point();
 		for (point.x = 0; point.x < disks.length; point.x++) {
 			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				disks[point.x][point.y] = new Disk(new Point(point), DiskState.EMPTY);
+				disks[point.x][point.y] = new Disk(point, DiskState.EMPTY);
 			}
 		}
-		disks[3][3] = new Disk(new Point(point), DiskState.WHITE);
-		disks[3][4] = new Disk(new Point(point), DiskState.BLACK);
-		disks[4][3] = new Disk(new Point(point), DiskState.BLACK);
-		disks[4][4] = new Disk(new Point(point), DiskState.WHITE);
+		disks[3][3] = new Disk(point, DiskState.WHITE);
+		disks[3][4] = new Disk(point, DiskState.BLACK);
+		disks[4][3] = new Disk(point, DiskState.BLACK);
+		disks[4][4] = new Disk(point, DiskState.WHITE);
 	}
 
 	public Disk[][] getDisks() {

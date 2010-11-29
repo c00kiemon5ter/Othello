@@ -67,7 +67,7 @@ public class CliGame implements Game {
 			System.out.println("\n:: We haz a draw!?");
 			System.out.println("\n==> No party for you :( ");
 		} else {
-			System.out.println("\n:: We haz a winnarz! ---");
+			System.out.println("\n:: We haz a winnarz!");
 			System.out.printf("\n==> %s wins\n", controller.getWinnerName());
 		}
 	}
