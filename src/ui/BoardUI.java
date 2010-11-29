@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import ui.DiskComponentFactory.DiskType;
+import ui.DiskComponentFactory.DiskCompType;
 import utils.Transform;
 
 public final class BoardUI extends JFrame {
@@ -76,16 +76,16 @@ public final class BoardUI extends JFrame {
 		board = new JPanel(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_WIDTH));
 		for (int row = 0; row < Board.BOARD_LENGTH; row++) {
 			for (int col = 0; col < Board.BOARD_WIDTH; col++) {
-				ImageComponent emptyDisk = diskFactory.createDisk(DiskType.EMPTY);
+				ImageComponent emptyDisk = diskFactory.createDisk(DiskCompType.EMPTY);
 				board.add(emptyDisk);
 				diskComps.add(emptyDisk);
 			}
 		}
 		/* paint the start points */
-		setDisk(new Point(3, 3), DiskType.WHITE);
-		setDisk(new Point(3, 4), DiskType.BLACK);
-		setDisk(new Point(4, 3), DiskType.BLACK);
-		setDisk(new Point(4, 4), DiskType.WHITE);
+		setDisk(new Point(3, 3), DiskCompType.WHITE);
+		setDisk(new Point(3, 4), DiskCompType.BLACK);
+		setDisk(new Point(4, 3), DiskCompType.BLACK);
+		setDisk(new Point(4, 4), DiskCompType.WHITE);
 
 		constrains.anchor = GridBagConstraints.CENTER;
 		constrains.fill = GridBagConstraints.NONE;
@@ -124,15 +124,15 @@ public final class BoardUI extends JFrame {
 		pane.add(statusbar, constrains);
 	}
 
-	private void setDisk(Point point, DiskType disk) {
+	private void setDisk(Point point, DiskCompType disk) {
 		ImageComponent imgcomp = diskFactory.createDisk(disk);
-		int index = Transform.pointToIndex(point, Board.BOARD_LENGTH);
+		int index = Transform.pointToIndex(point);
 		diskComps.set(index, imgcomp);
 		board.remove(index);
 		board.add(imgcomp, index);
 	}
 
-	public void markPossibleMoves(Collection<Point> pssbleMoves, DiskType color) {
+	public void markPossibleMoves(Collection<Point> pssbleMoves, DiskCompType color) {
 		for (Point pssblPoint : pssbleMoves) {
 			setDisk(pssblPoint, color);
 		}
@@ -141,12 +141,12 @@ public final class BoardUI extends JFrame {
 
 	public void unmarkPossibleMoves(Collection<Point> pssbleMoves) {
 		for (Point pssblPoint : pssbleMoves) {
-			setDisk(pssblPoint, DiskType.EMPTY);
+			setDisk(pssblPoint, DiskCompType.EMPTY);
 		}
 		board.revalidate();
 	}
 
-	public void fill(Collection<Point> filledpoints, DiskType color) {
+	public void fill(Collection<Point> filledpoints, DiskCompType color) {
 		for (Point toFill : filledpoints) {
 			setDisk(toFill, color);
 		}
@@ -158,13 +158,8 @@ public final class BoardUI extends JFrame {
 		this.whiteStat.setText(whiteStats);
 	}
 
-	public void updateTurn(boolean turn) {
-		this.showTurn.setText(turn ? "Go White" : "Go Black");
-	}
-
-	public void declareWinner(boolean winner) {
-		this.showTurn.setFont(showTurn.getFont().deriveFont(Font.BOLD));
-		this.showTurn.setText(winner ? "Whites!" : "Blacks!");
+	public void updateTurn(String player) {
+		this.showTurn.setText("GO " + player);
 	}
 
 	public void declareDraw() {

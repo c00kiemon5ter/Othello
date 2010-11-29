@@ -1,11 +1,20 @@
 package utils;
 
+import core.Board;
 import java.awt.Point;
 
 public class Transform {
 
+	public static Point indexToPoint(int index) {
+		return new Point(index / Board.BOARD_LENGTH, index % Board.BOARD_LENGTH);
+	}
+
 	public static Point indexToPoint(int index, int length) {
 		return new Point(index / length, index % length);
+	}
+
+	public static int pointToIndex(Point point) {
+		return Board.BOARD_LENGTH * point.x + point.y;
 	}
 
 	public static int pointToIndex(Point point, int length) {

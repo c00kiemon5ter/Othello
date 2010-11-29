@@ -12,7 +12,7 @@ public class DiskComponentFactory {
 	private static final Image pssblBlkDiscImg = Toolkit.getDefaultToolkit().getImage("src/ui/images/blackpssbl.png").getScaledInstance(imagesize, imagesize, Image.SCALE_SMOOTH);
 	private static final Image pssblWhtDiscImg = Toolkit.getDefaultToolkit().getImage("src/ui/images/whitepssbl.png").getScaledInstance(imagesize, imagesize, Image.SCALE_SMOOTH);
 
-	public enum DiskType {
+	public enum DiskCompType {
 
 		BLACK,
 		WHITE,
@@ -21,7 +21,7 @@ public class DiskComponentFactory {
 		PSSBLWHT;
 	}
 
-	public ImageComponent createDisk(DiskType type) {
+	public ImageComponent createDisk(DiskCompType type) {
 		switch (type) {
 			case BLACK:
 				return new ImageComponent(blackDiscImg);

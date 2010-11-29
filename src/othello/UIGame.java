@@ -1,11 +1,11 @@
 package othello;
 
-import core.Board;
+import core.DiskState;
 import utils.Transform;
 import logic.Controller;
 import ui.BoardUI;
 import ui.ImageComponent;
-import ui.DiskComponentFactory.DiskType;
+import ui.DiskComponentFactory.DiskCompType;
 import java.util.Set;
 import java.awt.Point;
 import java.awt.Component;
@@ -46,7 +46,8 @@ public class UIGame implements Runnable {
 		Set<Point> moves = controller.markPossibleMoves();
 		controller.unmarkPossibleMoves(moves);
 		if (!moves.isEmpty()) {
-			DiskType color = controller.whosTurn() ? DiskType.PSSBLWHT : DiskType.PSSBLBLK;
+			DiskCompType color = controller.whoPlays().color() == DiskState.WHITE
+					 ? DiskCompType.PSSBLWHT : DiskCompType.PSSBLBLK;
 			boardUI.markPossibleMoves(moves, color);
 		}
 		updateListeners();
@@ -60,7 +61,7 @@ public class UIGame implements Runnable {
 
 	private void changeTurn() {
 		controller.changeTurn();
-		boardUI.updateTurn(controller.whosTurn());
+		boardUI.updateTurn(controller.whoPlays().toString());
 	}
 
 	private void lostTurn() {
@@ -85,7 +86,7 @@ public class UIGame implements Runnable {
 
 	private void clickzWasHappend(Component imgComp) {
 		int index = boardUI.getDiskComps().indexOf(imgComp);
-		Point selectedMove = Transform.indexToPoint(index, Board.BOARD_LENGTH);
+		Point selectedMove = Transform.indexToPoint(index);
 		if (possblMoves.contains(selectedMove)) {
 			boardUI.unmarkPossibleMoves(possblMoves);
 			makeMove(selectedMove);
@@ -96,9 +97,9 @@ public class UIGame implements Runnable {
 	}
 
 	private void makeMove(Point move) {
-		DiskType color = controller.whosTurn() ? DiskType.WHITE : DiskType.BLACK;
+		DiskCompType color = controller.whoPlays().color() == DiskState.WHITE
+				 ? DiskCompType.WHITE : DiskCompType.BLACK;
 		Set<Point> disksToChange = controller.makeMove(move);
-		disksToChange.add(move);
 		boardUI.fill(disksToChange, color);
 	}
 

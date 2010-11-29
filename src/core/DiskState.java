@@ -20,6 +20,10 @@ public enum DiskState {
 		return this.symbol;
 	}
 
+	public DiskState opposite() {
+		return this == BLACK ? WHITE : BLACK;
+	}
+
 	@Override
 	public String toString() {
 		return String.valueOf(symbol);

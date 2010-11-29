@@ -1,7 +1,6 @@
 package logic;
 
 import core.Board;
-import core.Direction;
 import core.Disk;
 import core.DiskState;
 import java.awt.Point;
@@ -14,15 +13,21 @@ import java.util.Set;
 
 public class MoveExplorer {
 
-	private Board board;;
-	private DiskState color;
+	private Board board;
 
-	MoveExplorer(Board board, DiskState color) {
+	MoveExplorer(final Board board) {
 		this.board = board;
-		this.color = color;
 	}
 
-	private boolean shouldSearch(Point seed, Direction direction) {
+	/**
+	 *
+	 * @param board - the board to search in
+	 * @param seed - where we start searching from
+	 * @param direction - which direction should we search
+	 * @return if search in this direction is likely to have interesting findings
+	 */
+	private boolean shouldSearch(final Point seed, final Direction direction) {
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint;
 		Disk nextDisk;
 		switch (direction) {
@@ -95,51 +100,46 @@ public class MoveExplorer {
 		}
 	}
 
-	public Set<Point> explore() {
+	public Set<Point> explore(final DiskState color) {
 		Set<Point> possibleMoves = new HashSet<Point>();
 		Set<Point> diskpoints = board.getDiskPoints(color);
-		for (Point point : diskpoints) {
-			possibleMoves.addAll(searchMoves(point));
+		for (Point seed : diskpoints) {
+			for (Direction direction : Direction.values()) {
+				if (shouldSearch(seed, direction)) {
+					switch (direction) {
+						case NORTH:
+							possibleMoves.addAll(searchNorth(seed));
+							break;
+						case SOUTH:
+							possibleMoves.addAll(searchSouth(seed));
+							break;
+						case WEST:
+							possibleMoves.addAll(searchWest(seed));
+							break;
+						case EAST:
+							possibleMoves.addAll(searchEast(seed));
+							break;
+						case NORTHWEST:
+							possibleMoves.addAll(searchNorthWest(seed));
+							break;
+						case SOUTHEAST:
+							possibleMoves.addAll(searchSouthEast(seed));
+							break;
+						case SOUTHWEST:
+							possibleMoves.addAll(searchSouthWest(seed));
+							break;
+						case NORTHEAST:
+							possibleMoves.addAll(searchNorthEast(seed));
+							break;
+					}
+				}
+			}
 		}
 		return possibleMoves;
 	}
 
-	private Collection<Point> searchMoves(Point seed) {
-		Collection<Point> pointlist = new LinkedList<Point>();
-		for (Direction direction : Direction.values()) {
-			if (shouldSearch(seed, direction)) {
-				switch (direction) {
-					case NORTH:
-						pointlist.addAll(searchNorth(seed));
-						break;
-					case SOUTH:
-						pointlist.addAll(searchSouth(seed));
-						break;
-					case WEST:
-						pointlist.addAll(searchWest(seed));
-						break;
-					case EAST:
-						pointlist.addAll(searchEast(seed));
-						break;
-					case NORTHWEST:
-						pointlist.addAll(searchNorthWest(seed));
-						break;
-					case SOUTHEAST:
-						pointlist.addAll(searchSouthEast(seed));
-						break;
-					case SOUTHWEST:
-						pointlist.addAll(searchSouthWest(seed));
-						break;
-					case NORTHEAST:
-						pointlist.addAll(searchNorthEast(seed));
-						break;
-				}
-			}
-		}
-		return pointlist;
-	}
-
-	private Collection<Point> searchNorth(Point seed) {
+	private Collection<Point> searchNorth(final Point seed) {
+		DiskState color = board.getDisk(seed).getColor();
 		Collection<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x - 2, seed.y);
 		while (nextPoint.x >= 0) {
@@ -154,7 +154,8 @@ public class MoveExplorer {
 		return list;
 	}
 
-	private Collection<Point> searchSouth(Point seed) {
+	private Collection<Point> searchSouth(final Point seed) {
+		DiskState color = board.getDisk(seed).getColor();
 		Collection<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x + 2, seed.y);
 		while (nextPoint.x < Board.BOARD_LENGTH) {
@@ -169,7 +170,8 @@ public class MoveExplorer {
 		return list;
 	}
 
-	private Collection<Point> searchWest(Point seed) {
+	private Collection<Point> searchWest(final Point seed) {
+		DiskState color = board.getDisk(seed).getColor();
 		Collection<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x, seed.y - 2);
 		while (nextPoint.y >= 0) {
@@ -184,7 +186,8 @@ public class MoveExplorer {
 		return list;
 	}
 
-	private Collection<Point> searchEast(Point seed) {
+	private Collection<Point> searchEast(final Point seed) {
+		DiskState color = board.getDisk(seed).getColor();
 		Collection<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x, seed.y + 2);
 		while (nextPoint.y < Board.BOARD_WIDTH) {
@@ -199,7 +202,8 @@ public class MoveExplorer {
 		return list;
 	}
 
-	private Collection<Point> searchNorthWest(Point seed) {
+	private Collection<Point> searchNorthWest(final Point seed) {
+		DiskState color = board.getDisk(seed).getColor();
 		Collection<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x - 2, seed.y - 2);
 		while (nextPoint.x >= 0 && nextPoint.y >= 0) {
@@ -214,7 +218,8 @@ public class MoveExplorer {
 		return list;
 	}
 
-	private Collection<Point> searchSouthEast(Point seed) {
+	private Collection<Point> searchSouthEast(final Point seed) {
+		DiskState color = board.getDisk(seed).getColor();
 		Collection<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x + 2, seed.y + 2);
 		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y < Board.BOARD_WIDTH) {
@@ -229,7 +234,8 @@ public class MoveExplorer {
 		return list;
 	}
 
-	private Collection<Point> searchSouthWest(Point seed) {
+	private Collection<Point> searchSouthWest(final Point seed) {
+		DiskState color = board.getDisk(seed).getColor();
 		Collection<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x + 2, seed.y - 2);
 		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y >= 0) {
@@ -244,7 +250,8 @@ public class MoveExplorer {
 		return list;
 	}
 
-	private Collection<Point> searchNorthEast(Point seed) {
+	private Collection<Point> searchNorthEast(final Point seed) {
+		DiskState color = board.getDisk(seed).getColor();
 		Collection<Point> list = new ArrayList<Point>(1);
 		Point nextPoint = new Point(seed.x - 2, seed.y + 2);
 		while (nextPoint.x >= 0 && nextPoint.y < Board.BOARD_WIDTH) {
@@ -259,7 +266,7 @@ public class MoveExplorer {
 		return list;
 	}
 
-	public Set<Point> fill(Point seed) {
+	public Set<Point> pointsToFill(final Point seed) {
 		Set<Point> filledlist = new HashSet<Point>();
 		for (Direction direction : Direction.values()) {
 			if (shouldSearch(seed, direction)) {
@@ -294,18 +301,14 @@ public class MoveExplorer {
 		return filledlist;
 	}
 
-	private Collection<Point> fillNorth(Point seed) {
+	private Collection<Point> fillNorth(final Point seed) {
 		Collection<Point> pointlist = new LinkedList<Point>();
-		DiskState oppositeColor = (color == DiskState.BLACK)
-					  ? DiskState.WHITE : DiskState.BLACK;
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint = new Point(seed.x - 1, seed.y);
 		while (nextPoint.x >= 0) {
-			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+			if (board.getDisk(nextPoint).getColor() == color.opposite()) {
 				pointlist.add(nextPoint);
 			} else if (board.getDisk(nextPoint).getColor() == color) {
-				for (Point toChange : pointlist) {
-					board.getDisk(toChange).changeColor();
-				}
 				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
@@ -315,18 +318,14 @@ public class MoveExplorer {
 		return Collections.emptyList();
 	}
 
-	private Collection<Point> fillSouth(Point seed) {
+	private Collection<Point> fillSouth(final Point seed) {
 		Collection<Point> pointlist = new LinkedList<Point>();
-		DiskState oppositeColor = (color == DiskState.BLACK)
-					  ? DiskState.WHITE : DiskState.BLACK;
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint = new Point(seed.x + 1, seed.y);
 		while (nextPoint.x < Board.BOARD_LENGTH) {
-			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+			if (board.getDisk(nextPoint).getColor() == color.opposite()) {
 				pointlist.add(nextPoint);
 			} else if (board.getDisk(nextPoint).getColor() == color) {
-				for (Point toChange : pointlist) {
-					board.getDisk(toChange).changeColor();
-				}
 				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
@@ -336,18 +335,14 @@ public class MoveExplorer {
 		return Collections.emptyList();
 	}
 
-	private Collection<Point> fillWest(Point seed) {
+	private Collection<Point> fillWest(final Point seed) {
 		Collection<Point> pointlist = new LinkedList<Point>();
-		DiskState oppositeColor = (color == DiskState.BLACK)
-					  ? DiskState.WHITE : DiskState.BLACK;
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint = new Point(seed.x, seed.y - 1);
 		while (nextPoint.y >= 0) {
-			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+			if (board.getDisk(nextPoint).getColor() == color.opposite()) {
 				pointlist.add(nextPoint);
 			} else if (board.getDisk(nextPoint).getColor() == color) {
-				for (Point toChange : pointlist) {
-					board.getDisk(toChange).changeColor();
-				}
 				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
@@ -357,18 +352,14 @@ public class MoveExplorer {
 		return Collections.emptyList();
 	}
 
-	private Collection<Point> fillEast(Point seed) {
+	private Collection<Point> fillEast(final Point seed) {
 		Collection<Point> pointlist = new LinkedList<Point>();
-		DiskState oppositeColor = (color == DiskState.BLACK)
-					  ? DiskState.WHITE : DiskState.BLACK;
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint = new Point(seed.x, seed.y + 1);
 		while (nextPoint.y < Board.BOARD_WIDTH) {
-			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+			if (board.getDisk(nextPoint).getColor() == color.opposite()) {
 				pointlist.add(nextPoint);
 			} else if (board.getDisk(nextPoint).getColor() == color) {
-				for (Point toChange : pointlist) {
-					board.getDisk(toChange).changeColor();
-				}
 				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
@@ -378,18 +369,14 @@ public class MoveExplorer {
 		return Collections.emptyList();
 	}
 
-	private Collection<Point> fillNorthWest(Point seed) {
+	private Collection<Point> fillNorthWest(final Point seed) {
 		Collection<Point> pointlist = new LinkedList<Point>();
-		DiskState oppositeColor = (color == DiskState.BLACK)
-					  ? DiskState.WHITE : DiskState.BLACK;
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint = new Point(seed.x - 1, seed.y - 1);
 		while (nextPoint.x >= 0 && nextPoint.y >= 0) {
-			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+			if (board.getDisk(nextPoint).getColor() == color.opposite()) {
 				pointlist.add(nextPoint);
 			} else if (board.getDisk(nextPoint).getColor() == color) {
-				for (Point toChange : pointlist) {
-					board.getDisk(toChange).changeColor();
-				}
 				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
@@ -399,18 +386,14 @@ public class MoveExplorer {
 		return Collections.emptyList();
 	}
 
-	private Collection<Point> fillSouthEast(Point seed) {
+	private Collection<Point> fillSouthEast(final Point seed) {
 		Collection<Point> pointlist = new LinkedList<Point>();
-		DiskState oppositeColor = (color == DiskState.BLACK)
-					  ? DiskState.WHITE : DiskState.BLACK;
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint = new Point(seed.x + 1, seed.y + 1);
 		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y < Board.BOARD_WIDTH) {
-			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+			if (board.getDisk(nextPoint).getColor() == color.opposite()) {
 				pointlist.add(nextPoint);
 			} else if (board.getDisk(nextPoint).getColor() == color) {
-				for (Point toChange : pointlist) {
-					board.getDisk(toChange).changeColor();
-				}
 				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
@@ -420,18 +403,14 @@ public class MoveExplorer {
 		return Collections.emptyList();
 	}
 
-	private Collection<Point> fillSouthWest(Point seed) {
+	private Collection<Point> fillSouthWest(final Point seed) {
 		Collection<Point> pointlist = new LinkedList<Point>();
-		DiskState oppositeColor = (color == DiskState.BLACK)
-					  ? DiskState.WHITE : DiskState.BLACK;
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint = new Point(seed.x + 1, seed.y - 1);
 		while (nextPoint.x < Board.BOARD_LENGTH && nextPoint.y >= 0) {
-			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+			if (board.getDisk(nextPoint).getColor() == color.opposite()) {
 				pointlist.add(nextPoint);
 			} else if (board.getDisk(nextPoint).getColor() == color) {
-				for (Point toChange : pointlist) {
-					board.getDisk(toChange).changeColor();
-				}
 				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();
@@ -441,18 +420,14 @@ public class MoveExplorer {
 		return Collections.emptyList();
 	}
 
-	private Collection<Point> fillNorthEast(Point seed) {
+	private Collection<Point> fillNorthEast(final Point seed) {
 		Collection<Point> pointlist = new LinkedList<Point>();
-		DiskState oppositeColor = (color == DiskState.BLACK)
-					  ? DiskState.WHITE : DiskState.BLACK;
+		DiskState color = board.getDisk(seed).getColor();
 		Point nextPoint = new Point(seed.x - 1, seed.y + 1);
 		while (nextPoint.x >= 0 && nextPoint.y < Board.BOARD_WIDTH) {
-			if (board.getDisk(nextPoint).getColor() == oppositeColor) {
+			if (board.getDisk(nextPoint).getColor() == color.opposite()) {
 				pointlist.add(nextPoint);
 			} else if (board.getDisk(nextPoint).getColor() == color) {
-				for (Point toChange : pointlist) {
-					board.getDisk(toChange).changeColor();
-				}
 				return pointlist;
 			} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
 				return Collections.emptyList();

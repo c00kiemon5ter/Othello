@@ -14,6 +14,10 @@ public enum Player {
 		this.color = color;
 	}
 
+	public Player opponent() {
+		return this == BLACK ? WHITE : BLACK;
+	}
+
 	public DiskState color() {
 		return color;
 	}

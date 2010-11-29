@@ -11,16 +11,17 @@ import java.util.Collection;
 public final class Controller {
 
 	/**
-	 * whosTurn has two values -> boolean
-	 * false : if it's black player's whosTurn
-	 * true  : if it's white player's whosTurn
+	 * whoPlays has two values -> boolean
+	 * false : if it's black player's whoPlays
+	 * true  : if it's white player's whoPlays
 	 */
 	private Board board;
 	private MoveExplorer explorer;
 	private boolean turn;
+	private Player player;
 	/* 0: all good , 1: one cant move , 2: none can move */
-	private final short YES = 0, CANTMOVE = 2;
-	private short canMove = YES;
+	private final short CANMOVE = 0, CANNOTMOVE = 2;
+	private short canMove = CANMOVE;
 
 	private Controller() {
 		this.board = new Board();
@@ -28,15 +29,15 @@ public final class Controller {
 	}
 
 	public Set<Point> markPossibleMoves() {
-		explorer = new MoveExplorer(board, turn ? DiskState.WHITE : DiskState.BLACK);
-		Set<Point> moves = explorer.explore();
+		explorer = new MoveExplorer(board);
+		Set<Point> moves = explorer.explore(player.color());
 		for (Point possiblePoint : moves) {
 			board.getDisk(possiblePoint).setState(DiskState.PSSBL);
 		}
 		if (moves.isEmpty()) {
 			canMove++;
 		} else {
-			canMove = YES;
+			canMove = CANMOVE;
 		}
 		return moves;
 	}
@@ -48,18 +49,22 @@ public final class Controller {
 	}
 
 	public Set<Point> makeMove(Point move) {
-		DiskState color = turn ? DiskState.WHITE : DiskState.BLACK;
-		explorer = new MoveExplorer(board, turn ? DiskState.WHITE : DiskState.BLACK);
-		board.getDisk(move).setColor(color);
-		return explorer.fill(move);
+		board.getDisk(move).setColor(player.color());
+		Set<Point> pointsToFill = explorer.pointsToFill(move);
+		for (Point pointToFill : pointsToFill) {
+			board.getDisk(pointToFill).setColor(player.color());
+		}
+		pointsToFill.add(move);
+		return pointsToFill;
 	}
 
 	public void updateScores() {
-		int score = 0;
-		score = calcScore(DiskState.BLACK);
-		Player.BLACK.setScore(score);
-		score = calcScore(DiskState.WHITE);
-		Player.WHITE.setScore(score);
+		player.setScore(calcScore(player));
+		player.opponent().setScore(calcScore(player.opponent()));
+	}
+
+	private int calcScore(Player player) {
+		return calcScore(player.color());
 	}
 
 	private int calcScore(DiskState color) {
@@ -74,36 +79,28 @@ public final class Controller {
 		return score;
 	}
 
-	private int getScore(DiskState color) {
-		return color == DiskState.WHITE ? Player.WHITE.score() : Player.BLACK.score();
-	}
-
-	private String getStats(boolean color) {
-		return color ? Player.WHITE.stats() : Player.BLACK.stats();
-	}
-
 	public int getBlackScore() {
-		return getScore(DiskState.BLACK);
+		return Player.BLACK.score();
 	}
 
 	public int getWhiteScore() {
-		return getScore(DiskState.WHITE);
+		return Player.WHITE.score();
 	}
 
 	public String getBlackStats() {
-		return getStats(false);
+		return Player.BLACK.stats();
 	}
 
 	public String getWhiteStats() {
-		return getStats(true);
+		return Player.WHITE.stats();
 	}
 
-	public boolean getWinner() {
-		return Player.BLACK.score() < Player.WHITE.score();
+	public Player getWinner() {
+		return Player.BLACK.score() < Player.WHITE.score() ? Player.WHITE : Player.BLACK;
 	}
 
 	public String getWinnerName() {
-		return getWinner() ? Player.WHITE.toString() : Player.BLACK.toString();
+		return getWinner().toString();
 	}
 
 	public boolean isDraw() {
@@ -121,7 +118,7 @@ public final class Controller {
 	 * @return if the game is over
 	 */
 	public boolean endOfGame() {
-		return checkFullBoard() || checkZeroScore() || canMove == CANTMOVE;
+		return checkFullBoard() || checkZeroScore() || canMove == CANNOTMOVE;
 	}
 
 	private boolean checkFullBoard() {
@@ -141,10 +138,11 @@ public final class Controller {
 
 	public void changeTurn() {
 		turn = !turn;
+		player = player.opponent();
 	}
 
-	public boolean whosTurn() {
-		return turn;
+	public Player whoPlays() {
+		return player;
 	}
 
 	public String getBoardForm() {
@@ -157,9 +155,7 @@ public final class Controller {
 			} else if (idx == 4) {
 				strbuf.append('\t').append(Player.WHITE.stats());
 			} else if (idx == 6) {
-				strbuf.append('\t').
-					append(turn ? Player.WHITE : Player.BLACK).
-					append(" plays");
+				strbuf.append('\t').append(player).append(" plays");
 			}
 			strbuf.append('\n');
 		}
@@ -167,9 +163,10 @@ public final class Controller {
 	}
 
 	public void init() {
+		board.init();
 		Player.BLACK.init();
 		Player.WHITE.init();
-		board.init();
+		player = Player.BLACK;
 		turn = false;
 	}
 
