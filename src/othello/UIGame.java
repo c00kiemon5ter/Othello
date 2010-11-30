@@ -69,7 +69,8 @@ public class UIGame implements Runnable {
 				pass();
 				run();
 			}
-			if (controller.currentPlayer() != boardUI.getPlayerSelection()) {
+			if (controller.currentPlayer() != boardUI.getPlayerSelection()
+			    && boardUI.againstRobots()) {
 				boardUI.setEnabled(false);
 				boardUI.unmarkPossibleMoves(possblMoves);
 				Point computerMove = controller.evalMove();

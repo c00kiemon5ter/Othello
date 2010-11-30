@@ -50,7 +50,6 @@ public class Othello {
 	}
 }
 /**
- * TODO: Select Human vs [Human|Computer]
  * TODO: Implement NegaMan-AB MiniMax-AB Negascout
  * TODO: Efficient use of a Global Hash Table <Move, Max>
  */
