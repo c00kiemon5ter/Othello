@@ -1,6 +1,7 @@
 package othello;
 
 import core.SquareState;
+import java.awt.event.ActionEvent;
 import utils.Transform;
 import logic.Controller;
 import ui.BoardUI;
@@ -9,6 +10,7 @@ import ui.DiskComponentFactory.DiskCompType;
 import java.util.Set;
 import java.awt.Point;
 import java.awt.Component;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -26,6 +28,16 @@ public class UIGame implements Runnable {
 	private void initBoardUI() {
 		boardUI = new BoardUI();
 		boardUI.setVisible(true);
+		boardUI.getNewGameMI().addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boardUI.dispose();
+				controller.init();
+				initBoardUI();
+				run();
+			}
+		});
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class NegaMax extends AbstractSearcher implements Searcher, SimpleSearche
 					}
 				}
 			} else {
-				int value = -simpleSearch(subBoard, player, depth - 1, function);
+				int value = -search(subBoard, player, depth - 1, -beta, -alpha, function);
 				if (value >= beta) {
 					return beta;
 				}
