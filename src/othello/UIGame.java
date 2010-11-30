@@ -13,6 +13,8 @@ import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JRadioButtonMenuItem;
+import logic.DifficultyLevel;
 
 public class UIGame implements Runnable {
 
@@ -38,6 +40,24 @@ public class UIGame implements Runnable {
 				run();
 			}
 		});
+                for(final JRadioButtonMenuItem difficulty : boardUI.getDifficulties()) {
+                    difficulty.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                            int level = 0;
+                            if(difficulty.getText().equalsIgnoreCase("easy"))
+                                level = DifficultyLevel.EASY.level();
+                            else if(difficulty.getText().equalsIgnoreCase("normal"))
+                                level = DifficultyLevel.NORMAL.level();
+                            else if(difficulty.getText().equalsIgnoreCase("hard"))
+                                level = DifficultyLevel.HARD.level();
+                            else if(difficulty.getText().equalsIgnoreCase("heroic"))
+                                level = DifficultyLevel.HEROIC.level();
+                            controller.setDifficulty(level);
+			}
+		});
+                }
 	}
 
 	@Override

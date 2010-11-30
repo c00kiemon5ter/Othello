@@ -26,6 +26,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
+import logic.DifficultyLevel;
 import ui.DiskComponentFactory.DiskCompType;
 import utils.Transform;
 
@@ -42,6 +43,7 @@ public final class BoardUI extends JFrame {
 	private JLabel showTurn;
 	private DiskComponentFactory diskFactory;
 	private JMenuItem newgame, exit, about;
+        private JRadioButtonMenuItem[] difficulty = new JRadioButtonMenuItem[4];
         private ButtonGroup dificultylevel = new ButtonGroup();
 
 	private void initComponents(Container pane) {
@@ -61,19 +63,19 @@ public final class BoardUI extends JFrame {
                 menu = new JMenu("Edit");
                 menubar.add(menu);
                 JMenu preferences = new JMenu("Difficulty");
-                JRadioButtonMenuItem difficulty = new JRadioButtonMenuItem("Easy");
-                dificultylevel.add(difficulty);
-                preferences.add(difficulty);
-                difficulty = new JRadioButtonMenuItem("Normal");
-                difficulty.setSelected(true);
-                dificultylevel.add(difficulty);
-                preferences.add(difficulty);
-                difficulty = new JRadioButtonMenuItem("Hard");
-                dificultylevel.add(difficulty);
-                preferences.add(difficulty);
-                difficulty = new JRadioButtonMenuItem("Heroic");
-                dificultylevel.add(difficulty);
-                preferences.add(difficulty);
+                difficulty[0] = new JRadioButtonMenuItem("Easy");
+                dificultylevel.add(difficulty[0]);
+                preferences.add(difficulty[0]);
+                difficulty[1] = new JRadioButtonMenuItem("Normal");
+                difficulty[1].setSelected(true);
+                dificultylevel.add(difficulty[1]);
+                preferences.add(difficulty[1]);
+                difficulty[2] = new JRadioButtonMenuItem("Hard");
+                dificultylevel.add(difficulty[2]);
+                preferences.add(difficulty[2]);
+                difficulty[3] = new JRadioButtonMenuItem("Heroic");
+                dificultylevel.add(difficulty[3]);
+                preferences.add(difficulty[3]);
                 menu.add(preferences);
 		menu = new JMenu("Help");
 		menubar.add(menu);
@@ -271,4 +273,8 @@ public final class BoardUI extends JFrame {
 	public JMenuItem getNewGameMI() {
 		return newgame;
 	}
+
+        public JRadioButtonMenuItem[] getDifficulties() {
+                return difficulty;
+        }
 }
