@@ -69,6 +69,14 @@ public class UIGame implements Runnable {
 				pass();
 				run();
 			}
+			if (controller.who() != boardUI.getPlayerSelection()) {
+				boardUI.setEnabled(false);
+				boardUI.unmarkPossibleMoves(possblMoves);
+				Point computerMove = controller.evalMove();
+				makeMove(computerMove);
+				afterMove();
+				boardUI.setEnabled(true);
+			}
 		}
 	}
 
@@ -124,10 +132,14 @@ public class UIGame implements Runnable {
 		if (possblMoves.contains(selectedMove)) {
 			boardUI.unmarkPossibleMoves(possblMoves);
 			makeMove(selectedMove);
-			updateStats();
-			changeTurn();
-			run();
+			afterMove();
 		}
+	}
+
+	private void afterMove() {
+		updateStats();
+		changeTurn();
+		run();
 	}
 
 	private void makeMove(Point move) {

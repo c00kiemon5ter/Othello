@@ -1,6 +1,7 @@
 package ui;
 
 import core.Board;
+import core.Player;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -43,6 +44,20 @@ public final class BoardUI extends JFrame {
 	private SquareImgFactory squareFactory;
 	private JMenuItem newgame, exit, about;
 	private JRadioButtonMenuItem[] diffbuttons;
+	private Player human;
+
+	public BoardUI() {
+		squares = new ArrayList<ImageComponent>(Board.BOARD_LENGTH * Board.BOARD_WIDTH);
+		squareFactory = new SquareImgFactory();
+		human = Player.BLACK;
+		initComponents(this.getContentPane());
+		this.pack();
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setTitle("Othello");
+		this.setIconImage(LOGO);
+		this.setResizable(false);
+	}
 
 	private void initComponents(Container pane) {
 		pane.setLayout(new GridBagLayout());
@@ -250,23 +265,15 @@ public final class BoardUI extends JFrame {
 		return squares;
 	}
 
-	public BoardUI() {
-		squares = new ArrayList<ImageComponent>(Board.BOARD_LENGTH * Board.BOARD_WIDTH);
-		squareFactory = new SquareImgFactory();
-		initComponents(this.getContentPane());
-		this.pack();
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("Othello");
-		this.setIconImage(LOGO);
-		this.setResizable(false);
-	}
-
 	public JMenuItem getNewGameItem() {
 		return newgame;
 	}
 
 	public JRadioButtonMenuItem[] getDifficulties() {
 		return diffbuttons;
+	}
+
+	public Player getPlayerSelection() {
+		return human;
 	}
 }
