@@ -19,24 +19,27 @@ public abstract class AbstractSearcher implements Searcher {
 		return bestMove;
 	}
 
-	public int searchSimple(Board board, Player player, int depth, Evaluation function) {
+	public int simpleSearch(Board board, Player player, int depth, Evaluation function) {
 		int record = Integer.MIN_VALUE;
 		Point maxMove = null;
 		if (depth <= 0 || isEndState(board)) {
 			record = function.evaluate(board, player);
 		} else {
 			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
+			Board subBoard = new Board(board);
 			if (!possibleMoves.isEmpty()) {
 				for (Point nextPossibleMove : possibleMoves) {
-					Board subBoard = new Board(board);
+					subBoard = new Board(board);
 					subBoard.makeMove(nextPossibleMove, player.color());
-					int result = -searchSimple(subBoard, player.opponent(), depth - 1, function);
-//					record = max(record, -searchSimple(subBoard, player.opponent(), depth - 1, function));
+					int result = -simpleSearch(subBoard, player.opponent(), depth - 1, function);
+//					record = max(record, -simpleSearch(subBoard, player.opponent(), depth - 1, function));
 					if (result > record) {
 						record = result;
 						maxMove = nextPossibleMove;
 					}
 				}
+			} else {
+				record = -simpleSearch(subBoard, player, depth - 1, function);
 			}
 		}
 		bestMove = maxMove;
