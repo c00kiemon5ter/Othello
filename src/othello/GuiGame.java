@@ -8,4 +8,8 @@ public class GuiGame implements Game {
 	public void play() {
 		EventQueue.invokeLater(new UIGame());
 	}
+
+        public boolean rematch() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
 }

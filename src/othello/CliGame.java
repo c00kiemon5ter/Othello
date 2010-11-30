@@ -79,4 +79,24 @@ public class CliGame implements Game {
 			System.out.printf("\n==> %s wins\n", controller.getWinner());
 		}
 	}
+
+        public boolean rematch() {
+                System.out.println("Want another game? [y/n]");
+                boolean answer = false;
+                String line;
+                while (true) {
+			line = System.console().readLine();
+                        if(line.equalsIgnoreCase("y")) {
+                            answer = true;
+                            break;
+                        }
+                        else if (line.equalsIgnoreCase("n")) {
+                            answer = false;
+                            break;
+                        }
+                        else
+                            System.out.println("Wrong choice. Try again: [y/n]");
+		}
+                return answer;
+        }
 }
