@@ -10,10 +10,12 @@ import logic.ai.evaluation.Evaluation;
 public class NegaMax extends AbstractSearcher implements Searcher, SimpleSearcher {
 
 	@Override
-	public int search(Board board, Player player, int alpha, int beta, int depth, Evaluation function) {
+
+        public int search(Board board, Player player, int alpha, int beta, int depth, Evaluation function) {
+		int record = alpha;
 		Point maxMove = null;
 		if (depth <= 0 || isEndState(board)) {
-			alpha = function.evaluate(board, player);
+			record = function.evaluate(board, player);
 		} else {
 			Board subBoard = board.clone();
 			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
@@ -21,29 +23,20 @@ public class NegaMax extends AbstractSearcher implements Searcher, SimpleSearche
 				for (Point nextPossibleMove : possibleMoves) {
 					subBoard = board.clone();
 					subBoard.makeMove(nextPossibleMove, player.color());
-					int value = -search(subBoard, player.opponent(), depth - 1, -beta, -alpha, function);
-//					record = max(record, -simpleSearch(subBoard, player.opponent(), depth - 1, function));
-					if (value >= beta) {
+					int result = -search(subBoard, player.opponent(),-beta,-alpha, depth - 1, function);
+					if (result > record) {
+						record = result;
 						maxMove = nextPossibleMove;
-						return beta;
-					}
-					if (value > alpha) {
-						maxMove = nextPossibleMove;
-						alpha = value;
+                                                if(record >= beta)
+                                                    return record;
 					}
 				}
 			} else {
-				int value = -search(subBoard, player, depth - 1, -beta, -alpha, function);
-				if (value >= beta) {
-					return beta;
-				}
-				if (value > alpha) {
-					alpha = value;
-				}
+				record = -simpleSearch(subBoard, player, depth - 1, function);
 			}
 		}
 		bestMove = maxMove;
-		return alpha;
+		return record;
 	}
 
 	@Override
