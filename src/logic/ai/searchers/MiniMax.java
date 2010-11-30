@@ -7,13 +7,13 @@ import java.util.Set;
 import logic.MoveExplorer;
 import logic.ai.evaluation.Evaluation;
 
-public class MiniMax extends AbstractSearcher {
+public class MiniMax extends AbstractSearcher implements Searcher, SimpleSearcher {
 
 	@Override
 	public int search(Board board, Player player, int alpha, int beta, int depth, Evaluation function) {
 		int record = Integer.MIN_VALUE;
 		Point maxMove = null;
-                Board subBoard = board.clone();
+		Board subBoard = board.clone();
 		if (depth <= 0 || isEndState(board)) {
 			record = function.evaluate(board, player);
 		} else {
@@ -36,11 +36,53 @@ public class MiniMax extends AbstractSearcher {
 		return record;
 	}
 
-        @Override
-        public int simpleSearch(Board board, Player player, int depth, Evaluation function) {
+	private int valueMax(Board board, Player player, int alpha, int beta, int depth, Evaluation function, int rcounter) {
+		int maxscore = alpha;
+		if (rcounter == 0) {
+			maxscore = function.evaluate(board, player);
+		} else {
+			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
+			if (!possibleMoves.isEmpty()) {
+				for (Point nextPossibleMove : possibleMoves) {
+					Board subBoard = board.clone();
+					subBoard.makeMove(nextPossibleMove, player.color());
+					int result = max(maxscore, valueMin(board, player, alpha, beta, depth, function, --rcounter));
+					alpha = maxscore;
+					if (alpha >= beta) {
+						maxscore = result;
+					}
+				}
+			}
+		}
+		return maxscore;
+	}
+
+	private int valueMin(Board board, Player player, int alpha, int beta, int depth, Evaluation function, int rcounter) {
+		int minscore = beta;
+		if (rcounter == 0) {
+			minscore = function.evaluate(board, player);
+		} else {
+			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
+			if (!possibleMoves.isEmpty()) {
+				for (Point nextPossibleMove : possibleMoves) {
+					Board subBoard = board.clone();
+					subBoard.makeMove(nextPossibleMove, player.color());
+					int result = min(minscore, valueMax(board, player, alpha, beta, depth, function, --rcounter));
+					if (alpha >= beta) {
+						minscore = result;
+					}
+				}
+			}
+		}
+		return minscore;
+	}
+
+	/* ------------------------------------------------------------------ */
+	@Override
+	public int simpleSearch(Board board, Player player, int depth, Evaluation function) {
 		int record = Integer.MIN_VALUE;
 		Point maxMove = null;
-                Board subBoard = board.clone();
+		Board subBoard = board.clone();
 		if (depth <= 0 || isEndState(board)) {
 			record = function.evaluate(board, player);
 		} else {
@@ -63,92 +105,88 @@ public class MiniMax extends AbstractSearcher {
 		return record;
 	}
 
-        private int valueMax(Board board, Player player, int depth, Evaluation function,int rcounter) {
+	private int valueMax(Board board, Player player, int depth, Evaluation function, int rcounter) {
 		int maxscore = Integer.MIN_VALUE;
-                if(rcounter == 0)
-                {maxscore = function.evaluate(board, player);
-                } else {
-                    Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
+		if (rcounter == 0) {
+			maxscore = function.evaluate(board, player);
+		} else {
+			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
 			if (!possibleMoves.isEmpty()) {
 				for (Point nextPossibleMove : possibleMoves) {
 					Board subBoard = board.clone();
 					subBoard.makeMove(nextPossibleMove, player.color());
-					int result = max(maxscore,valueMin(board,player,depth,function,--rcounter));
+					int result = max(maxscore, valueMin(board, player, depth, function, --rcounter));
 					if (result > maxscore) {
 						maxscore = result;
 					}
 				}
 			}
-                }
-                return maxscore;
-        }
+		}
+		return maxscore;
+	}
 
-        private int valueMin(Board board, Player player, int depth, Evaluation function,int rcounter) {
-            int minscore = Integer.MAX_VALUE;
-                if(rcounter == 0)
-                {minscore = function.evaluate(board, player);
-                } else {
-                    Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
+	private int valueMin(Board board, Player player, int depth, Evaluation function, int rcounter) {
+		int minscore = Integer.MAX_VALUE;
+		if (rcounter == 0) {
+			minscore = function.evaluate(board, player);
+		} else {
+			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
 			if (!possibleMoves.isEmpty()) {
 				for (Point nextPossibleMove : possibleMoves) {
 					Board subBoard = board.clone();
 					subBoard.makeMove(nextPossibleMove, player.color());
-					int result = min(minscore,valueMax(board,player,depth,function,--rcounter));
+					int result = min(minscore, valueMax(board, player, depth, function, --rcounter));
 					if (result > minscore) {
 						minscore = result;
 					}
 				}
 			}
-                }
-                return minscore;
-        }
-
-        private int valueMax(Board board, Player player, int alpha, int beta, int depth, Evaluation function,int rcounter) {
-		int maxscore = alpha;
-                if(rcounter == 0)
-                {maxscore = function.evaluate(board, player);
-                } else {
-                    Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
-			if (!possibleMoves.isEmpty()) {
-				for (Point nextPossibleMove : possibleMoves) {
-					Board subBoard = board.clone();
-					subBoard.makeMove(nextPossibleMove, player.color());
-					int result = max(maxscore,valueMin(board,player,alpha,beta,depth,function,--rcounter));
-                                        alpha = maxscore;
-					if (alpha >= beta) {
-						maxscore = result;
-					}
-				}
-			}
-                }
-                return maxscore;
-        }
-
-        private int valueMin(Board board, Player player, int alpha, int beta, int depth, Evaluation function,int rcounter) {
-            int minscore = beta;
-                if(rcounter == 0)
-                {minscore = function.evaluate(board, player);
-                } else {
-                    Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
-			if (!possibleMoves.isEmpty()) {
-				for (Point nextPossibleMove : possibleMoves) {
-					Board subBoard = board.clone();
-					subBoard.makeMove(nextPossibleMove, player.color());
-					int result = min(minscore,valueMax(board,player,alpha,beta,depth,function,--rcounter));
-					if (alpha >= beta) {
-						minscore = result;
-					}
-				}
-			}
-                }
-                return minscore;
-        }
-
-	private int max(int a, int b) {
-		return a < b ? b : a;
+		}
+		return minscore;
 	}
 
-        private int min(int a,int b) {
-                return a > b ? b : a;
-        }
+	/* ------------------------------------------------------------------ */
+	public int minimax(Board board, Player player, int depth, Evaluation function) {
+		if (player == Player.WHITE) {	/* White is the maximizing player */
+			return valueMax(board, player, depth, function);
+		} else {			/* Black is the minimizing player */
+			return valueMin(board, player, depth, function);
+		}
+	}
+
+	private int valueMax(Board board, Player player, int depth, Evaluation function) {
+		int best = Integer.MIN_VALUE;
+		if (depth <= 0 || isEndState(board)) {
+			return function.evaluate(board, player);
+		}
+		Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
+		Board subBoard = board.clone();
+		for (Point move : possibleMoves) {
+			subBoard.makeMove(move, player.color());
+			int value = valueMin(board, player.opponent(), depth - 1, function);
+			subBoard = board.clone();
+			if (value > best) {
+				best = value;
+			}
+		}
+		return best;
+	}
+
+	private int valueMin(Board board, Player player, int depth, Evaluation function) {
+		int best = Integer.MAX_VALUE;
+		if (depth <= 0 || isEndState(board)) {
+			return function.evaluate(board, player);
+		}
+		Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
+		Board subBoard = board.clone();
+		for (Point move : possibleMoves) {
+			subBoard.makeMove(move, player.color());
+			int value = valueMax(board, player.opponent(), depth - 1, function);
+			subBoard = board.clone();
+			if (value < best) {
+				best = value;
+			}
+		}
+		return best;
+	}
 }
