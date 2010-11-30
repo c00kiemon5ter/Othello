@@ -50,6 +50,6 @@ public class Othello {
 	}
 }
 /**
- * TODO: Implement NegaMan-AB MiniMax-AB Negascout
- * TODO: Efficient use of a Global Hash Table <Move, Max>
+ * TODO: ? Negascout ! NegaMax-AB
+ * TODO: ? Efficient use of a Global Hash Table <Move, Max>
  */
