@@ -18,6 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import ui.DiskComponentFactory.DiskCompType;
 import utils.Transform;
@@ -38,13 +41,36 @@ public final class BoardUI extends JFrame {
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints constrains = new GridBagConstraints();
 
+                /* paint the menubar */
+                JMenuBar menubar = new JMenuBar();
+
+                /* add menu and items */
+                JMenu menu = new JMenu("File");
+                menubar.add(menu);
+                JMenuItem menuitem = new JMenuItem("New Game");
+                menu.add(menuitem);
+                menuitem = new JMenuItem("Exit");
+                menu.add(menuitem);
+                menu = new JMenu("Help");
+                menubar.add(menu);
+                menuitem = new JMenuItem("About");
+                menu.add(menuitem);
+
+                constrains.anchor = GridBagConstraints.PAGE_START;
+		constrains.fill = GridBagConstraints.HORIZONTAL;
+		constrains.gridwidth = 3;
+		constrains.gridx = 0;
+		constrains.gridy = 0;
+		pane.add(menubar, constrains);
+		constrains.gridwidth = 0;
+
 		/* paint the cols */
 		ImageComponent colsCeil = new ImageComponent(cols);
 		constrains.anchor = GridBagConstraints.PAGE_START;
 		constrains.fill = GridBagConstraints.HORIZONTAL;
 		constrains.gridwidth = 3;
 		constrains.gridx = 0;
-		constrains.gridy = 0;
+		constrains.gridy = 1;
 		pane.add(colsCeil, constrains);
 		constrains.gridwidth = 0;
 
@@ -53,7 +79,7 @@ public final class BoardUI extends JFrame {
 		constrains.fill = GridBagConstraints.HORIZONTAL;
 		constrains.gridwidth = 3;
 		constrains.gridx = 0;
-		constrains.gridy = 2;
+		constrains.gridy = 3;
 		pane.add(colsBotm, constrains);
 		constrains.gridwidth = 0;
 
@@ -62,14 +88,14 @@ public final class BoardUI extends JFrame {
 		constrains.anchor = GridBagConstraints.LINE_START;
 		constrains.fill = GridBagConstraints.VERTICAL;
 		constrains.gridx = 0;
-		constrains.gridy = 1;
+		constrains.gridy = 2;
 		pane.add(rowsLeft, constrains);
 
 		ImageComponent rowsRight = new ImageComponent(rows);
 		constrains.anchor = GridBagConstraints.LINE_END;
 		constrains.fill = GridBagConstraints.VERTICAL;
 		constrains.gridx = 2;
-		constrains.gridy = 1;
+		constrains.gridy = 2;
 		pane.add(rowsRight, constrains);
 
 		/* paint the disks */
@@ -90,7 +116,7 @@ public final class BoardUI extends JFrame {
 		constrains.anchor = GridBagConstraints.CENTER;
 		constrains.fill = GridBagConstraints.NONE;
 		constrains.gridx = 1;
-		constrains.gridy = 1;
+		constrains.gridy = 2;
 		pane.add(board, constrains);
 
 		/* paint the status bar */
@@ -120,7 +146,7 @@ public final class BoardUI extends JFrame {
 		constrains.fill = GridBagConstraints.HORIZONTAL;
 		constrains.weightx = 1;
 		constrains.gridx = 1;
-		constrains.gridy = 3;
+		constrains.gridy = 4;
 		pane.add(statusbar, constrains);
 	}
 
