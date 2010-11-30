@@ -5,7 +5,7 @@
 Basically, there are two sided chips (also called discs) on a board. One side is black, and one side is white. Yours are the black chips and your opponents are the white. You can play the computer or another player. The goal is to end the game with as many chips showing your color as possible. To do this, you must sandwich your opponents chip(s) between a piece (showing your own color) currently on the board, and the piece you're putting down.
 
 ##Screenshot
-![othello](Othello/raw/master/doc/mid_shot.png)
+![othello](Othello/raw/master/shots/mid_shot.png)
 
 ##License
 [Othello](https://github.com/c00kiemon5ter/Othello) is licensed under [GNU GPLv3](http://www.gnu.org/licenses/gpl.txt) license. See [COPYING](https://github.com/c00kiemon5ter/Othello/blob/master/COPYING) for further information.
