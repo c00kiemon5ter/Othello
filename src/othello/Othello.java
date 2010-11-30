@@ -38,12 +38,6 @@ public class Othello {
 			System.exit(1);
 		}
 		othello.play();
-                while (args.length != 0 && args[0].equals(CLI_OPT)) {
-                    if(((CliGame)othello).rematch()) {
-                        othello = new CliGame();
-                        othello.play();
-                    }
-                }
 	}
 
 	private static void printUsage() {
@@ -58,11 +52,6 @@ public class Othello {
 /**
  * TODO: Select Human vs [Human|Computer]
  *	-> 1on1Game + AIGame ? Make SelectMove class
- *
- * TODO: Ask to restart game
- * TODO: Select which color the Computer is
- * TODO: Select difficulty --> increase depth
- *	-> cli menu + gui menubar
  *
  * TODO: Implement Gui Computer Opponent
  * TODO: Chose evaluation function

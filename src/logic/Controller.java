@@ -23,6 +23,7 @@ public final class Controller {
 	 */
 	private Board board;
 	private Player player;
+	public final int DEFAULT_DEPTH = 3;
 	/* 0: all good , 1: one cant move , 2: none can move */
 	private final short CANMOVE = 0, CANNOTMOVE = 2;
 	private short canMove = CANMOVE;
@@ -34,7 +35,6 @@ public final class Controller {
 	}
 
 	public Set<Point> markPossibleMoves() {
-//		Set<Point> moves = board.markPossibleMoves(player);
 		Set<Point> moves = board.getPossibleMoves(player);
 		board.markPossibleMoves(moves);
 		if (moves.isEmpty()) {
@@ -106,7 +106,11 @@ public final class Controller {
 	public void init() {
 		board.init();
 		player = Player.BLACK;
-		depth = 3;
+		depth = DEFAULT_DEPTH;
+	}
+
+	public void setDifficulty(int level) {
+		depth = level;
 	}
 
 	public Point evalMove() {
