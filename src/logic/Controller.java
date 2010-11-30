@@ -23,11 +23,11 @@ public final class Controller {
 	 */
 	private Board board;
 	private Player player;
-	public final int DEFAULT_DEPTH = 3;
+	public static final int DEFAULT_DEPTH = 3;
+	private static int depth = DEFAULT_DEPTH;
 	/* 0: all good , 1: one cant move , 2: none can move */
 	private final short CANMOVE = 0, CANNOTMOVE = 2;
 	private short canMove = CANMOVE;
-	private int depth;
 
 	private Controller() {
 		this.board = new Board();
@@ -106,12 +106,11 @@ public final class Controller {
 	public void init() {
 		board.init();
 		player = Player.BLACK;
-		depth = DEFAULT_DEPTH;
 		canMove = CANMOVE;
 	}
 
-	public void setDifficulty(int level) {
-		depth = level;
+	public void setDifficulty(DifficultyLevel level) {
+		depth = level.level();
 	}
 
 	public Point evalMove() {

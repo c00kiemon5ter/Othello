@@ -144,22 +144,21 @@ public class CliGame implements Game {
 		while (level == 0) {
 			switch (readInt()) {
 				case 1:
-					level = DifficultyLevel.EASY.level();
+					controller.setDifficulty(DifficultyLevel.EASY);
 					break;
 				case 2:
-					level = DifficultyLevel.NORMAL.level();
+					controller.setDifficulty(DifficultyLevel.NORMAL);
 					break;
 				case 3:
-					level = DifficultyLevel.HARD.level();
+					controller.setDifficulty(DifficultyLevel.HARD);
 					break;
 				case 4:
-					level = DifficultyLevel.HEROIC.level();
+					controller.setDifficulty(DifficultyLevel.HEROIC);
 					break;
 				default:
 					System.err.print("Wrong choice. Try again: ");
 			}
 		}
-		controller.setDifficulty(level);
 	}
 
 	private void chooseColor() {

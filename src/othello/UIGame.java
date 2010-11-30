@@ -46,13 +46,13 @@ public class UIGame implements Runnable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (diffbutton.getText().equalsIgnoreCase(DifficultyLevel.EASY.description())) {
-						controller.setDifficulty(DifficultyLevel.EASY.level());
+						controller.setDifficulty(DifficultyLevel.EASY);
 					} else if (diffbutton.getText().equalsIgnoreCase(DifficultyLevel.NORMAL.description())) {
-						controller.setDifficulty(DifficultyLevel.NORMAL.level());
+						controller.setDifficulty(DifficultyLevel.NORMAL);
 					} else if (diffbutton.getText().equalsIgnoreCase(DifficultyLevel.HARD.description())) {
-						controller.setDifficulty(DifficultyLevel.HARD.level());
+						controller.setDifficulty(DifficultyLevel.HARD);
 					} else if (diffbutton.getText().equalsIgnoreCase(DifficultyLevel.HEROIC.description())) {
-						controller.setDifficulty(DifficultyLevel.HEROIC.level());
+						controller.setDifficulty(DifficultyLevel.HEROIC);
 					}
 				}
 			});
@@ -71,12 +71,10 @@ public class UIGame implements Runnable {
 			}
 			if (controller.currentPlayer() != boardUI.getPlayerSelection()
 			    && boardUI.againstRobots()) {
-				boardUI.setEnabled(false);
 				boardUI.unmarkPossibleMoves(possblMoves);
 				Point computerMove = controller.evalMove();
 				makeMove(computerMove);
 				afterMove();
-				boardUI.setEnabled(true);
 			}
 		}
 	}
