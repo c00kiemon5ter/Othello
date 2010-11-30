@@ -31,8 +31,13 @@ public class CliGame implements Game {
 					}
 					break;
 				case WHITE: /* computer */
-					Point bestMove = controller.evalMove();
-					controller.makeMove(bestMove);
+					possblMoves = controller.markPossibleMoves();
+					System.out.println(controller.boardWithTurn());
+					controller.unmarkPossibleMoves(possblMoves);
+					if (!possblMoves.isEmpty()) {
+						Point bestMove = controller.evalMove();
+						controller.makeMove(bestMove);
+					}
 					break;
 			}
 			controller.updateScore();

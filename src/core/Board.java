@@ -147,7 +147,7 @@ public final class Board {
 	public String boardWithStats() {
 		Point point = new Point();
 		StringBuilder builder = new StringBuilder();
-		builder.append("  A B C D E F G H\n");
+		builder.append("\n  A B C D E F G H\n");
 		for (point.x = 0; point.x < disks.length; point.x++) {
 			builder.append(point.x + 1);
 			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
