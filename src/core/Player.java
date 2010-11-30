@@ -4,13 +4,10 @@ public enum Player {
 
 	BLACK(DiskState.BLACK),
 	WHITE(DiskState.WHITE);
-	private String description;
 	private DiskState color;
 	private int score;
 
 	private Player(DiskState color) {
-		this.description = "The " + (color == DiskState.BLACK
-					     ? "black" : "white") + " player";
 		this.color = color;
 	}
 
@@ -20,10 +17,6 @@ public enum Player {
 
 	public DiskState color() {
 		return color;
-	}
-
-	public String description() {
-		return description;
 	}
 
 	public int score() {

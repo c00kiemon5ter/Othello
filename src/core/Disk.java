@@ -41,10 +41,6 @@ public class Disk {
 		this.state = state;
 	}
 
-	public void changeColor() {
-		this.state = this.state == DiskState.BLACK ? DiskState.WHITE : DiskState.BLACK;
-	}
-
 	public boolean isCorner() {
 		int rowEdge = Board.BOARD_LENGTH - 1;
 		int colmnEdge = Board.BOARD_WIDTH - 1;

@@ -3,6 +3,7 @@ package core;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
+import logic.MoveExplorer;
 
 public final class Board {
 
@@ -46,10 +47,6 @@ public final class Board {
 		disks[4][4] = new Disk(point, DiskState.WHITE);
 	}
 
-	public Disk[][] getDisks() {
-		return disks;
-	}
-
 	public Disk getDisk(Point point) {
 		return disks[point.x][point.y];
 	}
@@ -67,6 +64,71 @@ public final class Board {
 		return points;
 	}
 
+	public int getScore(DiskState color) {
+		int score = 0;
+		for (Disk[] rowOfDisks : disks) {
+			for (Disk disk : rowOfDisks) {
+				if (disk.getColor() == color) {
+					score++;
+				}
+			}
+		}
+		return score;
+	}
+
+	public boolean isFull() {
+		for (Disk[] rowOfDisks : disks) {
+			for (Disk disk : rowOfDisks) {
+				if (disk.getState() == DiskState.EMPTY) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public Set<Point> getPossibleMoves(Player player) {
+		return MoveExplorer.explore(this, player.color());
+	}
+
+	public Set<Point> markPossibleMoves(Player player) {
+		Set<Point> possibleMoves = MoveExplorer.explore(this, player.color());
+		for (Point point : possibleMoves) {
+			getDisk(point).setColor(DiskState.PSSBL);
+		}
+		return possibleMoves;
+	}
+
+	public void markPossibleMoves(Set<Point> possibleMoves) {
+		for (Point point : possibleMoves) {
+			getDisk(point).setColor(DiskState.PSSBL);
+		}
+	}
+
+	public void unmarkPossibleMoves() {
+		for (Disk[] rowdisk : disks) {
+			for (Disk disk : rowdisk) {
+				if (disk.getState() == DiskState.PSSBL) {
+					disk.setColor(DiskState.EMPTY);
+				}
+			}
+		}
+	}
+
+	public void fill(Set<Point> disksToFill, DiskState color) {
+		for (Point point : disksToFill) {
+			getDisk(point).setColor(color);
+		}
+	}
+
+	public Set<Point> makeMove(Point move, DiskState color) {
+		getDisk(move).setColor(color);
+		Set<Point> fillPoints = MoveExplorer.pointsToFill(this, move);
+		fill(fillPoints, color);
+		fillPoints.add(move);
+		return fillPoints;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -76,6 +138,34 @@ public final class Board {
 			builder.append(point.x + 1);
 			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
 				builder.append(' ').append(disks[point.x][point.y].getState().getSymbol());
+			}
+			builder.append('\n');
+		}
+		return builder.toString();
+	}
+
+	public String boardWithStats() {
+		Point point = new Point();
+		StringBuilder builder = new StringBuilder();
+		builder.append("  A B C D E F G H\n");
+		for (point.x = 0; point.x < disks.length; point.x++) {
+			builder.append(point.x + 1);
+			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
+				builder.append(' ').append(getDisk(point).getState().getSymbol());
+			}
+			switch (point.x) {
+				case 2:
+//					builder.append('\t').append(Player.BLACK.stats());
+					builder.append('\t').append(Player.BLACK).
+						append(": ").
+						append(getScore(DiskState.BLACK));
+					break;
+				case 4:
+//					builder.append('\t').append(Player.WHITE.stats());
+					builder.append('\t').append(Player.WHITE).
+						append(": ").
+						append(getScore(DiskState.WHITE));
+					break;
 			}
 			builder.append('\n');
 		}
