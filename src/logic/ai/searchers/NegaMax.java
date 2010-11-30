@@ -8,9 +8,7 @@ import java.util.Set;
 import java.awt.Point;
 import logic.ai.evaluation.Evaluation;
 
-public class NegaMax implements Searcher {
-
-	private Point bMove;
+public class NegaMax extends AbstractSearcher {
 
 	/* search( board , player , Integer.MIN_VALUE , Integer.MAX_VALUE , depth , ef ) */
 	@Override
@@ -39,7 +37,7 @@ public class NegaMax implements Searcher {
 
 	public int searchSimple(Board board, Player player, int depth, Evaluation function) {
 		int record = Integer.MIN_VALUE;
-		Point bestMove = null;
+		Point maxMove = null;
 		if (depth <= 0 || isEndState(board)) {
 			record = function.evaluate(board, player);
 		} else {
@@ -52,17 +50,13 @@ public class NegaMax implements Searcher {
 //					record = max(record, -searchSimple(subBoard, player.opponent(), depth - 1, function));
 					if (result > record) {
 						record = result;
-						bestMove = nextPossibleMove;
+						maxMove = nextPossibleMove;
 					}
 				}
 			}
 		}
-		bMove = bestMove;
+		bestMove = maxMove;
 		return record;
-	}
-
-	public Point getBestMove() {
-		return bMove;
 	}
 
 	private int max(int a, int b) {
