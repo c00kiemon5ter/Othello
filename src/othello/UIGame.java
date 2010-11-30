@@ -13,6 +13,8 @@ import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JRadioButtonMenuItem;
+import logic.DifficultyLevel;
 
 public class UIGame implements Runnable {
 
@@ -28,7 +30,7 @@ public class UIGame implements Runnable {
 	private void initBoardUI() {
 		boardUI = new BoardUI();
 		boardUI.setVisible(true);
-		boardUI.getNewGameItel().addActionListener(new ActionListener() {
+		boardUI.getNewGameItem().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -38,6 +40,23 @@ public class UIGame implements Runnable {
 				run();
 			}
 		});
+		for (final JRadioButtonMenuItem diffbutton : boardUI.getDifficulties()) {
+			diffbutton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (diffbutton.getText().equalsIgnoreCase(DifficultyLevel.EASY.description())) {
+						controller.setDifficulty(DifficultyLevel.EASY.level());
+					} else if (diffbutton.getText().equalsIgnoreCase(DifficultyLevel.NORMAL.description())) {
+						controller.setDifficulty(DifficultyLevel.NORMAL.level());
+					} else if (diffbutton.getText().equalsIgnoreCase(DifficultyLevel.HARD.description())) {
+						controller.setDifficulty(DifficultyLevel.HARD.level());
+					} else if (diffbutton.getText().equalsIgnoreCase(DifficultyLevel.HEROIC.description())) {
+						controller.setDifficulty(DifficultyLevel.HEROIC.level());
+					}
+				}
+			});
+		}
 	}
 
 	@Override

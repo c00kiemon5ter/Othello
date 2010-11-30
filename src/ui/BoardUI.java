@@ -20,11 +20,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import ui.SquareImgFactory.SquareType;
+import javax.swing.JRadioButtonMenuItem;
 import utils.Transform;
 
 public final class BoardUI extends JFrame {
@@ -40,6 +42,7 @@ public final class BoardUI extends JFrame {
 	private JLabel showTurn;
 	private SquareImgFactory squareFactory;
 	private JMenuItem newgame, exit, about;
+	private JRadioButtonMenuItem[] diffbuttons;
 
 	private void initComponents(Container pane) {
 		pane.setLayout(new GridBagLayout());
@@ -47,7 +50,6 @@ public final class BoardUI extends JFrame {
 
 		/* paint the menubar */
 		JMenuBar menubar = new JMenuBar();
-
 		/* add menu and items */
 		JMenu menu = new JMenu("File");
 		menubar.add(menu);
@@ -55,6 +57,25 @@ public final class BoardUI extends JFrame {
 		menu.add(newgame);
 		exit = new JMenuItem("Exit");
 		menu.add(exit);
+		menu = new JMenu("Edit");
+		menubar.add(menu);
+		JMenu diffmenu = new JMenu("Difficulty");
+		diffbuttons = new JRadioButtonMenuItem[4];
+		ButtonGroup diffbuttgroup = new ButtonGroup();
+		diffbuttons[0] = new JRadioButtonMenuItem("Easy");
+		diffbuttgroup.add(diffbuttons[0]);
+		diffmenu.add(diffbuttons[0]);
+		diffbuttons[1] = new JRadioButtonMenuItem("Normal");
+		diffbuttons[1].setSelected(true);
+		diffbuttgroup.add(diffbuttons[1]);
+		diffmenu.add(diffbuttons[1]);
+		diffbuttons[2] = new JRadioButtonMenuItem("Hard");
+		diffbuttgroup.add(diffbuttons[2]);
+		diffmenu.add(diffbuttons[2]);
+		diffbuttons[3] = new JRadioButtonMenuItem("Heroic");
+		diffbuttgroup.add(diffbuttons[3]);
+		diffmenu.add(diffbuttons[3]);
+		menu.add(diffmenu);
 		menu = new JMenu("Help");
 		menubar.add(menu);
 		about = new JMenuItem("About");
@@ -73,10 +94,6 @@ public final class BoardUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				exitActionPerformed(evt);
-			}
-
-			private void exitActionPerformed(ActionEvent evt) {
 				System.exit(0);
 			}
 		});
@@ -85,10 +102,6 @@ public final class BoardUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				aboutActionPerformed(evt);
-			}
-
-			private void aboutActionPerformed(ActionEvent evt) {
 				JOptionPane.showMessageDialog(board, "Othello is a classic board game!",
 							      "About Othello", JOptionPane.INFORMATION_MESSAGE);
 			}
@@ -229,7 +242,8 @@ public final class BoardUI extends JFrame {
 	}
 
 	public void notifyLostTurn() {
-		JOptionPane.showMessageDialog(this, "No available moves, turn lost", "Well played!", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, "No available moves, turn lost",
+					      "Well played!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public List<ImageComponent> getSquares() {
@@ -248,7 +262,11 @@ public final class BoardUI extends JFrame {
 		this.setResizable(false);
 	}
 
-	public JMenuItem getNewGameItel() {
+	public JMenuItem getNewGameItem() {
 		return newgame;
+	}
+
+	public JRadioButtonMenuItem[] getDifficulties() {
+		return diffbuttons;
 	}
 }
