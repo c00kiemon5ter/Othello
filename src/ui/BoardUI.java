@@ -29,6 +29,7 @@ import utils.Transform;
 
 public final class BoardUI extends JFrame {
 
+	private final Image LOGO = new ImageIcon(getClass().getResource("/ui/images/logo.jpg")).getImage();
 	private static final Image rows = Toolkit.getDefaultToolkit().getImage("src/ui/images/rows.png");
 	private static final Image cols = Toolkit.getDefaultToolkit().getImage("src/ui/images/cols.png");
 	private List<ImageComponent> diskComps;
@@ -38,28 +39,28 @@ public final class BoardUI extends JFrame {
 	private JLabel blackStat;
 	private JLabel showTurn;
 	private DiskComponentFactory diskFactory;
-        private JMenuItem newgame, exit, about;
+	private JMenuItem newgame, exit, about;
 
 	private void initComponents(Container pane) {
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints constrains = new GridBagConstraints();
 
-                /* paint the menubar */
-                JMenuBar menubar = new JMenuBar();
+		/* paint the menubar */
+		JMenuBar menubar = new JMenuBar();
 
-                /* add menu and items */
-                JMenu menu = new JMenu("File");
-                menubar.add(menu);
-                newgame = new JMenuItem("New Game");
-                menu.add(newgame);
-                exit = new JMenuItem("Exit");
-                menu.add(exit);
-                menu = new JMenu("Help");
-                menubar.add(menu);
-                about = new JMenuItem("About");
-                menu.add(about);
+		/* add menu and items */
+		JMenu menu = new JMenu("File");
+		menubar.add(menu);
+		newgame = new JMenuItem("New Game");
+		menu.add(newgame);
+		exit = new JMenuItem("Exit");
+		menu.add(exit);
+		menu = new JMenu("Help");
+		menubar.add(menu);
+		about = new JMenuItem("About");
+		menu.add(about);
 
-                constrains.anchor = GridBagConstraints.PAGE_START;
+		constrains.anchor = GridBagConstraints.PAGE_START;
 		constrains.fill = GridBagConstraints.HORIZONTAL;
 		constrains.gridwidth = 3;
 		constrains.gridx = 0;
@@ -67,26 +68,31 @@ public final class BoardUI extends JFrame {
 		pane.add(menubar, constrains);
 		constrains.gridwidth = 0;
 
-                /* add menu item listeners */
-                exit.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        exitActionPerformed(evt);
-                    }
-                    private void exitActionPerformed(ActionEvent evt) {
-                        System.exit(0);
-                    }
-                });
+		/* add menu item listeners */
+		exit.addActionListener(new ActionListener() {
 
-                about.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        aboutActionPerformed(evt);
-                    }
-                    private void aboutActionPerformed(ActionEvent evt) {
-                        JOptionPane.showMessageDialog(board, "Othello is a classic board game!",
-					  "About Othello",
-					  JOptionPane.INFORMATION_MESSAGE);
-                    }
-                });
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				exitActionPerformed(evt);
+			}
+
+			private void exitActionPerformed(ActionEvent evt) {
+				System.exit(0);
+			}
+		});
+
+		about.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				aboutActionPerformed(evt);
+			}
+
+			private void aboutActionPerformed(ActionEvent evt) {
+				JOptionPane.showMessageDialog(board, "Othello is a classic board game!",
+							      "About Othello", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 
 		/* paint the cols */
 		ImageComponent colsCeil = new ImageComponent(cols);
@@ -230,31 +236,19 @@ public final class BoardUI extends JFrame {
 		return diskComps;
 	}
 
-	public void init() {
+	public BoardUI() {
 		diskComps = new ArrayList<ImageComponent>(Board.BOARD_LENGTH * Board.BOARD_WIDTH);
 		diskFactory = new DiskComponentFactory();
 		initComponents(this.getContentPane());
 		this.pack();
 		this.setLocationRelativeTo(null);
-	}
-
-	public BoardUI() {
-		init();
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("Othello");
-		this.setIconImage(new ImageIcon(getClass().getResource("/ui/images/logo.jpg")).getImage());
+		this.setIconImage(LOGO);
 		this.setResizable(false);
 	}
 
-        public JMenuItem getNewGameMI() {
-            return newgame;
-        }
-
-        public JMenuItem getExitMI() {
-            return exit;
-        }
-
-        public JMenuItem getAboutMI() {
-            return about;
-        }
+	public JMenuItem getNewGameMI() {
+		return newgame;
+	}
 }
