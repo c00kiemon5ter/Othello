@@ -21,7 +21,7 @@ public class SquareImgFactory {
 		PSSBLWHT;
 	}
 
-	public ImageComponent buildSquare(SquareType type) {
+	public static ImageComponent buildSquare(SquareType type) {
 		switch (type) {
 			case BLACK:
 				return new ImageComponent(blackDiscImg);

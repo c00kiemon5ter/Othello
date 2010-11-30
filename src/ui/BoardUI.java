@@ -28,6 +28,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import ui.SquareImgFactory.SquareType;
 import javax.swing.JRadioButtonMenuItem;
+import logic.DifficultyLevel;
+import othello.Othello;
 import utils.Transform;
 
 public final class BoardUI extends JFrame {
@@ -37,24 +39,20 @@ public final class BoardUI extends JFrame {
 	private static final Image cols = Toolkit.getDefaultToolkit().getImage("src/ui/images/cols.png");
 	private List<ImageComponent> squares;
 	private JPanel board;
-	private JPanel statusbar;
 	private JLabel whiteStat;
 	private JLabel blackStat;
 	private JLabel showTurn;
-	private SquareImgFactory squareFactory;
-	private JMenuItem newgame, exit, about;
 	private JRadioButtonMenuItem[] diffbuttons;
-	private Player human;
+	private JMenuItem newgame;
+	private static Player human = Player.BLACK;
 
 	public BoardUI() {
 		squares = new ArrayList<ImageComponent>(Board.BOARD_LENGTH * Board.BOARD_WIDTH);
-		squareFactory = new SquareImgFactory();
-		human = Player.BLACK;
 		initComponents(this.getContentPane());
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("Othello");
+		this.setTitle(Othello.class.getSimpleName());
 		this.setIconImage(LOGO);
 		this.setResizable(false);
 	}
@@ -68,43 +66,13 @@ public final class BoardUI extends JFrame {
 		/* add menu and items */
 		JMenu menu = new JMenu("File");
 		menubar.add(menu);
+		JMenuItem exit, about;
+
 		newgame = new JMenuItem("New Game");
 		menu.add(newgame);
+
 		exit = new JMenuItem("Exit");
 		menu.add(exit);
-		menu = new JMenu("Edit");
-		menubar.add(menu);
-		JMenu diffmenu = new JMenu("Difficulty");
-		diffbuttons = new JRadioButtonMenuItem[4];
-		ButtonGroup diffbuttgroup = new ButtonGroup();
-		diffbuttons[0] = new JRadioButtonMenuItem("Easy");
-		diffbuttgroup.add(diffbuttons[0]);
-		diffmenu.add(diffbuttons[0]);
-		diffbuttons[1] = new JRadioButtonMenuItem("Normal");
-		diffbuttons[1].setSelected(true);
-		diffbuttgroup.add(diffbuttons[1]);
-		diffmenu.add(diffbuttons[1]);
-		diffbuttons[2] = new JRadioButtonMenuItem("Hard");
-		diffbuttgroup.add(diffbuttons[2]);
-		diffmenu.add(diffbuttons[2]);
-		diffbuttons[3] = new JRadioButtonMenuItem("Heroic");
-		diffbuttgroup.add(diffbuttons[3]);
-		diffmenu.add(diffbuttons[3]);
-		menu.add(diffmenu);
-		menu = new JMenu("Help");
-		menubar.add(menu);
-		about = new JMenuItem("About");
-		menu.add(about);
-
-		constrains.anchor = GridBagConstraints.PAGE_START;
-		constrains.fill = GridBagConstraints.HORIZONTAL;
-		constrains.gridwidth = 3;
-		constrains.gridx = 0;
-		constrains.gridy = 0;
-		pane.add(menubar, constrains);
-		constrains.gridwidth = 0;
-
-		/* add menu item listeners */
 		exit.addActionListener(new ActionListener() {
 
 			@Override
@@ -113,6 +81,57 @@ public final class BoardUI extends JFrame {
 			}
 		});
 
+
+		menu = new JMenu("Edit");
+		menubar.add(menu);
+
+		ButtonGroup buttongroup = new ButtonGroup();
+		JMenu submenu = new JMenu("Difficulty");
+		diffbuttons = new JRadioButtonMenuItem[4];
+		diffbuttons[0] = new JRadioButtonMenuItem(DifficultyLevel.EASY.description());
+		buttongroup.add(diffbuttons[0]);
+		submenu.add(diffbuttons[0]);
+		diffbuttons[1] = new JRadioButtonMenuItem(DifficultyLevel.NORMAL.description());
+		diffbuttons[1].setSelected(true);
+		buttongroup.add(diffbuttons[1]);
+		submenu.add(diffbuttons[1]);
+		diffbuttons[2] = new JRadioButtonMenuItem(DifficultyLevel.HARD.description());
+		buttongroup.add(diffbuttons[2]);
+		submenu.add(diffbuttons[2]);
+		diffbuttons[3] = new JRadioButtonMenuItem(DifficultyLevel.HEROIC.description());
+		buttongroup.add(diffbuttons[3]);
+		submenu.add(diffbuttons[3]);
+		menu.add(submenu);
+
+		submenu = new JMenu("Player Color");
+		buttongroup = new ButtonGroup();
+		JRadioButtonMenuItem player;
+		player = new JRadioButtonMenuItem(Player.BLACK.toString());
+		player.setSelected(true);
+		player.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				human = Player.BLACK;
+			}
+		});
+		submenu.add(player);
+		player = new JRadioButtonMenuItem(Player.WHITE.toString());
+		player.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				human = Player.WHITE;
+			}
+		});
+		submenu.add(player);
+		menu.add(submenu);
+
+		menu = new JMenu("Help");
+		menubar.add(menu);
+
+		about = new JMenuItem("About");
+		menu.add(about);
 		about.addActionListener(new ActionListener() {
 
 			@Override
@@ -121,6 +140,14 @@ public final class BoardUI extends JFrame {
 							      "About Othello", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
+
+		constrains.anchor = GridBagConstraints.PAGE_START;
+		constrains.fill = GridBagConstraints.HORIZONTAL;
+		constrains.gridwidth = 3;
+		constrains.gridx = 0;
+		constrains.gridy = 0;
+		pane.add(menubar, constrains);
+		constrains.gridwidth = 0;
 
 		/* paint the cols */
 		ImageComponent colsCeil = new ImageComponent(cols);
@@ -160,7 +187,7 @@ public final class BoardUI extends JFrame {
 		board = new JPanel(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_WIDTH));
 		for (int row = 0; row < Board.BOARD_LENGTH; row++) {
 			for (int col = 0; col < Board.BOARD_WIDTH; col++) {
-				ImageComponent emptySquare = squareFactory.buildSquare(SquareType.EMPTY);
+				ImageComponent emptySquare = SquareImgFactory.buildSquare(SquareType.EMPTY);
 				board.add(emptySquare);
 				squares.add(emptySquare);
 			}
@@ -196,7 +223,7 @@ public final class BoardUI extends JFrame {
 		blackStat.setFont(blackStat.getFont().deriveFont(Font.PLAIN));
 		blackStat.setHorizontalAlignment(JLabel.RIGHT);
 
-		statusbar = new JPanel(new GridLayout());
+		JPanel statusbar = new JPanel(new GridLayout());
 		statusbar.add(whiteStat);
 		statusbar.add(showTurn);
 		statusbar.add(blackStat);
@@ -209,7 +236,7 @@ public final class BoardUI extends JFrame {
 	}
 
 	private void setSquare(Point point, SquareType squareType) {
-		ImageComponent imgcomp = squareFactory.buildSquare(squareType);
+		ImageComponent imgcomp = SquareImgFactory.buildSquare(squareType);
 		int index = Transform.pointToIndex(point);
 		squares.set(index, imgcomp);
 		board.remove(index);
