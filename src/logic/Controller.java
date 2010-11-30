@@ -6,7 +6,9 @@ import core.Player;
 import java.awt.Point;
 import java.util.Set;
 import java.util.Collection;
+import logic.ai.evaluation.Evaluation;
 import logic.ai.evaluation.ScoreEval;
+import logic.ai.searchers.AbstractSearcher;
 import logic.ai.searchers.NegaMax;
 
 public final class Controller {
@@ -23,6 +25,7 @@ public final class Controller {
 	/* 0: all good , 1: one cant move , 2: none can move */
 	private final short CANMOVE = 0, CANNOTMOVE = 2;
 	private short canMove = CANMOVE;
+	private int depth;
 
 	private Controller() {
 		this.board = new Board();
@@ -134,12 +137,14 @@ public final class Controller {
 		Player.BLACK.init();
 		Player.WHITE.init();
 		player = Player.BLACK;
+		depth = 3;
 	}
 
 	public Point evalMove() {
-		NegaMax ngmx = new NegaMax();
-		ngmx.searchSimple(board, player, 2, new ScoreEval());
-		return ngmx.getBestMove();
+		AbstractSearcher searcher = new NegaMax();
+		Evaluation evalfunc = new ScoreEval();
+		searcher.searchSimple(board, player, depth, evalfunc);
+		return searcher.getBestMove();
 	}
 
 	private static class ControllerHolder {
