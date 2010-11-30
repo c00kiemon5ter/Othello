@@ -154,13 +154,13 @@ public final class Board {
 				builder.append(' ').append(getDisk(point).getState().getSymbol());
 			}
 			switch (point.x) {
-				case 2:
+				case 1:
 //					builder.append('\t').append(Player.BLACK.stats());
 					builder.append('\t').append(Player.BLACK).
 						append(": ").
 						append(getScore(DiskState.BLACK));
 					break;
-				case 4:
+				case 3:
 //					builder.append('\t').append(Player.WHITE.stats());
 					builder.append('\t').append(Player.WHITE).
 						append(": ").
