@@ -6,9 +6,9 @@ package logic;
  */
 public enum DifficultyLevel {
 
-	EASY("Easy", 2),
-	NORMAL("Normal", 3),
-	HARD("Hard", 4),
+	EASY("Easy", 3),
+	NORMAL("Normal", 4),
+	HARD("Hard", 5),
 	HEROIC("Heroic", 6);
 	private String description;
 	private int level;

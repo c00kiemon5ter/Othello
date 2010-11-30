@@ -11,12 +11,13 @@ import utils.Transform;
 
 public class CliGame implements Game {
 
-	Controller controller = Controller.getInstance();
-	Player human;
+	private Controller controller = Controller.getInstance();
+	private Player humanoid;
+	private boolean vsAi;
 
 	public CliGame() {
 		controller.init();
-		human = Player.BLACK;
+		humanoid = Player.BLACK;
 	}
 
 	@Override
@@ -26,12 +27,17 @@ public class CliGame implements Game {
 				case 0:
 					System.exit(0);
 				case 1:
-					run();
+					vsAi = true;
+					startGame();
 					break;
 				case 2:
-					setDifficulty();
+					vsAi = false;
+					startGame();
 					break;
 				case 3:
+					setDifficulty();
+					break;
+				case 4:
 					chooseColor();
 					break;
 				default:
@@ -41,23 +47,23 @@ public class CliGame implements Game {
 		}
 	}
 
-	public void run() {
+	public void startGame() {
 		Set<Point> possblMoves;
 		Point move;
 		while (!controller.endOfGame()) {
 			possblMoves = controller.markPossibleMoves();
 			System.out.println(controller.boardWithTurn());
 			controller.unmarkPossibleMoves();
-			if (controller.currentPlayer() == human) {
-				if (!possblMoves.isEmpty()) {
+			if (!possblMoves.isEmpty()) {
+				if (controller.currentPlayer() == humanoid) {
 					move = selectMove(possblMoves);
 					controller.makeMove(move);
+				} else if (controller.currentPlayer() == humanoid.opponent()) {
+					move = vsAi ? controller.evalMove() : selectMove(possblMoves);
+					controller.makeMove(move);
 				}
-			} else if (controller.currentPlayer() == human.opponent()) {
-				if (!possblMoves.isEmpty()) {
-					Point bestMove = controller.evalMove();
-					controller.makeMove(bestMove);
-				}
+			} else {
+				System.out.printf("Whoops! %s lost his turn\n", controller.currentPlayer());
 			}
 			controller.changeTurn();
 		}
@@ -88,22 +94,26 @@ public class CliGame implements Game {
 		} else {
 			System.out.println("\n:: We haz a winnarz!");
 			System.out.printf("\n==> %s wins\n", controller.getWinner());
+			if (vsAi) {
+				System.out.printf("\n==> Robots conquered teh worldz\n");
+			}
 		}
 	}
 
 	public void rematch() {
 		System.out.print("\nReady for another game? [y/]");
+		controller.init();
 		if (System.console().readLine().equalsIgnoreCase("y")) {
-			controller.init();
-			run();
+			startGame();
 		}
 	}
 
 	private int menu() {
 		System.out.print("\nLet the games begin!\n"
-				 + "\n1. Play!"
-				 + "\n2. Set Difficulty"
-				 + "\n3. Choose Color"
+				 + "\n1. Play against Robots!"
+				 + "\n2. Play against Friend!"
+				 + "\n3. Set Difficulty"
+				 + "\n4. Choose Color"
 				 + "\n0. Exit");
 		System.err.print("\n\nSelect action: ");
 		return readInt();
@@ -159,10 +169,10 @@ public class CliGame implements Game {
 		while (true) {
 			switch (readInt()) {
 				case 1:
-					human = Player.BLACK;
+					humanoid = Player.BLACK;
 					return;
 				case 2:
-					human = Player.WHITE;
+					humanoid = Player.WHITE;
 					return;
 				default:
 					System.err.print("Wrong choice. Try again: ");

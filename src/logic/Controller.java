@@ -107,6 +107,7 @@ public final class Controller {
 		board.init();
 		player = Player.BLACK;
 		depth = DEFAULT_DEPTH;
+		canMove = CANMOVE;
 	}
 
 	public void setDifficulty(int level) {

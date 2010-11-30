@@ -37,6 +37,8 @@ public final class BoardUI extends JFrame {
 	private final Image LOGO = new ImageIcon(getClass().getResource("/ui/images/logo.jpg")).getImage();
 	private static final Image rows = Toolkit.getDefaultToolkit().getImage("src/ui/images/rows.png");
 	private static final Image cols = Toolkit.getDefaultToolkit().getImage("src/ui/images/cols.png");
+	private static boolean vsRobots = true;
+	private static Player human = Player.BLACK;
 	private List<ImageComponent> squares;
 	private JPanel board;
 	private JLabel whiteStat;
@@ -44,7 +46,6 @@ public final class BoardUI extends JFrame {
 	private JLabel showTurn;
 	private JRadioButtonMenuItem[] diffbuttons;
 	private JMenuItem newgame;
-	private static Player human = Player.BLACK;
 
 	public BoardUI() {
 		squares = new ArrayList<ImageComponent>(Board.BOARD_LENGTH * Board.BOARD_WIDTH);
@@ -60,6 +61,8 @@ public final class BoardUI extends JFrame {
 	private void initComponents(Container pane) {
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints constrains = new GridBagConstraints();
+		ButtonGroup buttongroup = new ButtonGroup();
+		JRadioButtonMenuItem radiobutton;
 
 		/* paint the menubar */
 		JMenuBar menubar = new JMenuBar();
@@ -85,7 +88,6 @@ public final class BoardUI extends JFrame {
 		menu = new JMenu("Edit");
 		menubar.add(menu);
 
-		ButtonGroup buttongroup = new ButtonGroup();
 		JMenu submenu = new JMenu("Difficulty");
 		diffbuttons = new JRadioButtonMenuItem[4];
 		diffbuttons[0] = new JRadioButtonMenuItem(DifficultyLevel.EASY.description());
@@ -105,26 +107,52 @@ public final class BoardUI extends JFrame {
 
 		submenu = new JMenu("Player Color");
 		buttongroup = new ButtonGroup();
-		JRadioButtonMenuItem player;
-		player = new JRadioButtonMenuItem(Player.BLACK.toString());
-		player.setSelected(true);
-		player.addActionListener(new ActionListener() {
+		radiobutton = new JRadioButtonMenuItem(Player.BLACK.toString());
+		radiobutton.setSelected(true);
+		radiobutton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				human = Player.BLACK;
 			}
 		});
-		submenu.add(player);
-		player = new JRadioButtonMenuItem(Player.WHITE.toString());
-		player.addActionListener(new ActionListener() {
+		buttongroup.add(radiobutton);
+		submenu.add(radiobutton);
+		radiobutton = new JRadioButtonMenuItem(Player.WHITE.toString());
+		radiobutton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				human = Player.WHITE;
 			}
 		});
-		submenu.add(player);
+		buttongroup.add(radiobutton);
+		submenu.add(radiobutton);
+		menu.add(submenu);
+
+		submenu = new JMenu("Oppenent Inteligence");
+		buttongroup = new ButtonGroup();
+		radiobutton = new JRadioButtonMenuItem("Robot Invader");
+		radiobutton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				vsRobots = true;
+			}
+		});
+		radiobutton.setSelected(true);
+		buttongroup.add(radiobutton);
+		submenu.add(radiobutton);
+		radiobutton = new JRadioButtonMenuItem("Human brain");
+		radiobutton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				vsRobots = false;
+			}
+		});
+		buttongroup.add(radiobutton);
+		submenu.add(radiobutton);
 		menu.add(submenu);
 
 		menu = new JMenu("Help");
@@ -302,5 +330,9 @@ public final class BoardUI extends JFrame {
 
 	public Player getPlayerSelection() {
 		return human;
+	}
+
+	public boolean againstRobots() {
+		return vsRobots;
 	}
 }

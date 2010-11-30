@@ -44,13 +44,12 @@ public class Othello {
 		System.err.printf("Usage: %s [options]\n"
 				  + "\n\tOptions are:\n"
 				  + "\t %s\tcommand line interface mode\n"
-				  + "\t %s\tgraphical user interface mode\n"
+				  + "\t %s\tgraphical user interface mode [default]\n"
 				  + "\t %s\tthis help message\n",
 				  Othello.class.getSimpleName(), CLI_OPT, GUI_OPT, HELP_OPT);
 	}
 }
 /**
- * TODO: Select Human vs [Human|Computer]
- * TODO: Implement NegaMan-AB MiniMax-AB Negascout
- * TODO: Efficient use of a Global Hash Table <Move, Max>
+ * TODO: ? Negascout ! NegaMax-AB
+ * TODO: ? Efficient use of a Global Hash Table <Move, Max>
  */
