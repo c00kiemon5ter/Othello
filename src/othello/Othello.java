@@ -38,7 +38,7 @@ public class Othello {
 			System.exit(1);
 		}
 		othello.play();
-                while (args[0].equals(CLI_OPT)) {
+                while (args.length != 0 && args[0].equals(CLI_OPT)) {
                     if(((CliGame)othello).rematch()) {
                         othello = new CliGame();
                         othello.play();

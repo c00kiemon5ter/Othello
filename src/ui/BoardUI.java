@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +38,7 @@ public final class BoardUI extends JFrame {
 	private JLabel blackStat;
 	private JLabel showTurn;
 	private DiskComponentFactory diskFactory;
+        private JMenuItem newgame, exit, about;
 
 	private void initComponents(Container pane) {
 		pane.setLayout(new GridBagLayout());
@@ -47,14 +50,14 @@ public final class BoardUI extends JFrame {
                 /* add menu and items */
                 JMenu menu = new JMenu("File");
                 menubar.add(menu);
-                JMenuItem menuitem = new JMenuItem("New Game");
-                menu.add(menuitem);
-                menuitem = new JMenuItem("Exit");
-                menu.add(menuitem);
+                newgame = new JMenuItem("New Game");
+                menu.add(newgame);
+                exit = new JMenuItem("Exit");
+                menu.add(exit);
                 menu = new JMenu("Help");
                 menubar.add(menu);
-                menuitem = new JMenuItem("About");
-                menu.add(menuitem);
+                about = new JMenuItem("About");
+                menu.add(about);
 
                 constrains.anchor = GridBagConstraints.PAGE_START;
 		constrains.fill = GridBagConstraints.HORIZONTAL;
@@ -63,6 +66,27 @@ public final class BoardUI extends JFrame {
 		constrains.gridy = 0;
 		pane.add(menubar, constrains);
 		constrains.gridwidth = 0;
+
+                /* add menu item listeners */
+                exit.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        exitActionPerformed(evt);
+                    }
+                    private void exitActionPerformed(ActionEvent evt) {
+                        System.exit(0);
+                    }
+                });
+
+                about.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        aboutActionPerformed(evt);
+                    }
+                    private void aboutActionPerformed(ActionEvent evt) {
+                        JOptionPane.showMessageDialog(board, "Othello is a classic board game!",
+					  "About Othello",
+					  JOptionPane.INFORMATION_MESSAGE);
+                    }
+                });
 
 		/* paint the cols */
 		ImageComponent colsCeil = new ImageComponent(cols);
@@ -221,4 +245,16 @@ public final class BoardUI extends JFrame {
 		this.setIconImage(new ImageIcon(getClass().getResource("/ui/images/logo.jpg")).getImage());
 		this.setResizable(false);
 	}
+
+        public JMenuItem getNewGameMI() {
+            return newgame;
+        }
+
+        public JMenuItem getExitMI() {
+            return exit;
+        }
+
+        public JMenuItem getAboutMI() {
+            return about;
+        }
 }
