@@ -48,13 +48,11 @@ public class CliGame implements Game {
 			possblMoves = controller.markPossibleMoves();
 			System.out.println(controller.boardWithTurn());
 			controller.unmarkPossibleMoves();
-			if (controller.currentPlayer() == human) {
-				if (!possblMoves.isEmpty()) {
+			if (!possblMoves.isEmpty()) {
+				if (controller.currentPlayer() == human) {
 					move = selectMove(possblMoves);
 					controller.makeMove(move);
-				}
-			} else if (controller.currentPlayer() == human.opponent()) {
-				if (!possblMoves.isEmpty()) {
+				} else if (controller.currentPlayer() == human.opponent()) {
 					Point bestMove = controller.evalMove();
 					controller.makeMove(bestMove);
 				}
