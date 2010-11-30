@@ -11,7 +11,7 @@ package othello;
  * 6         .      	BLACKs turn!
  * 7
  * 8
- *
+ * 
  * 1: 5F	2: 6E	3: 3D	4: 4C
  * Select move: 
  *

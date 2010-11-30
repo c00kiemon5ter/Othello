@@ -114,6 +114,7 @@ public final class Board implements Cloneable {
 				sb.append(' ').append(board.get(point).getSymbol());
 			}
 		}
+		sb.append('\n');
 		return sb.toString();
 	}
 
@@ -133,6 +134,7 @@ public final class Board implements Cloneable {
 					break;
 			}
 		}
+		sb.append('\n');
 		return sb.toString();
 	}
 
@@ -155,6 +157,7 @@ public final class Board implements Cloneable {
 					break;
 			}
 		}
+		sb.append('\n');
 		return sb.toString();
 	}
 
