@@ -283,9 +283,9 @@ public final class BoardUI extends JFrame {
 		this.showTurn.setText(winnerName + "!");
 	}
 
-	public void notifyLostTurn() {
-		JOptionPane.showMessageDialog(this, "No available moves, turn lost",
-					      "Well played!", JOptionPane.INFORMATION_MESSAGE);
+	public void notifyLostTurn(Player player) {
+		JOptionPane.showMessageDialog(this, "No available moves for, " + player.toString()
+						    + " turn lost", "Well played!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public List<ImageComponent> getSquares() {

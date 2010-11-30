@@ -69,7 +69,7 @@ public class UIGame implements Runnable {
 				pass();
 				run();
 			}
-			if (controller.who() != boardUI.getPlayerSelection()) {
+			if (controller.currentPlayer() != boardUI.getPlayerSelection()) {
 				boardUI.setEnabled(false);
 				boardUI.unmarkPossibleMoves(possblMoves);
 				Point computerMove = controller.evalMove();
@@ -84,7 +84,7 @@ public class UIGame implements Runnable {
 		Set<Point> moves = controller.markPossibleMoves();
 		controller.unmarkPossibleMoves();
 		if (!moves.isEmpty()) {
-			SquareType color = controller.who().color() == SquareState.WHITE
+			SquareType color = controller.currentPlayer().color() == SquareState.WHITE
 					   ? SquareType.PSSBLWHT : SquareType.PSSBLBLK;
 			boardUI.markPossibleMoves(moves, color);
 		}
@@ -98,11 +98,11 @@ public class UIGame implements Runnable {
 
 	private void changeTurn() {
 		controller.changeTurn();
-		boardUI.updateTurn(controller.who().toString());
+		boardUI.updateTurn(controller.currentPlayer().toString());
 	}
 
 	private void lostTurn() {
-		boardUI.notifyLostTurn();
+		boardUI.notifyLostTurn(controller.currentPlayer());
 		changeTurn();
 	}
 
@@ -143,7 +143,7 @@ public class UIGame implements Runnable {
 	}
 
 	private void makeMove(Point move) {
-		SquareType color = controller.who().color() == SquareState.WHITE
+		SquareType color = controller.currentPlayer().color() == SquareState.WHITE
 				   ? SquareType.WHITE : SquareType.BLACK;
 		Set<Point> squaresToChange = controller.makeMove(move);
 		boardUI.fill(squaresToChange, color);

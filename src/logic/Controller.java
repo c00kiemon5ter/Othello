@@ -95,7 +95,7 @@ public final class Controller {
 		player = player.opponent();
 	}
 
-	public Player who() {
+	public Player currentPlayer() {
 		return player;
 	}
 
