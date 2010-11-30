@@ -1,23 +1,24 @@
 package logic;
 
 import core.Board;
-import core.Disk;
 import core.DiskState;
 import core.Player;
 import java.awt.Point;
 import java.util.Set;
 import java.util.Collection;
+import logic.ai.evaluation.ScoreEval;
+import logic.ai.searchers.NegaMax;
 
 public final class Controller {
 
 	/**
-	 * whoPlays has two values -> boolean
-	 * false : if it's black player's whoPlays
-	 * true  : if it's white player's whoPlays
+	 * {@code turn} has two values
+	 * <ul>
+	 * <li>false : if it the black player plays
+	 * <li>true  : if it the white player plays
+	 * </ul>
 	 */
 	private Board board;
-	private MoveExplorer explorer;
-	private boolean turn;
 	private Player player;
 	/* 0: all good , 1: one cant move , 2: none can move */
 	private final short CANMOVE = 0, CANNOTMOVE = 2;
@@ -29,11 +30,7 @@ public final class Controller {
 	}
 
 	public Set<Point> markPossibleMoves() {
-		explorer = new MoveExplorer(board);
-		Set<Point> moves = explorer.explore(player.color());
-		for (Point possiblePoint : moves) {
-			board.getDisk(possiblePoint).setState(DiskState.PSSBL);
-		}
+		Set<Point> moves = board.markPossibleMoves(player);
 		if (moves.isEmpty()) {
 			canMove++;
 		} else {
@@ -42,41 +39,23 @@ public final class Controller {
 		return moves;
 	}
 
-	public void unmarkPossibleMoves(Collection<Point> moves) {
-		for (Point possiblePoint : moves) {
-			board.getDisk(possiblePoint).setState(DiskState.EMPTY);
+	public void unmarkPossibleMoves(Collection<Point> possibleMoves) {
+		for (Point possibleMove : possibleMoves) {
+			board.getDisk(possibleMove).setState(DiskState.EMPTY);
 		}
 	}
 
 	public Set<Point> makeMove(Point move) {
-		board.getDisk(move).setColor(player.color());
-		Set<Point> pointsToFill = explorer.pointsToFill(move);
-		for (Point pointToFill : pointsToFill) {
-			board.getDisk(pointToFill).setColor(player.color());
-		}
-		pointsToFill.add(move);
-		return pointsToFill;
+		return board.makeMove(move, player.color());
 	}
 
 	public void updateScore() {
-		player.setScore(calcScore(player));
-		player.opponent().setScore(calcScore(player.opponent()));
-	}
-
-	private int calcScore(Player player) {
-		return calcScore(player.color());
+		player.setScore(calcScore(player.color()));
+		player.opponent().setScore(calcScore(player.color().opposite()));
 	}
 
 	private int calcScore(DiskState color) {
-		int score = 0;
-		for (Disk[] diskrow : board.getDisks()) {
-			for (Disk disk : diskrow) {
-				if (disk.getState() == color) {
-					score++;
-				}
-			}
-		}
-		return score;
+		return board.getScore(color);
 	}
 
 	public int getBlackScore() {
@@ -118,18 +97,7 @@ public final class Controller {
 	 * @return if the game is over
 	 */
 	public boolean endOfGame() {
-		return checkFullBoard() || checkZeroScore() || canMove == CANNOTMOVE;
-	}
-
-	private boolean checkFullBoard() {
-		for (Disk[] row : board.getDisks()) {
-			for (Disk disk : row) {
-				if (disk.getState() == DiskState.EMPTY) {
-					return false;
-				}
-			}
-		}
-		return true;
+		return board.isFull() || checkZeroScore() || canMove == CANNOTMOVE;
 	}
 
 	private boolean checkZeroScore() {
@@ -137,7 +105,6 @@ public final class Controller {
 	}
 
 	public void changeTurn() {
-		turn = !turn;
 		player = player.opponent();
 	}
 
@@ -145,16 +112,12 @@ public final class Controller {
 		return player;
 	}
 
-	public String getBoardForm() {
+	public String boardWithTurn() {
 		StringBuilder strbuf = new StringBuilder();
-		String[] rows = board.toString().split("\n");
+		String[] rows = board.boardWithStats().split("\n");
 		for (int idx = 0; idx < rows.length; idx++) {
 			strbuf.append(rows[idx]);
-			if (idx == 2) {
-				strbuf.append('\t').append(Player.BLACK.stats());
-			} else if (idx == 4) {
-				strbuf.append('\t').append(Player.WHITE.stats());
-			} else if (idx == 6) {
+			if (idx == 7) {
 				strbuf.append('\t').append(player).append(" plays");
 			}
 			strbuf.append('\n');
@@ -162,12 +125,21 @@ public final class Controller {
 		return strbuf.toString();
 	}
 
+	public String boardWithScore() {
+		return board.boardWithStats();
+	}
+
 	public void init() {
 		board.init();
 		Player.BLACK.init();
 		Player.WHITE.init();
 		player = Player.BLACK;
-		turn = false;
+	}
+
+	public Point evalMove() {
+		NegaMax ngmx = new NegaMax();
+		ngmx.searchSimple(board, player, 2, new ScoreEval());
+		return ngmx.getBestMove();
 	}
 
 	private static class ControllerHolder {

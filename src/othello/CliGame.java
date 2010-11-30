@@ -20,14 +20,22 @@ public class CliGame implements Game {
 		Set<Point> possblMoves;
 		Point move;
 		while (!controller.endOfGame()) {
-			possblMoves = controller.markPossibleMoves();
-			printBoard();
-			controller.unmarkPossibleMoves(possblMoves);
-			if (!possblMoves.isEmpty()) {
-				move = selectMove(possblMoves);
-				controller.makeMove(move);
-				controller.updateScore();
+			switch (controller.whoPlays()) {
+				case BLACK:
+					possblMoves = controller.markPossibleMoves();
+					System.out.println(controller.boardWithTurn());
+					controller.unmarkPossibleMoves(possblMoves);
+					if (!possblMoves.isEmpty()) {
+						move = selectMove(possblMoves);
+						controller.makeMove(move);
+					}
+					break;
+				case WHITE: /* computer */
+					Point bestMove = controller.evalMove();
+					controller.makeMove(bestMove);
+					break;
 			}
+			controller.updateScore();
 			controller.changeTurn();
 		}
 		whoWon();
@@ -57,15 +65,11 @@ public class CliGame implements Game {
 		return select.get(moveIdx - 1);
 	}
 
-	private void printBoard() {
-		System.out.println(controller.getBoardForm());
-	}
-
 	private void whoWon() {
-		System.out.println(controller.getBoardForm().toString());
+		System.out.println(controller.boardWithScore());
 		if (controller.isDraw()) {
 			System.out.println("\n:: We haz a draw!?");
-			System.out.println("\n==> No party for you :( ");
+			System.out.println("\n==> No party for you >:(");
 		} else {
 			System.out.println("\n:: We haz a winnarz!");
 			System.out.printf("\n==> %s wins\n", controller.getWinnerName());

@@ -9,12 +9,6 @@ import java.util.Set;
 
 public class MoveExplorer {
 
-	private Board board;
-
-	MoveExplorer(final Board board) {
-		this.board = board;
-	}
-
 	/**
 	 *
 	 * @param board - the board to search in
@@ -22,7 +16,7 @@ public class MoveExplorer {
 	 * @param direction - which direction should we search
 	 * @return if search in this direction is likely to have interesting findings
 	 */
-	private boolean shouldSearch(final Point seed, final Direction direction) {
+	private static boolean shouldSearch(final Board board, final Point seed, final Direction direction) {
 		Point nextPoint = direction.next(seed);
 		return pointIsValid(nextPoint)
 		       ? board.getDisk(nextPoint).getColor()
@@ -30,17 +24,17 @@ public class MoveExplorer {
 		       : false;
 	}
 
-	private boolean pointIsValid(Point point) {
+	private static boolean pointIsValid(Point point) {
 		return point.x >= 0 && point.x < Board.BOARD_LENGTH
 		       && point.y >= 0 && point.y < Board.BOARD_WIDTH;
 	}
 
-	public Set<Point> explore(final DiskState color) {
+	public static Set<Point> explore(final Board board, final DiskState color) {
 		Set<Point> possibleMoves = new HashSet<Point>();
 		Set<Point> diskpoints = board.getDiskPoints(color);
 		for (Point seed : diskpoints) {
 			for (Direction direction : Direction.values()) {
-				if (shouldSearch(seed, direction)) {
+				if (shouldSearch(board, seed, direction)) {
 					Point nextPoint = direction.next(seed);
 					nextPoint = direction.next(nextPoint);
 					while (pointIsValid(nextPoint)) {
@@ -58,11 +52,11 @@ public class MoveExplorer {
 		return possibleMoves;
 	}
 
-	public Set<Point> pointsToFill(final Point seed) {
+	public static Set<Point> pointsToFill(final Board board, final Point seed) {
 		Set<Point> filledlist = new HashSet<Point>();
 		DiskState seedState = board.getDisk(seed).getColor();
 		for (Direction direction : Direction.values()) {
-			if (shouldSearch(seed, direction)) {
+			if (shouldSearch(board, seed, direction)) {
 				Point nextPoint = direction.next(seed);
 				LinkedList<Point> templist = new LinkedList<Point>();
 				while (pointIsValid(nextPoint)) {
