@@ -135,26 +135,25 @@ public class CliGame implements Game {
 	}
 
 	private void setDifficulty() {
-		int level = 0;
 		System.out.print("\n1. " + DifficultyLevel.EASY.description()
 				 + "\n2. " + DifficultyLevel.NORMAL.description()
 				 + "\n3. " + DifficultyLevel.HARD.description()
 				 + "\n4. " + DifficultyLevel.HEROIC.description()
 				 + "\n\nSelect difficutly:");
-		while (level == 0) {
+		while (true) {
 			switch (readInt()) {
 				case 1:
 					controller.setDifficulty(DifficultyLevel.EASY);
-					break;
+					return;
 				case 2:
 					controller.setDifficulty(DifficultyLevel.NORMAL);
-					break;
+					return;
 				case 3:
 					controller.setDifficulty(DifficultyLevel.HARD);
-					break;
+					return;
 				case 4:
 					controller.setDifficulty(DifficultyLevel.HEROIC);
-					break;
+					return;
 				default:
 					System.err.print("Wrong choice. Try again: ");
 			}

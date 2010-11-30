@@ -118,8 +118,8 @@ public final class Controller {
 //		AbstractSearcher searcher = new MiniMax();
 		Evaluation evalfunc = new ScoreEval();
 //		Evaluation evalfunc = new ScoreDiffEval();
-		searcher.simpleSearch(board, player, depth, evalfunc);
-//		searcher.search(board, player, Integer.MIN_VALUE, Integer.MAX_VALUE, depth, evalfunc);
+//		searcher.simpleSearch(board, player, depth, evalfunc);
+		searcher.search(board, player, Integer.MIN_VALUE, Integer.MAX_VALUE, depth, evalfunc);
 		return searcher.getBestMove();
 	}
 
