@@ -2,12 +2,11 @@ package core;
 
 public enum Player {
 
-	BLACK(DiskState.BLACK),
-	WHITE(DiskState.WHITE);
-	private DiskState color;
-	private int score;
+	BLACK(SquareState.BLACK),
+	WHITE(SquareState.WHITE);
+	private SquareState color;
 
-	private Player(DiskState color) {
+	private Player(SquareState color) {
 		this.color = color;
 	}
 
@@ -15,23 +14,7 @@ public enum Player {
 		return this == BLACK ? WHITE : BLACK;
 	}
 
-	public DiskState color() {
+	public SquareState color() {
 		return color;
-	}
-
-	public int score() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public String stats() {
-		return String.format("%s: %d", this, this.score);
-	}
-
-	public void init() {
-		this.score = 2;
 	}
 }

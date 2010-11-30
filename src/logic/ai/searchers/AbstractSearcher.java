@@ -1,7 +1,7 @@
 package logic.ai.searchers;
 
 import core.Board;
-import core.DiskState;
+import core.SquareState;
 import core.Player;
 import java.awt.Point;
 import logic.MoveExplorer;
@@ -25,11 +25,11 @@ public abstract class AbstractSearcher implements Searcher {
 		if (depth <= 0 || isEndState(board)) {
 			record = function.evaluate(board, player);
 		} else {
+			Board subBoard = board.clone();
 			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
-			Board subBoard = new Board(board);
 			if (!possibleMoves.isEmpty()) {
 				for (Point nextPossibleMove : possibleMoves) {
-					subBoard = new Board(board);
+					subBoard = board.clone();
 					subBoard.makeMove(nextPossibleMove, player.color());
 					int result = -simpleSearch(subBoard, player.opponent(), depth - 1, function);
 //					record = max(record, -simpleSearch(subBoard, player.opponent(), depth - 1, function));
@@ -59,7 +59,7 @@ public abstract class AbstractSearcher implements Searcher {
 	 */
 	protected boolean isEndState(final Board board) {
 		return board.isFull()
-		       || board.getScore(DiskState.BLACK) == 0
-		       || board.getScore(DiskState.WHITE) == 0;
+		       || board.count(SquareState.BLACK) == 0
+		       || board.count(SquareState.WHITE) == 0;
 	}
 }

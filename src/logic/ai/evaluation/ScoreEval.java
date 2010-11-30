@@ -11,6 +11,6 @@ public class ScoreEval implements Evaluation {
 
 	@Override
 	public int evaluate(final Board board, final Player player) {
-		return board.getScore(player.color());
+		return board.count(player.color());
 	}
 }

@@ -1,7 +1,7 @@
 package logic;
 
 import core.Board;
-import core.DiskState;
+import core.SquareState;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,10 +18,8 @@ public class MoveExplorer {
 	 */
 	private static boolean shouldSearch(final Board board, final Point seed, final Direction direction) {
 		Point nextPoint = direction.next(seed);
-		return pointIsValid(nextPoint)
-		       ? board.getDisk(nextPoint).getColor()
-			 == board.getDisk(seed).getColor().opposite()
-		       : false;
+		return pointIsValid(nextPoint) ? board.getSquareState(nextPoint)
+						 == board.getSquareState(seed).opposite() : false;
 	}
 
 	private static boolean pointIsValid(Point point) {
@@ -29,18 +27,18 @@ public class MoveExplorer {
 		       && point.y >= 0 && point.y < Board.BOARD_WIDTH;
 	}
 
-	public static Set<Point> explore(final Board board, final DiskState color) {
+	public static Set<Point> explore(final Board board, final SquareState state) {
 		Set<Point> possibleMoves = new HashSet<Point>();
-		Set<Point> diskpoints = board.getDiskPoints(color);
-		for (Point seed : diskpoints) {
+		Set<Point> statePoints = board.getSquares(state);
+		for (Point seed : statePoints) {
 			for (Direction direction : Direction.values()) {
 				if (shouldSearch(board, seed, direction)) {
 					Point nextPoint = direction.next(seed);
 					nextPoint = direction.next(nextPoint);
 					while (pointIsValid(nextPoint)) {
-						if (board.getDisk(nextPoint).getColor() == color) {
+						if (board.getSquareState(nextPoint) == state) {
 							break;
-						} else if (board.getDisk(nextPoint).getState() == DiskState.EMPTY) {
+						} else if (board.getSquareState(nextPoint) == SquareState.EMPTY) {
 							possibleMoves.add(nextPoint);
 							break;
 						}
@@ -52,21 +50,21 @@ public class MoveExplorer {
 		return possibleMoves;
 	}
 
-	public static Set<Point> pointsToFill(final Board board, final Point seed) {
+	public static Set<Point> squaresToFill(final Board board, final Point seed) {
 		Set<Point> filledlist = new HashSet<Point>();
-		DiskState seedState = board.getDisk(seed).getColor();
+		SquareState seedState = board.getSquareState(seed);
 		for (Direction direction : Direction.values()) {
 			if (shouldSearch(board, seed, direction)) {
 				Point nextPoint = direction.next(seed);
 				LinkedList<Point> templist = new LinkedList<Point>();
 				while (pointIsValid(nextPoint)) {
-					DiskState nextState = board.getDisk(nextPoint).getState();
+					SquareState nextState = board.getSquareState(nextPoint);
 					if (nextState == seedState.opposite()) {
 						templist.add(nextPoint);
 					} else if (nextState == seedState) {
 						filledlist.addAll(templist);
 						break;
-					} else if (nextState == DiskState.EMPTY) {
+					} else if (nextState == SquareState.EMPTY) {
 						break;
 					}
 					nextPoint = direction.next(nextPoint);

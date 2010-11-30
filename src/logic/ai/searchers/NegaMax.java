@@ -19,7 +19,7 @@ public class NegaMax extends AbstractSearcher {
 			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
 			if (!possibleMoves.isEmpty()) {
 				for (Point nextPossibleMove : possibleMoves) {
-					Board subBoard = new Board(board);
+					Board subBoard = board.clone();
 					subBoard.makeMove(nextPossibleMove, player.color());
 					record = max(Integer.MIN_VALUE, -search(subBoard, player.opponent(), alpha, beta, depth - 1, function));
 				}

@@ -1,6 +1,6 @@
 package othello;
 
-import core.DiskState;
+import core.SquareState;
 import utils.Transform;
 import logic.Controller;
 import ui.BoardUI;
@@ -43,9 +43,9 @@ public class UIGame implements Runnable {
 
 	private Set<Point> markPossibleMoves() {
 		Set<Point> moves = controller.markPossibleMoves();
-		controller.unmarkPossibleMoves(moves);
+		controller.unmarkPossibleMoves();
 		if (!moves.isEmpty()) {
-			DiskCompType color = controller.whoPlays().color() == DiskState.WHITE
+			DiskCompType color = controller.who().color() == SquareState.WHITE
 					     ? DiskCompType.PSSBLWHT : DiskCompType.PSSBLBLK;
 			boardUI.markPossibleMoves(moves, color);
 		}
@@ -54,13 +54,12 @@ public class UIGame implements Runnable {
 	}
 
 	private void updateStats() {
-		controller.updateScore();
-		boardUI.updateStats(controller.getBlackStats(), controller.getWhiteStats());
+		boardUI.updateScore(controller.getBlackScore(), controller.getWhiteScore());
 	}
 
 	private void changeTurn() {
 		controller.changeTurn();
-		boardUI.updateTurn(controller.whoPlays().toString());
+		boardUI.updateTurn(controller.who().toString());
 	}
 
 	private void lostTurn() {
@@ -101,7 +100,7 @@ public class UIGame implements Runnable {
 	}
 
 	private void makeMove(Point move) {
-		DiskCompType color = controller.whoPlays().color() == DiskState.WHITE
+		DiskCompType color = controller.who().color() == SquareState.WHITE
 				     ? DiskCompType.WHITE : DiskCompType.BLACK;
 		Set<Point> disksToChange = controller.makeMove(move);
 		boardUI.fill(disksToChange, color);
@@ -112,7 +111,7 @@ public class UIGame implements Runnable {
 		if (controller.isDraw()) {
 			boardUI.declareDraw();
 		} else {
-			boardUI.declareWinner(controller.getWinnerName());
+			boardUI.declareWinner(controller.getWinner().toString());
 		}
 	}
 }

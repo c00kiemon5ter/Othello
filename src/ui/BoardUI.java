@@ -153,9 +153,9 @@ public final class BoardUI extends JFrame {
 		board.revalidate();
 	}
 
-	public void updateStats(String blackStats, String whiteStats) {
-		this.blackStat.setText(blackStats);
-		this.whiteStat.setText(whiteStats);
+	public void updateScore(int blackStats, int whiteStats) {
+		this.blackStat.setText("Black: " + blackStats);
+		this.whiteStat.setText("White: " + whiteStats);
 	}
 
 	public void updateTurn(String player) {

@@ -4,7 +4,7 @@ package core;
  *
  * @author c00kiemon5ter
  */
-public enum DiskState {
+public enum SquareState {
 
 	BLACK('x'),
 	WHITE('o'),
@@ -12,7 +12,7 @@ public enum DiskState {
 	EMPTY(' ');
 	private final char symbol;
 
-	DiskState(char symbol) {
+	SquareState(char symbol) {
 		this.symbol = symbol;
 	}
 
@@ -20,7 +20,7 @@ public enum DiskState {
 		return this.symbol;
 	}
 
-	public DiskState opposite() {
+	public SquareState opposite() {
 		return this == BLACK ? WHITE : BLACK;
 	}
 

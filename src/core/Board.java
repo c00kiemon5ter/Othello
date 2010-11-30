@@ -2,173 +2,167 @@ package core;
 
 import java.awt.Point;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import logic.MoveExplorer;
 
-public final class Board {
+public final class Board implements Cloneable {
 
 	public static final int BOARD_LENGTH = 8;
 	public static final int BOARD_WIDTH = 8;
-	private Disk[][] disks;
+	private Map<Point, SquareState> board;
 
 	public Board() {
-		this(BOARD_LENGTH, BOARD_WIDTH);
-	}
-
-	private Board(int boardLength, int boardWidth) {
-		disks = new Disk[boardLength][boardWidth];
+		board = new HashMap<Point, SquareState>(BOARD_LENGTH * BOARD_WIDTH);
 		init();
 	}
 
-	/* copy constructor */
-	public Board(Board board) {
-		disks = new Disk[BOARD_LENGTH][BOARD_WIDTH];
-		Point point = new Point();
-		for (point.x = 0; point.x < disks.length; point.x++) {
-			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				disks[point.x][point.y] = new Disk(board.getDisk(point));
-			}
+	public Board(Map<Point, SquareState> board) {
+		this.board = new HashMap<Point, SquareState>(board.size());
+		for (Point point : board.keySet()) {
+			this.board.put(new Point(point), board.get(point));
 		}
 	}
 
-	/**
-	 * game starts with four pieces, two black, two white, placed diagonally
-	 */
 	public void init() {
 		Point point = new Point();
-		for (point.x = 0; point.x < disks.length; point.x++) {
-			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				disks[point.x][point.y] = new Disk(point, DiskState.EMPTY);
+		for (point.x = 0; point.x < BOARD_LENGTH; point.x++) {
+			for (point.y = 0; point.y < BOARD_WIDTH; point.y++) {
+				board.put(new Point(point), SquareState.EMPTY);
 			}
 		}
-		disks[3][3] = new Disk(point, DiskState.WHITE);
-		disks[3][4] = new Disk(point, DiskState.BLACK);
-		disks[4][3] = new Disk(point, DiskState.BLACK);
-		disks[4][4] = new Disk(point, DiskState.WHITE);
+		board.put(new Point(3, 3), SquareState.WHITE);
+		board.put(new Point(3, 4), SquareState.BLACK);
+		board.put(new Point(4, 3), SquareState.BLACK);
+		board.put(new Point(4, 4), SquareState.WHITE);
 	}
 
-	public Disk getDisk(Point point) {
-		return disks[point.x][point.y];
+	public SquareState getSquareState(Point point) {
+		return board.get(point);
 	}
 
-	public Set<Point> getDiskPoints(DiskState color) {
+	public Set<Point> getSquares(SquareState state) {
 		Set<Point> points = new HashSet<Point>();
-		Point point = new Point();
-		for (point.x = 0; point.x < disks.length; point.x++) {
-			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				if (disks[point.x][point.y].getState() == color) {
-					points.add(new Point(point));
-				}
+		for (Point point : board.keySet()) {
+			if (board.get(point) == state) {
+				points.add(point);
 			}
 		}
 		return points;
 	}
 
-	public int getScore(DiskState color) {
-		int score = 0;
-		for (Disk[] rowOfDisks : disks) {
-			for (Disk disk : rowOfDisks) {
-				if (disk.getColor() == color) {
-					score++;
-				}
-			}
-		}
-		return score;
-	}
-
 	public boolean isFull() {
-		for (Disk[] rowOfDisks : disks) {
-			for (Disk disk : rowOfDisks) {
-				if (disk.getState() == DiskState.EMPTY) {
-					return false;
-				}
+		for (Point point : board.keySet()) {
+			if (board.get(point) == SquareState.EMPTY) {
+				return false;
 			}
 		}
 		return true;
+	}
+
+	public int count(SquareState state) {
+		int count = 0;
+		for (Point point : board.keySet()) {
+			if (board.get(point) == state) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	public Set<Point> getPossibleMoves(Player player) {
 		return MoveExplorer.explore(this, player.color());
 	}
 
-	public Set<Point> markPossibleMoves(Player player) {
-		Set<Point> possibleMoves = MoveExplorer.explore(this, player.color());
-		for (Point point : possibleMoves) {
-			getDisk(point).setColor(DiskState.PSSBL);
-		}
-		return possibleMoves;
-	}
-
 	public void markPossibleMoves(Set<Point> possibleMoves) {
 		for (Point point : possibleMoves) {
-			getDisk(point).setColor(DiskState.PSSBL);
+			board.put(point, SquareState.PSSBL);
 		}
 	}
 
 	public void unmarkPossibleMoves() {
-		for (Disk[] rowdisk : disks) {
-			for (Disk disk : rowdisk) {
-				if (disk.getState() == DiskState.PSSBL) {
-					disk.setColor(DiskState.EMPTY);
-				}
+		for (Point point : board.keySet()) {
+			if (board.get(point) == SquareState.PSSBL) {
+				board.put(point, SquareState.EMPTY);
 			}
 		}
 	}
 
-	public void fill(Set<Point> disksToFill, DiskState color) {
-		for (Point point : disksToFill) {
-			getDisk(point).setColor(color);
+	public void markState(Set<Point> points, SquareState state) {
+		for (Point point : points) {
+			board.put(point, state);
 		}
 	}
 
-	public Set<Point> makeMove(Point move, DiskState color) {
-		getDisk(move).setColor(color);
-		Set<Point> fillPoints = MoveExplorer.pointsToFill(this, move);
-		fill(fillPoints, color);
-		fillPoints.add(move);
-		return fillPoints;
+	public Set<Point> makeMove(Point move, SquareState state) {
+		board.put(move, state);
+		Set<Point> changedSquares = MoveExplorer.squaresToFill(this, move);
+		markState(changedSquares, state);
+		changedSquares.add(move);
+		return changedSquares;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
 		Point point = new Point();
-		builder.append("  A B C D E F G H\n");
-		for (point.x = 0; point.x < disks.length; point.x++) {
-			builder.append(point.x + 1);
-			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				builder.append(' ').append(disks[point.x][point.y].getState().getSymbol());
+		StringBuilder sb = new StringBuilder();
+		sb.append("  A B C D E F G H\n");
+		for (point.x = 0; point.x < BOARD_LENGTH; point.x++) {
+			sb.append(point.x + 1);
+			for (point.y = 0; point.y < BOARD_WIDTH; point.y++) {
+				sb.append(' ').append(board.get(point).getSymbol());
 			}
-			builder.append('\n');
+			sb.append('\n');
 		}
-		return builder.toString();
+		return sb.toString();
 	}
 
-	public String boardWithStats() {
-		Point point = new Point();
-		StringBuilder builder = new StringBuilder();
-		builder.append("\n  A B C D E F G H\n");
-		for (point.x = 0; point.x < disks.length; point.x++) {
-			builder.append(point.x + 1);
-			for (point.y = 0; point.y < disks[point.x].length; point.y++) {
-				builder.append(' ').append(getDisk(point).getState().getSymbol());
-			}
-			switch (point.x) {
-				case 1:
-//					builder.append('\t').append(Player.BLACK.stats());
-					builder.append('\t').append(Player.BLACK).
-						append(": ").
-						append(getScore(DiskState.BLACK));
+	public String toStringWithStats() {
+		StringBuilder sb = new StringBuilder();
+		String[] rows = toString().split("\n");
+		for (int row = 0; row < rows.length; row++) {
+			sb.append(rows[row]);
+			switch (row) {
+				case 2:
+					sb.append('\t').append(Player.BLACK).append(": ").
+						append(count(SquareState.BLACK));
 					break;
-				case 3:
-//					builder.append('\t').append(Player.WHITE.stats());
-					builder.append('\t').append(Player.WHITE).
-						append(": ").
-						append(getScore(DiskState.WHITE));
+				case 4:
+					sb.append('\t').append(Player.WHITE).append(": ").
+						append(count(SquareState.WHITE));
 					break;
 			}
-			builder.append('\n');
+			sb.append('\n');
 		}
-		return builder.toString();
+		return sb.toString();
+	}
+
+	public String toStringWithStatsTurn(Player player) {
+		StringBuilder sb = new StringBuilder();
+		String[] rows = toString().split("\n");
+		for (int row = 0; row < rows.length; row++) {
+			sb.append(rows[row]);
+			switch (row) {
+				case 2:
+					sb.append('\t').append(Player.BLACK).append(": ").
+						append(count(SquareState.BLACK));
+					break;
+				case 4:
+					sb.append('\t').append(Player.WHITE).append(": ").
+						append(count(SquareState.WHITE));
+					break;
+				case 6:
+					sb.append('\t').append(player).append("s turn!");
+					break;
+			}
+			sb.append('\n');
+		}
+		return sb.toString();
+	}
+
+	@Override
+	public Board clone() {
+		return new Board(this.board);
 	}
 }

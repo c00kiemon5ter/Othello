@@ -1,11 +1,10 @@
 package logic;
 
 import core.Board;
-import core.DiskState;
+import core.SquareState;
 import core.Player;
 import java.awt.Point;
 import java.util.Set;
-import java.util.Collection;
 import logic.ai.evaluation.Evaluation;
 import logic.ai.evaluation.ScoreEval;
 import logic.ai.searchers.AbstractSearcher;
@@ -33,7 +32,9 @@ public final class Controller {
 	}
 
 	public Set<Point> markPossibleMoves() {
-		Set<Point> moves = board.markPossibleMoves(player);
+//		Set<Point> moves = board.markPossibleMoves(player);
+		Set<Point> moves = board.getPossibleMoves(player);
+		board.markPossibleMoves(moves);
 		if (moves.isEmpty()) {
 			canMove++;
 		} else {
@@ -42,51 +43,32 @@ public final class Controller {
 		return moves;
 	}
 
-	public void unmarkPossibleMoves(Collection<Point> possibleMoves) {
-		for (Point possibleMove : possibleMoves) {
-			board.getDisk(possibleMove).setState(DiskState.EMPTY);
-		}
+	public void unmarkPossibleMoves() {
+		board.unmarkPossibleMoves();
 	}
 
 	public Set<Point> makeMove(Point move) {
 		return board.makeMove(move, player.color());
 	}
 
-	public void updateScore() {
-		player.setScore(calcScore(player.color()));
-		player.opponent().setScore(calcScore(player.color().opposite()));
-	}
-
-	private int calcScore(DiskState color) {
-		return board.getScore(color);
+	private int calcScore(SquareState state) {
+		return board.count(state);
 	}
 
 	public int getBlackScore() {
-		return Player.BLACK.score();
+		return board.count(SquareState.BLACK);
 	}
 
 	public int getWhiteScore() {
-		return Player.WHITE.score();
-	}
-
-	public String getBlackStats() {
-		return Player.BLACK.stats();
-	}
-
-	public String getWhiteStats() {
-		return Player.WHITE.stats();
+		return board.count(SquareState.WHITE);
 	}
 
 	public Player getWinner() {
-		return Player.BLACK.score() < Player.WHITE.score() ? Player.WHITE : Player.BLACK;
-	}
-
-	public String getWinnerName() {
-		return getWinner().toString();
+		return getBlackScore() < getWhiteScore() ? Player.WHITE : Player.BLACK;
 	}
 
 	public boolean isDraw() {
-		return Player.BLACK.score() == Player.WHITE.score();
+		return getBlackScore() == getWhiteScore();
 	}
 
 	/**
@@ -104,38 +86,23 @@ public final class Controller {
 	}
 
 	private boolean checkZeroScore() {
-		return Player.BLACK.score() == 0 || Player.WHITE.score() == 0;
+		return getBlackScore() == 0 || getWhiteScore() == 0;
 	}
 
 	public void changeTurn() {
 		player = player.opponent();
 	}
 
-	public Player whoPlays() {
+	public Player who() {
 		return player;
 	}
 
 	public String boardWithTurn() {
-		StringBuilder strbuf = new StringBuilder();
-		String[] rows = board.boardWithStats().split("\n");
-		for (int idx = 0; idx < rows.length; idx++) {
-			strbuf.append(rows[idx]);
-			if (idx == 7) {
-				strbuf.append('\t').append(player).append(" plays");
-			}
-			strbuf.append('\n');
-		}
-		return strbuf.toString();
-	}
-
-	public String boardWithScore() {
-		return board.boardWithStats();
+		return board.toStringWithStatsTurn(player);
 	}
 
 	public void init() {
 		board.init();
-		Player.BLACK.init();
-		Player.WHITE.init();
 		player = Player.BLACK;
 		depth = 3;
 	}
