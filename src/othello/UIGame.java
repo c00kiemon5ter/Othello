@@ -29,7 +29,7 @@ public class UIGame implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	synchronized public void run() {
 		if (controller.endOfGame()) {
 			gameEnd();
 		} else {
@@ -114,4 +114,10 @@ public class UIGame implements Runnable {
 			boardUI.declareWinner(controller.getWinner().toString());
 		}
 	}
+
+        synchronized public boolean rematch() {
+            boolean answer = false;
+            /* read answer and return it */
+            return answer;
+        }
 }
