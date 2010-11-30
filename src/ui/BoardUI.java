@@ -20,10 +20,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButtonMenuItem;
 import ui.DiskComponentFactory.DiskCompType;
 import utils.Transform;
 
@@ -40,6 +42,7 @@ public final class BoardUI extends JFrame {
 	private JLabel showTurn;
 	private DiskComponentFactory diskFactory;
 	private JMenuItem newgame, exit, about;
+        private ButtonGroup dificultylevel = new ButtonGroup();
 
 	private void initComponents(Container pane) {
 		pane.setLayout(new GridBagLayout());
@@ -55,6 +58,23 @@ public final class BoardUI extends JFrame {
 		menu.add(newgame);
 		exit = new JMenuItem("Exit");
 		menu.add(exit);
+                menu = new JMenu("Edit");
+                menubar.add(menu);
+                JMenu preferences = new JMenu("Difficulty");
+                JRadioButtonMenuItem difficulty = new JRadioButtonMenuItem("Easy");
+                dificultylevel.add(difficulty);
+                preferences.add(difficulty);
+                difficulty = new JRadioButtonMenuItem("Normal");
+                difficulty.setSelected(true);
+                dificultylevel.add(difficulty);
+                preferences.add(difficulty);
+                difficulty = new JRadioButtonMenuItem("Hard");
+                dificultylevel.add(difficulty);
+                preferences.add(difficulty);
+                difficulty = new JRadioButtonMenuItem("Heroic");
+                dificultylevel.add(difficulty);
+                preferences.add(difficulty);
+                menu.add(preferences);
 		menu = new JMenu("Help");
 		menubar.add(menu);
 		about = new JMenuItem("About");
