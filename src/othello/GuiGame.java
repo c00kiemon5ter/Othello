@@ -10,8 +10,4 @@ public class GuiGame implements Game {
 	public void play() {
 		EventQueue.invokeLater(uigame = new UIGame());
 	}
-
-        public boolean rematch() {
-            return uigame.rematch();
-        }
 }

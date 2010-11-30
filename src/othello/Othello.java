@@ -38,9 +38,11 @@ public class Othello {
 			System.exit(1);
 		}
 		othello.play();
-                while (othello.rematch()) {
-                    othello = args[0].equals(CLI_OPT)?new CliGame():new GuiGame();
-                    othello.play();
+                while (args[0].equals(CLI_OPT)) {
+                    if(((CliGame)othello).rematch()) {
+                        othello = new CliGame();
+                        othello.play();
+                    }
                 }
 	}
 
