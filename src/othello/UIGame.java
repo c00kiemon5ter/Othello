@@ -6,7 +6,7 @@ import utils.Transform;
 import logic.Controller;
 import ui.BoardUI;
 import ui.ImageComponent;
-import ui.DiskComponentFactory.DiskCompType;
+import ui.SquareImgFactory.SquareType;
 import java.util.Set;
 import java.awt.Point;
 import java.awt.Component;
@@ -28,7 +28,7 @@ public class UIGame implements Runnable {
 	private void initBoardUI() {
 		boardUI = new BoardUI();
 		boardUI.setVisible(true);
-		boardUI.getNewGameMI().addActionListener(new ActionListener() {
+		boardUI.getNewGameItel().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -57,8 +57,8 @@ public class UIGame implements Runnable {
 		Set<Point> moves = controller.markPossibleMoves();
 		controller.unmarkPossibleMoves();
 		if (!moves.isEmpty()) {
-			DiskCompType color = controller.who().color() == SquareState.WHITE
-					     ? DiskCompType.PSSBLWHT : DiskCompType.PSSBLBLK;
+			SquareType color = controller.who().color() == SquareState.WHITE
+					   ? SquareType.PSSBLWHT : SquareType.PSSBLBLK;
 			boardUI.markPossibleMoves(moves, color);
 		}
 		updateListeners();
@@ -85,7 +85,7 @@ public class UIGame implements Runnable {
 	}
 
 	private void updateListeners() {
-		for (ImageComponent imgComp : boardUI.getDiskComps()) {
+		for (ImageComponent imgComp : boardUI.getSquares()) {
 			if (imgComp.getMouseListeners().length != 0) {
 				continue;
 			}
@@ -100,7 +100,7 @@ public class UIGame implements Runnable {
 	}
 
 	private void clickzWasHappend(Component imgComp) {
-		int index = boardUI.getDiskComps().indexOf(imgComp);
+		int index = boardUI.getSquares().indexOf(imgComp);
 		Point selectedMove = Transform.indexToPoint(index);
 		if (possblMoves.contains(selectedMove)) {
 			boardUI.unmarkPossibleMoves(possblMoves);
@@ -112,10 +112,10 @@ public class UIGame implements Runnable {
 	}
 
 	private void makeMove(Point move) {
-		DiskCompType color = controller.who().color() == SquareState.WHITE
-				     ? DiskCompType.WHITE : DiskCompType.BLACK;
-		Set<Point> disksToChange = controller.makeMove(move);
-		boardUI.fill(disksToChange, color);
+		SquareType color = controller.who().color() == SquareState.WHITE
+				   ? SquareType.WHITE : SquareType.BLACK;
+		Set<Point> squaresToChange = controller.makeMove(move);
+		boardUI.fill(squaresToChange, color);
 	}
 
 	private void gameEnd() {

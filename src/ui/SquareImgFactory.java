@@ -3,7 +3,7 @@ package ui;
 import java.awt.Image;
 import java.awt.Toolkit;
 
-public class DiskComponentFactory {
+public class SquareImgFactory {
 
 	private static final int imagesize = 22;
 	private static final Image blackDiscImg = Toolkit.getDefaultToolkit().getImage("src/ui/images/black.png").getScaledInstance(imagesize, imagesize, Image.SCALE_SMOOTH);
@@ -12,7 +12,7 @@ public class DiskComponentFactory {
 	private static final Image pssblBlkDiscImg = Toolkit.getDefaultToolkit().getImage("src/ui/images/blackpssbl.png").getScaledInstance(imagesize, imagesize, Image.SCALE_SMOOTH);
 	private static final Image pssblWhtDiscImg = Toolkit.getDefaultToolkit().getImage("src/ui/images/whitepssbl.png").getScaledInstance(imagesize, imagesize, Image.SCALE_SMOOTH);
 
-	public enum DiskCompType {
+	public enum SquareType {
 
 		BLACK,
 		WHITE,
@@ -21,7 +21,7 @@ public class DiskComponentFactory {
 		PSSBLWHT;
 	}
 
-	public ImageComponent createDisk(DiskCompType type) {
+	public ImageComponent buildSquare(SquareType type) {
 		switch (type) {
 			case BLACK:
 				return new ImageComponent(blackDiscImg);

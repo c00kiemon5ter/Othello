@@ -24,7 +24,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import ui.DiskComponentFactory.DiskCompType;
+import ui.SquareImgFactory.SquareType;
 import utils.Transform;
 
 public final class BoardUI extends JFrame {
@@ -32,13 +32,13 @@ public final class BoardUI extends JFrame {
 	private final Image LOGO = new ImageIcon(getClass().getResource("/ui/images/logo.jpg")).getImage();
 	private static final Image rows = Toolkit.getDefaultToolkit().getImage("src/ui/images/rows.png");
 	private static final Image cols = Toolkit.getDefaultToolkit().getImage("src/ui/images/cols.png");
-	private List<ImageComponent> diskComps;
+	private List<ImageComponent> squares;
 	private JPanel board;
 	private JPanel statusbar;
 	private JLabel whiteStat;
 	private JLabel blackStat;
 	private JLabel showTurn;
-	private DiskComponentFactory diskFactory;
+	private SquareImgFactory squareFactory;
 	private JMenuItem newgame, exit, about;
 
 	private void initComponents(Container pane) {
@@ -128,20 +128,20 @@ public final class BoardUI extends JFrame {
 		constrains.gridy = 2;
 		pane.add(rowsRight, constrains);
 
-		/* paint the disks */
+		/* paint the squares */
 		board = new JPanel(new GridLayout(Board.BOARD_LENGTH, Board.BOARD_WIDTH));
 		for (int row = 0; row < Board.BOARD_LENGTH; row++) {
 			for (int col = 0; col < Board.BOARD_WIDTH; col++) {
-				ImageComponent emptyDisk = diskFactory.createDisk(DiskCompType.EMPTY);
-				board.add(emptyDisk);
-				diskComps.add(emptyDisk);
+				ImageComponent emptySquare = squareFactory.buildSquare(SquareType.EMPTY);
+				board.add(emptySquare);
+				squares.add(emptySquare);
 			}
 		}
 		/* paint the start points */
-		setDisk(new Point(3, 3), DiskCompType.WHITE);
-		setDisk(new Point(3, 4), DiskCompType.BLACK);
-		setDisk(new Point(4, 3), DiskCompType.BLACK);
-		setDisk(new Point(4, 4), DiskCompType.WHITE);
+		setSquare(new Point(3, 3), SquareType.WHITE);
+		setSquare(new Point(3, 4), SquareType.BLACK);
+		setSquare(new Point(4, 3), SquareType.BLACK);
+		setSquare(new Point(4, 4), SquareType.WHITE);
 
 		constrains.anchor = GridBagConstraints.CENTER;
 		constrains.fill = GridBagConstraints.NONE;
@@ -180,31 +180,31 @@ public final class BoardUI extends JFrame {
 		pane.add(statusbar, constrains);
 	}
 
-	private void setDisk(Point point, DiskCompType disk) {
-		ImageComponent imgcomp = diskFactory.createDisk(disk);
+	private void setSquare(Point point, SquareType squareType) {
+		ImageComponent imgcomp = squareFactory.buildSquare(squareType);
 		int index = Transform.pointToIndex(point);
-		diskComps.set(index, imgcomp);
+		squares.set(index, imgcomp);
 		board.remove(index);
 		board.add(imgcomp, index);
 	}
 
-	public void markPossibleMoves(Collection<Point> pssbleMoves, DiskCompType color) {
-		for (Point pssblPoint : pssbleMoves) {
-			setDisk(pssblPoint, color);
+	public void markPossibleMoves(Collection<Point> possibleMoves, SquareType color) {
+		for (Point pssblPoint : possibleMoves) {
+			setSquare(pssblPoint, color);
 		}
 		board.revalidate();
 	}
 
-	public void unmarkPossibleMoves(Collection<Point> pssbleMoves) {
-		for (Point pssblPoint : pssbleMoves) {
-			setDisk(pssblPoint, DiskCompType.EMPTY);
+	public void unmarkPossibleMoves(Collection<Point> possibleMoves) {
+		for (Point pssblPoint : possibleMoves) {
+			setSquare(pssblPoint, SquareType.EMPTY);
 		}
 		board.revalidate();
 	}
 
-	public void fill(Collection<Point> filledpoints, DiskCompType color) {
+	public void fill(Collection<Point> filledpoints, SquareType color) {
 		for (Point toFill : filledpoints) {
-			setDisk(toFill, color);
+			setSquare(toFill, color);
 		}
 		board.revalidate();
 	}
@@ -232,13 +232,13 @@ public final class BoardUI extends JFrame {
 		JOptionPane.showMessageDialog(this, "No available moves, turn lost", "Well played!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	public List<ImageComponent> getDiskComps() {
-		return diskComps;
+	public List<ImageComponent> getSquares() {
+		return squares;
 	}
 
 	public BoardUI() {
-		diskComps = new ArrayList<ImageComponent>(Board.BOARD_LENGTH * Board.BOARD_WIDTH);
-		diskFactory = new DiskComponentFactory();
+		squares = new ArrayList<ImageComponent>(Board.BOARD_LENGTH * Board.BOARD_WIDTH);
+		squareFactory = new SquareImgFactory();
 		initComponents(this.getContentPane());
 		this.pack();
 		this.setLocationRelativeTo(null);
@@ -248,7 +248,7 @@ public final class BoardUI extends JFrame {
 		this.setResizable(false);
 	}
 
-	public JMenuItem getNewGameMI() {
+	public JMenuItem getNewGameItel() {
 		return newgame;
 	}
 }
