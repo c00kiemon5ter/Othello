@@ -144,6 +144,7 @@ public final class Controller {
 		AbstractSearcher searcher = new NegaMax();
 		Evaluation evalfunc = new ScoreEval();
 		searcher.searchSimple(board, player, depth, evalfunc);
+//		searcher.search(board, player, Integer.MIN_VALUE, Integer.MAX_VALUE, depth, evalfunc);
 		return searcher.getBestMove();
 	}
 
