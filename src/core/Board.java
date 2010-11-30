@@ -107,13 +107,12 @@ public final class Board implements Cloneable {
 	public String toString() {
 		Point point = new Point();
 		StringBuilder sb = new StringBuilder();
-		sb.append("  A B C D E F G H\n");
+		sb.append("  A B C D E F G H");
 		for (point.x = 0; point.x < BOARD_LENGTH; point.x++) {
-			sb.append(point.x + 1);
+			sb.append('\n').append(point.x + 1);
 			for (point.y = 0; point.y < BOARD_WIDTH; point.y++) {
 				sb.append(' ').append(board.get(point).getSymbol());
 			}
-			sb.append('\n');
 		}
 		return sb.toString();
 	}
@@ -122,7 +121,7 @@ public final class Board implements Cloneable {
 		StringBuilder sb = new StringBuilder();
 		String[] rows = toString().split("\n");
 		for (int row = 0; row < rows.length; row++) {
-			sb.append(rows[row]);
+			sb.append('\n').append(rows[row]);
 			switch (row) {
 				case 2:
 					sb.append('\t').append(Player.BLACK).append(": ").
@@ -133,7 +132,6 @@ public final class Board implements Cloneable {
 						append(count(SquareState.WHITE));
 					break;
 			}
-			sb.append('\n');
 		}
 		return sb.toString();
 	}
@@ -142,7 +140,7 @@ public final class Board implements Cloneable {
 		StringBuilder sb = new StringBuilder();
 		String[] rows = toString().split("\n");
 		for (int row = 0; row < rows.length; row++) {
-			sb.append(rows[row]);
+			sb.append('\n').append(rows[row]);
 			switch (row) {
 				case 2:
 					sb.append('\t').append(Player.BLACK).append(": ").
@@ -156,7 +154,6 @@ public final class Board implements Cloneable {
 					sb.append('\t').append(player).append("s turn!");
 					break;
 			}
-			sb.append('\n');
 		}
 		return sb.toString();
 	}

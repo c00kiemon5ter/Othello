@@ -1,48 +1,28 @@
 package logic.ai.searchers;
 
 import core.Board;
-import core.SquareState;
 import core.Player;
+import core.SquareState;
+import java.util.List;
+import java.util.ArrayList;
 import java.awt.Point;
-import logic.MoveExplorer;
-import logic.ai.evaluation.Evaluation;
-import java.util.Set;
 
-public abstract class AbstractSearcher implements Searcher {
+public abstract class AbstractSearcher implements Searcher, SimpleSearcher {
 
 	protected Point bestMove;
 
-	@Override
-	public abstract int search(Board board, Player player, int alpha, int beta, int depth, Evaluation function);
-
-	public Point getBestMove() {
-		return bestMove;
+	protected int max(int a, int b) {
+		return a < b ? b : a;
 	}
 
-	public int simpleSearch(Board board, Player player, int depth, Evaluation function) {
-		int record = Integer.MIN_VALUE;
-		Point maxMove = null;
-		if (depth <= 0 || isEndState(board)) {
-			record = function.evaluate(board, player);
-		} else {
-			Board subBoard = board.clone();
-			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
-			if (!possibleMoves.isEmpty()) {
-				for (Point nextPossibleMove : possibleMoves) {
-					subBoard = board.clone();
-					subBoard.makeMove(nextPossibleMove, player.color());
-					int result = -simpleSearch(subBoard, player.opponent(), depth - 1, function);
-//					record = max(record, -simpleSearch(subBoard, player.opponent(), depth - 1, function));
-					if (result > record) {
-						record = result;
-						maxMove = nextPossibleMove;
-					}
-				}
-			} else {
-				record = -simpleSearch(subBoard, player, depth - 1, function);
-			}
-		}
-		bestMove = maxMove;
+	protected int min(int a, int b) {
+		return a > b ? b : a;
+	}
+
+	protected int randomChoice(Board board, Player player) {
+		List<Point> possibleMoves = new ArrayList<Point>(board.getPossibleMoves(player));
+		int record = (int) Math.random() * (possibleMoves.size() - 1);
+		bestMove = possibleMoves.get(record);
 		return record;
 	}
 
@@ -61,5 +41,10 @@ public abstract class AbstractSearcher implements Searcher {
 		return board.isFull()
 		       || board.count(SquareState.BLACK) == 0
 		       || board.count(SquareState.WHITE) == 0;
+	}
+
+	@Override
+	public Point getBestMove() {
+		return bestMove;
 	}
 }

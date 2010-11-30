@@ -6,8 +6,10 @@ import core.Player;
 import java.awt.Point;
 import java.util.Set;
 import logic.ai.evaluation.Evaluation;
+import logic.ai.evaluation.ScoreDiffEval;
 import logic.ai.evaluation.ScoreEval;
 import logic.ai.searchers.AbstractSearcher;
+import logic.ai.searchers.MiniMax;
 import logic.ai.searchers.NegaMax;
 
 public final class Controller {
@@ -109,7 +111,9 @@ public final class Controller {
 
 	public Point evalMove() {
 		AbstractSearcher searcher = new NegaMax();
+//		AbstractSearcher searcher = new MiniMax();
 		Evaluation evalfunc = new ScoreEval();
+//		Evaluation evalfunc = new ScoreDiffEval();
 		searcher.simpleSearch(board, player, depth, evalfunc);
 //		searcher.search(board, player, Integer.MIN_VALUE, Integer.MAX_VALUE, depth, evalfunc);
 		return searcher.getBestMove();
