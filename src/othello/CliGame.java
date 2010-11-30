@@ -42,7 +42,7 @@ public class CliGame implements Game {
 			}
 			controller.changeTurn();
 		}
-		whoWon();
+		declareWinnarz();
 	}
 
 	Point selectMove(Set<Point> moves) {
@@ -69,7 +69,7 @@ public class CliGame implements Game {
 		return select.get(moveIdx - 1);
 	}
 
-	private void whoWon() {
+	private void declareWinnarz() {
 		System.out.println(controller.boardWithTurn());
 		if (controller.isDraw()) {
 			System.out.println("\n:: We haz a draw!?");

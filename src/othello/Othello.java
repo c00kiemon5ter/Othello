@@ -2,17 +2,18 @@ package othello;
 
 /**
  *
- * 	  A B C D E F G H
- * 	1 o x o x o x o x
- * 	2 x o x o x o x o
- * 	3 o x o x o x o x
- * 	4 x o x o x o x o
- * 	5 o x o x o x o x
- * 	6 x o x o x o x o
- * 	7 o x o x o x o x
- * 	8 x o x o x o x o
+ *   A B C D E F G H
+ * 1
+ * 2                	BLACK: 2
+ * 3       .
+ * 4     . o x      	WHITE: 2
+ * 5       x o .
+ * 6         .      	BLACKs turn!
+ * 7
+ * 8
  *
- * 	BLACK: 32        WHITE: 32
+ * 1: 5F	2: 6E	3: 3D	4: 4C
+ * Select move: 
  *
  * @author c00kiemon5ter
  */
@@ -48,3 +49,19 @@ public class Othello {
 				  Othello.class.getSimpleName(), CLI_OPT, GUI_OPT, HELP_OPT);
 	}
 }
+/**
+ * TODO: Select Human vs [Human|Computer]
+ *	-> 1on1Game + AIGame ? Make SelectMove class
+ *
+ * TODO: Ask to restart game
+ * TODO: Select which color the Computer is
+ * TODO: Select difficulty --> increase depth
+ *	-> cli menu + gui menubar
+ *
+ * TODO: Implement Gui Computer Opponent
+ * TODO: Chose evaluation function
+ * TODO: What happens on lost turns ?
+ *
+ * TODO: Implement NegaMan-AB MiniMax-AB Negascout
+ * TODO: Efficient use of a Global Hash Table <Move, Max>
+ */
