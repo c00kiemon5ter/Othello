@@ -102,8 +102,8 @@ public class CliGame implements Game {
 
 	public void rematch() {
 		System.out.print("\nReady for another game? [y/]");
+		controller.init();
 		if (System.console().readLine().equalsIgnoreCase("y")) {
-			controller.init();
 			startGame();
 		}
 	}
