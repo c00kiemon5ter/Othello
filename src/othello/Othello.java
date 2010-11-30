@@ -51,12 +51,7 @@ public class Othello {
 }
 /**
  * TODO: Select Human vs [Human|Computer]
- *	-> 1on1Game + AIGame ? Make SelectMove class
- *
  * TODO: Implement Gui Computer Opponent
- * TODO: Chose evaluation function
- * TODO: What happens on lost turns ?
- *
  * TODO: Implement NegaMan-AB MiniMax-AB Negascout
  * TODO: Efficient use of a Global Hash Table <Move, Max>
  */
