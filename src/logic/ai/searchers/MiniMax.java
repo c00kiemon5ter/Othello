@@ -9,13 +9,11 @@ import logic.ai.evaluation.Evaluation;
 
 public class MiniMax extends AbstractSearcher {
 
-        private Point bMove;
-
 	@Override
 	public int search(Board board, Player player, int alpha, int beta, int depth, Evaluation function) {
 		int record = Integer.MIN_VALUE;
                 int minscore = Integer.MAX_VALUE;
-		bestMove = null;
+		Point maxMove = null;
 		if (depth <= 0 || isEndState(board)) {
 			record = function.evaluate(board, player);
 		} else {
@@ -27,12 +25,12 @@ public class MiniMax extends AbstractSearcher {
 					int result = -search(subBoard, player.opponent(), alpha, beta, depth - 1, function);
 					if (result > record) {
 						record = result;
-						bestMove = nextPossibleMove;
+						maxMove = nextPossibleMove;
 					}
 				}
 			}
 		}
-		bMove = bestMove;
+		bestMove = maxMove;
 		return record;
 	}
 
@@ -40,7 +38,7 @@ public class MiniMax extends AbstractSearcher {
         public int searchSimple(Board board, Player player, int depth, Evaluation function) {
 		int record = Integer.MIN_VALUE;
                 int minscore = Integer.MAX_VALUE;
-		bestMove = null;
+		Point maxMove = null;
 		if (depth <= 0 || isEndState(board)) {
 			record = function.evaluate(board, player);
 		} else {
@@ -52,18 +50,18 @@ public class MiniMax extends AbstractSearcher {
 					int result = -searchSimple(subBoard, player.opponent(), depth - 1, function);
 					if (result > record) {
 						record = result;
-						bestMove = nextPossibleMove;
+						maxMove = nextPossibleMove;
 					}
 				}
 			}
 		}
-		bMove = bestMove;
+		bestMove = maxMove;
 		return record;
 	}
 
         private int valueMax(Board board, Player player, int depth, Evaluation function,int rcounter) {
 		int maxscore = Integer.MIN_VALUE;
-		bestMove = null;
+		Point maxMove = null;
                 if(rcounter == 0)
                 {maxscore = function.evaluate(board, player);
                 } else {
@@ -75,7 +73,7 @@ public class MiniMax extends AbstractSearcher {
 					int result = max(maxscore,valueMin(board,player,depth,function,--rcounter));
 					if (result > maxscore) {
 						maxscore = result;
-						bestMove = nextPossibleMove;
+						maxMove = nextPossibleMove;
 					}
 				}
 			}
@@ -85,7 +83,7 @@ public class MiniMax extends AbstractSearcher {
 
         private int valueMin(Board board, Player player, int depth, Evaluation function,int rcounter) {
             int minscore = Integer.MAX_VALUE;
-		bestMove = null;
+		Point maxMove = null;
                 if(rcounter == 0)
                 {minscore = function.evaluate(board, player);
                 } else {
@@ -97,7 +95,7 @@ public class MiniMax extends AbstractSearcher {
 					int result = min(minscore,valueMax(board,player,depth,function,--rcounter));
 					if (result > minscore) {
 						minscore = result;
-						bestMove = nextPossibleMove;
+						maxMove = nextPossibleMove;
 					}
 				}
 			}
@@ -107,7 +105,7 @@ public class MiniMax extends AbstractSearcher {
 
         private int valueMax(Board board, Player player, int alpha, int beta, int depth, Evaluation function,int rcounter) {
 		int maxscore = alpha;
-		bestMove = null;
+		Point maxMove = null;
                 if(rcounter == 0)
                 {maxscore = function.evaluate(board, player);
                 } else {
@@ -120,7 +118,7 @@ public class MiniMax extends AbstractSearcher {
                                         alpha = maxscore;
 					if (alpha >= beta) {
 						maxscore = result;
-						bestMove = nextPossibleMove;
+						maxMove = nextPossibleMove;
 					}
 				}
 			}
@@ -130,7 +128,7 @@ public class MiniMax extends AbstractSearcher {
 
         private int valueMin(Board board, Player player, int alpha, int beta, int depth, Evaluation function,int rcounter) {
             int minscore = beta;
-		bestMove = null;
+		Point maxMove = null;
                 if(rcounter == 0)
                 {minscore = function.evaluate(board, player);
                 } else {
@@ -142,7 +140,7 @@ public class MiniMax extends AbstractSearcher {
 					int result = min(minscore,valueMax(board,player,alpha,beta,depth,function,--rcounter));
 					if (alpha >= beta) {
 						minscore = result;
-						bestMove = nextPossibleMove;
+						maxMove = nextPossibleMove;
 					}
 				}
 			}
