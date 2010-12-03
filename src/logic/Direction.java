@@ -3,6 +3,7 @@ package logic;
 import java.awt.Point;
 
 /**
+ * Direction navigates correctly to the next point in the board
  *
  * @author c00kiemon5ter
  */

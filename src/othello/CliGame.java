@@ -9,6 +9,12 @@ import logic.Controller;
 import logic.DifficultyLevel;
 import utils.Transform;
 
+/**
+ * Cli Game handler. Controls the cli menus and game presentation.
+ * CliGame speaks to the controller to handle and edit the board state.
+ *
+ * @author c00kiemon5ter
+ */
 public class CliGame implements Game {
 
 	private Controller controller = Controller.getInstance();
@@ -22,8 +28,15 @@ public class CliGame implements Game {
 
 	@Override
 	public void play() {
+		System.out.print("\nLet the games begin!\n"
+				 + "\n1. Play against Robots!"
+				 + "\n2. Play against Friend!"
+				 + "\n3. Set Difficulty"
+				 + "\n4. Choose Color"
+				 + "\n0. Exit");
+		System.err.print("\n\nSelect action: ");
 		while (true) {
-			switch (menu()) {
+			switch (readInt()) {
 				case 0:
 					System.exit(0);
 				case 1:
@@ -86,39 +99,6 @@ public class CliGame implements Game {
 		return select.get(moveIdx - 1);
 	}
 
-	private void declareWinnarz() {
-		System.out.println(controller.boardWithTurn());
-		if (controller.isDraw()) {
-			System.out.println("\n:: We haz a draw!?");
-			System.out.println("\n==> No party for you >:(");
-		} else {
-			System.out.println("\n:: We haz a winnarz!");
-			System.out.printf("\n==> %s wins\n", controller.getWinner());
-			if (vsAi) {
-				System.out.printf("\n==> Robots conquered teh worldz\n");
-			}
-		}
-	}
-
-	public void rematch() {
-		System.out.print("\nReady for another game? [y/]");
-		controller.init();
-		if (System.console().readLine().equalsIgnoreCase("y")) {
-			startGame();
-		}
-	}
-
-	private int menu() {
-		System.out.print("\nLet the games begin!\n"
-				 + "\n1. Play against Robots!"
-				 + "\n2. Play against Friend!"
-				 + "\n3. Set Difficulty"
-				 + "\n4. Choose Color"
-				 + "\n0. Exit");
-		System.err.print("\n\nSelect action: ");
-		return readInt();
-	}
-
 	private int readInt() {
 		int choice;
 		while (true) {
@@ -175,6 +155,28 @@ public class CliGame implements Game {
 				default:
 					System.err.print("Wrong choice. Try again: ");
 			}
+		}
+	}
+
+	private void declareWinnarz() {
+		System.out.println(controller.boardWithTurn());
+		if (controller.isDraw()) {
+			System.out.println("\n:: We haz a draw!?");
+			System.out.println("\n==> No party for you >:(");
+		} else {
+			System.out.println("\n:: We haz a winnarz!");
+			System.out.printf("\n==> %s wins\n", controller.getWinner());
+			if (vsAi) {
+				System.out.printf("\n==> Robots conquered teh worldz\n");
+			}
+		}
+	}
+
+	public void rematch() {
+		System.out.print("\nReady for another game? [y/]");
+		controller.init();
+		if (System.console().readLine().equalsIgnoreCase("y")) {
+			startGame();
 		}
 	}
 }

@@ -1,7 +1,10 @@
 package logic;
 
 /**
- *
+ * Four difficulty levels.
+ * Difficulty specifies the depth that the {@code Searchers} will dive
+ * to predict score results and thus select the next move
+ * 
  * @author c00kiemon5ter
  */
 public enum DifficultyLevel {

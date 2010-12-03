@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.Set;
 import logic.MoveExplorer;
 
+/**
+ * the game board is a mapping of states to points
+ * 
+ * @author c00kiemon5ter
+ */
 public final class Board implements Cloneable {
 
 	public static final int BOARD_LENGTH = 8;
@@ -18,7 +23,12 @@ public final class Board implements Cloneable {
 		init();
 	}
 
-	public Board(Map<Point, SquareState> board) {
+	/**
+	 * Deep copy constructor. 
+	 *
+	 * @param board
+	 */
+	private Board(Map<Point, SquareState> board) {
 		this.board = new HashMap<Point, SquareState>(board.size());
 		for (Point point : board.keySet()) {
 			this.board.put(new Point(point), board.get(point));
@@ -161,6 +171,11 @@ public final class Board implements Cloneable {
 		return sb.toString();
 	}
 
+	/**
+	 * Deep copy of this board.
+	 *
+	 * @return
+	 */
 	@Override
 	public Board clone() {
 		return new Board(this.board);

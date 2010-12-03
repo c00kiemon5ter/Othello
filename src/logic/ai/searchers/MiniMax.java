@@ -7,8 +7,24 @@ import java.util.Set;
 import logic.MoveExplorer;
 import logic.ai.evaluation.Evaluation;
 
+/**
+ * The classic minimax algorithm implementation.
+ *
+ * @author c00kiemon5ter
+ */
 public class MiniMax extends AbstractSearcher implements Searcher, SimpleSearcher {
 
+	/**
+	 * minimax search using A-B pruning
+	 *
+	 * @param board - the current board state
+	 * @param player - the current player
+	 * @param alpha -
+	 * @param beta -
+	 * @param depth - the current depth
+	 * @param function - the evaluation function
+	 * @return the score of chosen move
+	 */
 	@Override
 	public int search(Board board, Player player, int alpha, int beta, int depth, Evaluation function) {
 		int record = Integer.MIN_VALUE;
@@ -77,7 +93,15 @@ public class MiniMax extends AbstractSearcher implements Searcher, SimpleSearche
 		return minscore;
 	}
 
-	/* ------------------------------------------------------------------ */
+	/**
+	 * Simple minimax search
+	 *
+	 * @param board - the current board state
+	 * @param player - the current player
+	 * @param depth - the current depth
+	 * @param function - the evaluation function
+	 * @return the score of chosen move
+	 */
 	@Override
 	public int simpleSearch(Board board, Player player, int depth, Evaluation function) {
 		int record = Integer.MIN_VALUE;
@@ -145,7 +169,7 @@ public class MiniMax extends AbstractSearcher implements Searcher, SimpleSearche
 		return minscore;
 	}
 
-	/* ------------------------------------------------------------------ */
+	/* Test implementation */
 	public int minimax(Board board, Player player, int depth, Evaluation function) {
 		if (player == Player.WHITE) {	/* White is the maximizing player */
 			return valueMax(board, player, depth, function);

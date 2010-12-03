@@ -3,6 +3,19 @@ package ui;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+/**
+ * Square representation. Squares are of type:
+ * <ul>
+ * <li>Black - the square is black
+ * <li>White - the square is white
+ * <li>Empty - the square is empty
+ * <li>PssblBlk - the square is a possible next move for the black player
+ * <li>PssblWht - the square is a possible next move for the white player
+ * </ul>
+ * This class provides a square factory for easy building of any type of square.
+ * 
+ * @author c00kiemon5ter
+ */
 public class SquareImgFactory {
 
 	private static final int imagesize = 22;

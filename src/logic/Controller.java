@@ -12,6 +12,12 @@ import logic.ai.searchers.AbstractSearcher;
 import logic.ai.searchers.MiniMax;
 import logic.ai.searchers.NegaMax;
 
+/**
+ * Controller is the basic coordinator and communication means
+ * from the game abstraction to the model manipulation.
+ *
+ * @author c00kiemon5ter
+ */
 public final class Controller {
 
 	/**

@@ -1,5 +1,10 @@
 package core;
 
+/**
+ * Players. There are two players in the game. Black and White.
+ *
+ * @author c00kiemon5ter
+ */
 public enum Player {
 
 	BLACK(SquareState.BLACK),

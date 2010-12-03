@@ -16,6 +16,11 @@ import java.awt.event.MouseEvent;
 import javax.swing.JRadioButtonMenuItem;
 import logic.DifficultyLevel;
 
+/**
+ * The UI Game. Draw window and changes listening to events.
+ *
+ * @author c00kiemon5ter
+ */
 public class UIGame implements Runnable {
 
 	private Controller controller = Controller.getInstance();
@@ -91,25 +96,6 @@ public class UIGame implements Runnable {
 		return moves;
 	}
 
-	private void updateStats() {
-		boardUI.updateScore(controller.getBlackScore(), controller.getWhiteScore());
-	}
-
-	private void changeTurn() {
-		controller.changeTurn();
-		boardUI.updateTurn(controller.currentPlayer().toString());
-	}
-
-	private void lostTurn() {
-		boardUI.notifyLostTurn(controller.currentPlayer());
-		changeTurn();
-	}
-
-	private void pass() {
-		lostTurn();
-		updateStats();
-	}
-
 	private void updateListeners() {
 		for (ImageComponent imgComp : boardUI.getSquares()) {
 			if (imgComp.getMouseListeners().length != 0) {
@@ -135,17 +121,36 @@ public class UIGame implements Runnable {
 		}
 	}
 
+	private void makeMove(Point move) {
+		SquareType color = controller.currentPlayer().color() == SquareState.WHITE
+				   ? SquareType.WHITE : SquareType.BLACK;
+		Set<Point> squaresToChange = controller.makeMove(move);
+		boardUI.fill(squaresToChange, color);
+	}
+
 	private void afterMove() {
 		updateStats();
 		changeTurn();
 		run();
 	}
 
-	private void makeMove(Point move) {
-		SquareType color = controller.currentPlayer().color() == SquareState.WHITE
-				   ? SquareType.WHITE : SquareType.BLACK;
-		Set<Point> squaresToChange = controller.makeMove(move);
-		boardUI.fill(squaresToChange, color);
+	private void pass() {
+		lostTurn();
+		updateStats();
+	}
+
+	private void lostTurn() {
+		boardUI.notifyLostTurn(controller.currentPlayer());
+		changeTurn();
+	}
+
+	private void changeTurn() {
+		controller.changeTurn();
+		boardUI.updateTurn(controller.currentPlayer().toString());
+	}
+
+	private void updateStats() {
+		boardUI.updateScore(controller.getBlackScore(), controller.getWhiteScore());
 	}
 
 	private void gameEnd() {

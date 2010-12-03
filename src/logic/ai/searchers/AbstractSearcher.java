@@ -7,6 +7,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.awt.Point;
 
+/**
+ * Abstract searcher class, providing a random choice "search".
+ * Implements basic helper methods like min and max and isEndState
+ *
+ * @author c00kiemon5ter
+ */
 public abstract class AbstractSearcher implements Searcher, SimpleSearcher {
 
 	protected Point bestMove;

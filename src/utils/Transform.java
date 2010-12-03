@@ -3,6 +3,12 @@ package utils;
 import core.Board;
 import java.awt.Point;
 
+/**
+ * Trasformations.
+ * Translating points to indexes and board notations and reverse.
+ *
+ * @author c00kiemon5ter
+ */
 public class Transform {
 
 	public static Point indexToPoint(int index) {

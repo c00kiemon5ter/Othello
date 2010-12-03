@@ -32,6 +32,11 @@ import logic.DifficultyLevel;
 import othello.Othello;
 import utils.Transform;
 
+/**
+ * Board graphical representation
+ *
+ * @author c00kiemon5ter
+ */
 public final class BoardUI extends JFrame {
 
 	private final Image LOGO = new ImageIcon(getClass().getResource("/ui/images/logo.jpg")).getImage();

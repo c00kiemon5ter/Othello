@@ -6,6 +6,10 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import javax.swing.JComponent;
 
+/**
+ * An image container, given images component attributes.
+ *
+ */
 public class ImageComponent extends JComponent {
 
 	Image image;

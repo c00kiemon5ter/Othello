@@ -6,6 +6,11 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Adds weight to the score if the new state has corners owned by the player
+ * 
+ * @author c00kiemon5ter
+ */
 public class ScoreCornerWeightEval implements Evaluation {
 
 	private Set<Point> corners;
