@@ -2,6 +2,7 @@ package logic.ai.searchers;
 
 import core.Board;
 import core.Player;
+import core.SquareState;
 import logic.MoveExplorer;
 import java.util.Set;
 import java.awt.Point;
@@ -24,63 +25,74 @@ import logic.ai.evaluation.Evaluation;
  * 
  * @author c00kiemon5ter
  */
-public class NegaMax extends AbstractSearcher implements Searcher, SimpleSearcher {
+public class NegaMax { //extends AbstractSearcher implements Searcher, SimpleSearcher {
 
-	@Override
-	public int search(Board board, Player player, int alpha, int beta, int depth, Evaluation function) {
-		int record = alpha;
-		Point maxMove = null;
+//	public SearchResult search(Board board, Player player, int alpha, int beta, int depth, Evaluation function) {
+//		if (depth <= 0 || isEndState(board)) {
+//			record = function.evaluate(board, player);
+//		} else {
+//			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
+//			if (!possibleMoves.isEmpty()) {
+//				for (Point nextPossibleMove : possibleMoves) {
+//					Board subBoard = board.clone();
+//					subBoard.makeMove(nextPossibleMove, player.color());
+//					int result = -search(subBoard, player.opponent(), -beta, -alpha, depth - 1, function);
+//					if (result > record) {
+//						record = result;
+//						maxMove = nextPossibleMove;
+//						if (record >= beta) {
+//							return record;
+//						}
+//					}
+//				}
+//			} else {
+//				record = -simpleSearch(board.clone(), player, depth - 1, function);
+//			}
+//		}
+//		bestMove = maxMove;
+//		return record;
+//	}
+	public SearchResult simpleSearch(Board board, Player player, int depth, Evaluation evfunction) {
 		if (depth <= 0 || isEndState(board)) {
-			record = function.evaluate(board, player);
-		} else {
-			Board subBoard = board.clone();
+			return new SearchResult(null, evfunction.evaluate(board, player));
+		} else { /* there's more to check */
 			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
-			if (!possibleMoves.isEmpty()) {
+			SearchResult best = new SearchResult(null, Integer.MIN_VALUE);
+			if (possibleMoves.isEmpty()) { /* turn is lost - check next player */
+				possibleMoves = MoveExplorer.explore(board, player.opponent().color());
+				if (possibleMoves.isEmpty()) { /* end of game - is there a winner ? */
+					switch (Integer.signum(board.count(player.color()) - board.count(player.opponent().color()))) {
+						case -1:
+							best = new SearchResult(null, Integer.MIN_VALUE);
+							break;
+						case 0:
+							best = new SearchResult(null, 0);
+							break;
+						case 1:
+							best = new SearchResult(null, Integer.MAX_VALUE);
+							break;
+					}
+				} else { /* game continues - nothing to check */
+					best = simpleSearch(board, player.opponent(), depth - 1, evfunction).negated();
+				}
+			} else { /* check the score of each move */
 				for (Point nextPossibleMove : possibleMoves) {
-					subBoard = board.clone();
+					Board subBoard = board.clone();
 					subBoard.makeMove(nextPossibleMove, player.color());
-					int result = -search(subBoard, player.opponent(), -beta, -alpha, depth - 1, function);
-					if (result > record) {
-						record = result;
-						maxMove = nextPossibleMove;
-						if (record >= beta) {
-							return record;
-						}
+					int score = simpleSearch(subBoard, player.opponent(), depth - 1, evfunction).negated().getScore();
+					if (best.getScore() < score) {
+						/* store the best score and coresponding move */
+						best = new SearchResult(nextPossibleMove, score);
 					}
 				}
-			} else {
-				record = -simpleSearch(subBoard, player, depth - 1, function);
 			}
+			return best;
 		}
-		bestMove = maxMove;
-		return record;
 	}
 
-	@Override
-	public int simpleSearch(Board board, Player player, int depth, Evaluation function) {
-		int record = Integer.MIN_VALUE;
-		Point maxMove = null;
-		if (depth <= 0 || isEndState(board)) {
-			record = function.evaluate(board, player);
-		} else {
-			Board subBoard = board.clone();
-			Set<Point> possibleMoves = MoveExplorer.explore(board, player.color());
-			if (!possibleMoves.isEmpty()) {
-				for (Point nextPossibleMove : possibleMoves) {
-					subBoard = board.clone();
-					subBoard.makeMove(nextPossibleMove, player.color());
-					int result = -simpleSearch(subBoard, player.opponent(), depth - 1, function);
-//					record = max(record, -simpleSearch(subBoard, player.opponent(), depth - 1, function));
-					if (result > record) {
-						record = result;
-						maxMove = nextPossibleMove;
-					}
-				}
-			} else {
-				record = -simpleSearch(subBoard, player, depth - 1, function);
-			}
-		}
-		bestMove = maxMove;
-		return record;
+	protected boolean isEndState(final Board board) {
+		return board.isFull()
+		       || board.count(SquareState.BLACK) == 0
+		       || board.count(SquareState.WHITE) == 0;
 	}
 }

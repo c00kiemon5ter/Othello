@@ -43,11 +43,7 @@ public final class Controller {
 	public Set<Point> markPossibleMoves() {
 		Set<Point> moves = board.getPossibleMoves(player);
 		board.markPossibleMoves(moves);
-		if (moves.isEmpty()) {
-			canMove++;
-		} else {
-			canMove = CANMOVE;
-		}
+		canMove = moves.isEmpty() ? ++canMove : CANMOVE;
 		return moves;
 	}
 
@@ -120,13 +116,14 @@ public final class Controller {
 	}
 
 	public Point evalMove() {
-		AbstractSearcher searcher = new NegaMax();
+//		AbstractSearcher searcher = new NegaMax();
+		NegaMax searcher = new NegaMax();
 //		AbstractSearcher searcher = new MiniMax();
 		Evaluation evalfunc = new ScoreEval();
 //		Evaluation evalfunc = new ScoreDiffEval();
 //		searcher.simpleSearch(board, player, depth, evalfunc);
-		searcher.search(board, player, Integer.MIN_VALUE, Integer.MAX_VALUE, depth, evalfunc);
-		return searcher.getBestMove();
+//		searcher.search(board, player, Integer.MIN_VALUE, Integer.MAX_VALUE, depth, evalfunc);
+		return searcher.simpleSearch(board, player, depth, evalfunc).getPoint();
 	}
 
 	private static class ControllerHolder {
