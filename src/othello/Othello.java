@@ -50,6 +50,6 @@ public class Othello {
 	}
 }
 /**
- * TODO: ? Negascout ! NegaMax-AB
- * TODO: ? Efficient use of a Global Hash Table <Move, Max>
+ * TODO: Implement a server-client architecture and play over network
+ * TODO: Negascout + Efficient use of a Global Hash Table <Move, Max>
  */
