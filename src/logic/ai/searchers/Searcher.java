@@ -3,7 +3,6 @@ package logic.ai.searchers;
 import core.Board;
 import core.Player;
 import logic.ai.evaluation.Evaluation;
-import java.awt.Point;
 
 /**
  * The searcher interface. Provides searching making use of A-B pruning
@@ -15,8 +14,6 @@ import java.awt.Point;
  */
 interface Searcher {
 
-	int search(final Board board, final Player player, final int alpha,
-		   final int beta, final int depth, final Evaluation function);
-
-	Point getBestMove();
+	SearchResult search(final Board board, final Player player, int alpha,
+			    int beta, final int depth, final Evaluation function);
 }

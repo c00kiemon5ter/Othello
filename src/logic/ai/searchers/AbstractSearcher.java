@@ -6,6 +6,7 @@ import core.SquareState;
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.Point;
+import logic.ai.evaluation.Evaluation;
 
 /**
  * Abstract searcher class, providing a random choice "search".
@@ -15,7 +16,13 @@ import java.awt.Point;
  */
 public abstract class AbstractSearcher implements Searcher, SimpleSearcher {
 
-	protected Point bestMove;
+	@Override
+	public abstract SearchResult search(final Board board, final Player player, int alpha,
+					    int beta, final int depth, final Evaluation function);
+
+	@Override
+	public abstract SearchResult simpleSearch(final Board board, final Player player,
+						  final int depth, final Evaluation function);
 
 	protected int max(int a, int b) {
 		return a < b ? b : a;
@@ -25,11 +32,10 @@ public abstract class AbstractSearcher implements Searcher, SimpleSearcher {
 		return a > b ? b : a;
 	}
 
-	protected int randomChoice(Board board, Player player) {
+	protected Point randomChoice(Board board, Player player) {
 		List<Point> possibleMoves = new ArrayList<Point>(board.getPossibleMoves(player));
 		int record = (int) Math.random() * (possibleMoves.size() - 1);
-		bestMove = possibleMoves.get(record);
-		return record;
+		return possibleMoves.get(record);
 	}
 
 	/**
@@ -47,10 +53,5 @@ public abstract class AbstractSearcher implements Searcher, SimpleSearcher {
 		return board.isFull()
 		       || board.count(SquareState.BLACK) == 0
 		       || board.count(SquareState.WHITE) == 0;
-	}
-
-	@Override
-	public Point getBestMove() {
-		return bestMove;
 	}
 }
