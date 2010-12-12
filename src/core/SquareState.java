@@ -15,8 +15,10 @@ package core;
  */
 public enum SquareState {
 
-	BLACK('x'),
-	WHITE('o'),
+	BLACK('●'),
+	WHITE('○'),
+//	BLACK('x'),
+//	WHITE('o'),
 	PSSBL('.'),
 	EMPTY(' ');
 	private final char symbol;
@@ -25,7 +27,7 @@ public enum SquareState {
 		this.symbol = symbol;
 	}
 
-	public char getSymbol() {
+	public char symbol() {
 		return this.symbol;
 	}
 

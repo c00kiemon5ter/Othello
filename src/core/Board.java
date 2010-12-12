@@ -121,7 +121,7 @@ public final class Board implements Cloneable {
 		for (point.x = 0; point.x < BOARD_LENGTH; point.x++) {
 			sb.append('\n').append(point.x + 1);
 			for (point.y = 0; point.y < BOARD_WIDTH; point.y++) {
-				sb.append(' ').append(board.get(point).getSymbol());
+				sb.append(' ').append(board.get(point).symbol());
 			}
 		}
 		sb.append('\n');
@@ -135,12 +135,14 @@ public final class Board implements Cloneable {
 			sb.append('\n').append(rows[row]);
 			switch (row) {
 				case 2:
-					sb.append('\t').append(Player.BLACK).append(": ").
-						append(count(SquareState.BLACK));
+					sb.append('\t').append(SquareState.BLACK.symbol()).
+						append(' ').append(Player.BLACK).
+						append(": ").append(count(SquareState.BLACK));
 					break;
 				case 4:
-					sb.append('\t').append(Player.WHITE).append(": ").
-						append(count(SquareState.WHITE));
+					sb.append('\t').append(SquareState.WHITE.symbol()).
+						append(' ').append(Player.WHITE).
+						append(": ").append(count(SquareState.WHITE));
 					break;
 			}
 		}
@@ -155,15 +157,17 @@ public final class Board implements Cloneable {
 			sb.append('\n').append(rows[row]);
 			switch (row) {
 				case 2:
-					sb.append('\t').append(Player.BLACK).append(": ").
-						append(count(SquareState.BLACK));
+					sb.append('\t').append(SquareState.BLACK.symbol()).
+						append(' ').append(Player.BLACK).
+						append(": ").append(count(SquareState.BLACK));
 					break;
 				case 4:
-					sb.append('\t').append(Player.WHITE).append(": ").
-						append(count(SquareState.WHITE));
+					sb.append('\t').append(SquareState.WHITE.symbol()).
+						append(' ').append(Player.WHITE).
+						append(": ").append(count(SquareState.WHITE));
 					break;
 				case 6:
-					sb.append('\t').append(player).append("s turn!");
+					sb.append('\t').append(player).append("'s turn!");
 					break;
 			}
 		}
