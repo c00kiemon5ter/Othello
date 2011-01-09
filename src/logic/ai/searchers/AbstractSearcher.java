@@ -25,11 +25,11 @@ public abstract class AbstractSearcher implements Searcher, SimpleSearcher {
 						  final int depth, final Evaluation function);
 
 	protected int max(int a, int b) {
-		return a < b ? b : a;
+		return Math.max(a, b);
 	}
 
 	protected int min(int a, int b) {
-		return a > b ? b : a;
+		return Math.min(a, b);
 	}
 
 	protected Point randomChoice(Board board, Player player) {
